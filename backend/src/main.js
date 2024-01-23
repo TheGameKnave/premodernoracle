@@ -1,6 +1,7 @@
-const path = require('path')
-const Hapi = require('hapi')
-const fs = require('fs')
+const path = require('path');
+const Hapi = require('hapi');
+const fs = require('fs');
+const https = require('https');
 
 // ---
 // Config
@@ -84,36 +85,93 @@ server.register(plugins).then(() => {
   // API routes
   // ----------
 
+  let cache = {};
+
   // Helper to create API routes. All routes handled by the
   // backend should use this helper.
-  function createApiRoute(path, options) {
+  function logRequestDetails(options) {
+    console.log('Outgoing HTTP request details:');
+    console.log('URL:', options.hostname + options.path);
+    console.log('Method:', options.method);
+    console.log('Headers:', options.headers);
+  }
+  async function createApiRoute(path, options) {
     server.route({
       path: `/api/${path}`,
-      method: 'GET',
-      handler: () => 'NOT YET IMPLEMENTED',
-      ...options,
-    })
+      method: 'POST',
+      handler: async (request, h) => {
+        const payload = request.payload; // Access the payload from the request
+        console.log(payload);
+        const results = {};
+        let cardData = [];
+  
+        async function fetchPage(url) {
+          const pageUrl = new URL(url); // Parse the next_page URL
+  
+          const pageOptions = {
+            hostname: pageUrl.hostname,
+            path: pageUrl.pathname + pageUrl.search, // Use the path and query from the URL
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'GET', // Use GET method
+          };
+  
+          return new Promise((resolve, reject) => {
+            const proxyRequest = https.request(pageOptions, (proxyResponse) => {
+              let data = '';
+  
+              proxyResponse.on('data', (chunk) => {
+                data += chunk;
+              });
+  
+              proxyResponse.on('end', () => {
+                const responseData = JSON.parse(data);
+                if(responseData?.data) cardData.push(...responseData.data);
+                resolve(); // Resolve the promise when the fetch operation is complete
+              });
+            });
+  
+            proxyRequest.on('error', (error) => {
+              console.error('Error proxying request to 3rd party API:', error);
+              reject(new Error('Error proxying request to 3rd party API')); // Reject the promise with an error
+            });
+  
+            proxyRequest.end();
+          });
+        }
+  
+        // Use Promise.all with an array to store the fetched data in the correct order
+        await Promise.all(payload.cardList.map(async (cardName, index) => {
+          cardData = [];
+          if (!cache[cardName.toLowerCase()]) {
+            console.log('boutta get', cardName);
+            const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=art&q=name%3D${encodeURIComponent(`"${cardName}"`)}`;
+            const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
+            cache[cardName.toLowerCase()] = findFirstPrinting(cardName,cardData);
+          }
+          results[cardName] = cache[cardName.toLowerCase()] || {};
+        }));
+
+        let orderedResults = {};
+        payload.cardList.forEach(cardName => {
+          orderedResults[cache[cardName]?.name || cardName] = results[cardName];
+        });
+
+        return h.response(orderedResults); // Return the aggregated results in the same order as the request
+      },
+      options: {
+        ...options
+      }
+    });
   }
 
-  // Create an example route for `/api/todos`.
-  createApiRoute('todos', {
-    handler(request, h) {
-      return [
-        {
-          id: 1,
-          text: 'Do the dishes',
-        },
-        {
-          id: 2,
-          text: 'Clean the bathroom',
-        },
-        {
-          id: 3,
-          text: 'Rake the leaves',
-        },
-      ]
-    },
-  })
+  function findFirstPrinting(cardName,cardData){
+    return cardData.find(card => card.name.toLowerCase() === cardName.toLowerCase() && card.reprint === false);
+  }
+  
+  // Create an example route for `/api/cards`.
+  createApiRoute('cards', {});
 
   // ----------
   // SPA routes

@@ -21,24 +21,7 @@ const router = new VueRouter({
       // Use async components for routes, speeding up initial
       // page loads by minimizing the bundle size.
       component: () => import('./views/home'),
-      // Fetch todos from the backend and pass them as a prop
-      // before entering the route.
-      beforeEnter(routeTo, routeFrom, next) {
-        fetch('/api/todos')
-          .then(response => response.json())
-          .then(todos => {
-            routeTo.params.todos = todos
-            next()
-          })
-      },
-      props: route => ({ todos: route.params.todos }),
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // Use async components for routes, speeding up initial
-      // page loads by minimizing the bundle size.
-      component: () => import('./views/about'),
+
     },
 
     // ---
