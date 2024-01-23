@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon --watch src src/main.js",
+    "start": "cross-env NODE_ENV=production node src/main.js"
+  },
+  "dependencies": {
+    "hapi": "17.7.0",
+    "hapi-require-https": "3.0.0",
+    "inert": "5.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.x"
+  }
+}
