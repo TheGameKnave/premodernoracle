@@ -145,7 +145,6 @@ server.register(plugins).then(() => {
         await Promise.all(payload.cardList.map(async (cardName, index) => {
           cardData = [];
           if (!cache[cardName.toLowerCase()]) {
-            console.log('boutta get', cardName);
             const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=art&q=name%3D${encodeURIComponent(`"${cardName}"`)}`;
             const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
             cache[cardName.toLowerCase()] = findFirstPrinting(cardName,cardData);
