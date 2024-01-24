@@ -19,20 +19,31 @@
           v-if="tombstoneFrame()"
           class="cardTombstone"
         >Q</span>
-        <div class="cardTitle">{{ card.name }}</div>
-        <div class="cardManaCost">{{ card.mana_cost }}</div>
+        <div
+          class="cardTitle"
+          ref="cardTitleElement"
+        >{{ card.name }}</div>
+        <div
+          class="cardManaCost"
+          ref="cardManaCostElement"
+        ></div>
         <div 
           :style="{ backgroundImage: 'url(' + card.image_uris.art_crop + ')' }" 
           class="cardImage"/>
-        <div class="cardType">{{ card.type_line }}</div>
+        <div
+          class="cardType"
+          ref="cardTypeElement"
+        >{{ card.type_line }}</div>
         <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
-        <i 
+        <i
+          ref="cardExpansionElement"
           v-if="card.rarity !== 'common'" 
-          :class="'cardExpansion fill ss ss-' + card.set"/>
+          :class="'cardExpansion fill ss ss-' + card.set"
+        />
         <i :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"/>
         <div 
-          class="cardText" 
-          v-html="formatText(card.oracle_text, card.flavor_text)"/>
+          class="cardText"
+          ref="cardTextElement"
         <div class="cardArtist"><span class="magicSymbol">L</span>{{ card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE!</div>
         <template v-if="card.power || card.toughness">
@@ -60,6 +71,11 @@
     name: 'Card',
     props: {
       card: {},
+    },
+    mounted() {
+      this.adjustCardTitleSize();
+      this.adjustCardTypeSize();
+      this.adjustCardTextSize();
     },
     methods: {
       tombstoneFrame() {
@@ -139,6 +155,40 @@
       },
       formatPT(string){
         return string.replace(/\*/g,'<span class="smol">★</span>')
+      },
+      adjustCardTitleSize() {
+        const cardTitleElement = this.$refs.cardTitleElement;
+        const cardManaCostElement = this.$refs.cardManaCostElement || null;
+        let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
+
+        while (cardTitleElement.clientWidth + (cardManaCostElement ? cardManaCostElement.clientWidth : 0) > 580) {
+          fontSize--;
+          cardTitleElement.style.fontSize = `${fontSize}px`;
+        }
+      },
+      adjustCardTypeSize() {
+        const cardTypeElement = this.$refs.cardTypeElement;
+        const cardExpansionElement = this.$refs.cardExpansionElement || null;
+        let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
+
+        while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 580) {
+          fontSize--;
+          cardTypeElement.style.fontSize = `${fontSize}px`;
+        }
+      },
+      adjustCardTextSize() {
+        const cardTextElement = this.$refs.cardTextElement;
+        let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
+
+        while (cardTextElement.scrollHeight > cardTextElement.clientHeight) {
+          fontSize--;
+          cardTextElement.style.fontSize = `${fontSize}px`;
+        }
+        if(cardTextElement.clientHeight < 60) {
+          cardTextElement.style.textAlign = 'center';
+        }
+        let leftoverSpace = 285 - cardTextElement.clientHeight;
+        cardTextElement.style.paddingTop = `${leftoverSpace/3}px`;
       },
     }
   }
@@ -233,10 +283,10 @@
     position: absolute;
     top: 8px;
     left: 45px;
-    font-size: 42px;
+    font-size: 40px;
     color: white;
     font-family: "Magic";
-    letter-spacing: 2px;
+    letter-spacing: 1px;
   }
   .cardManaCost {
     position: absolute;
@@ -259,7 +309,7 @@
     position: absolute;
     top: 535px;
     left: 45px;
-    font-size: 34px;
+    font-size: 33px;
     color: white;
   }
   .cardExpansion {
@@ -348,12 +398,11 @@
     position: absolute;
     top: 585px;
     left: 60px;
-    font-size: 32px;
+    font-size: 33px;
     color: black;
     width: 555px;
     max-height: 285px;
     overflow-x: scroll;
-    line-height: 32px;
   }
   .smol {
     font-size: .7em;
