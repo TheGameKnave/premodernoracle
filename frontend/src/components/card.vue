@@ -20,36 +20,45 @@
           class="cardTombstone"
         >Q</span>
         <div
-          class="cardTitle"
           ref="cardTitleElement"
+          class="cardTitle"
         >{{ card.name }}</div>
         <div
-          class="cardManaCost"
           ref="cardManaCostElement"
-        ></div>
+          class="cardManaCost"
+          v-html="parseSymbols(card.mana_cost)"
+        />
         <div 
           :style="{ backgroundImage: 'url(' + card.image_uris.art_crop + ')' }" 
           class="cardImage"/>
         <div
-          class="cardType"
           ref="cardTypeElement"
+          class="cardType"
         >{{ card.type_line }}</div>
         <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
         <i
-          ref="cardExpansionElement"
           v-if="card.rarity !== 'common'" 
           :class="'cardExpansion fill ss ss-' + card.set"
         />
-        <i :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"/>
+        <i
+          ref="cardExpansionElement"
+          :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"
+        />
         <div 
-          class="cardText"
           ref="cardTextElement"
-        <div class="cardArtist"><span class="magicSymbol">L</span>{{ card.artist }}</div>
+          class="cardText"
+          v-html="findSymbols(formatText(card.oracle_text, card.flavor_text))"/>
+        <div
+          ref="cardArtistElement"
+          class="cardArtist"
+        ><span class="magicSymbol">L</span>{{ card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE!</div>
         <template v-if="card.power || card.toughness">
-          <div 
+          <div
+            ref="cardPowerToughnessElement"
             class="cardPowerToughness" 
-            v-html="formatPT(card.power + '/' + card.toughness)"/>
+            v-html="formatPT(card.power + '/' + card.toughness)"
+          />
         </template>
       </template>
       <template v-else>
@@ -71,6 +80,57 @@
     name: 'Card',
     props: {
       card: {},
+    },
+    data() {
+      return {
+        wubrg: ['W', 'U', 'B', 'R', 'G'],
+        symbols: {
+          'T': '<span class="manaGeneric">o</span>T',
+          'Q': '<span class="manaGeneric">o</span>Q',
+          'E': '<span class="manaEnergy"></span>',
+          'S': '<span class="manaSnow">o</span>V',
+          'C': '<span class="manaGeneric">o</span><span class="manaColorless"></span>',
+          'W': '<span class="manaWhite">o</span>W',
+          'U': '<span class="manaBlue">o</span>U',
+          'B': '<span class="manaBlack">o</span>B',
+          'R': '<span class="manaRed">o</span>R',
+          'G': '<span class="manaGreen">o</span>G',
+          'W/U': '<span class="manaWhite">O</span><span class="manaBlue">/</span>Pi',
+          'U/W': '<span class="manaBlue">O</span><span class="manaWhite">/</span>Ip',
+          'W/B': '<span class="manaWhite">O</span><span class="manaBlack">/</span>Ps',
+          'B/W': '<span class="manaBlack">O</span><span class="manaWhite">/</span>Sp',
+          'U/B': '<span class="manaBlue">O</span><span class="manaBlack">/</span>Is',
+          'B/U': '<span class="manaBlack">O</span><span class="manaBlue">/</span>Si',
+          'R/W': '<span class="manaRed">O</span><span class="manaWhite">/</span>Mp',
+          'W/R': '<span class="manaWhite">O</span><span class="manaRed">/</span>Pm',
+          'R/U': '<span class="manaRed">O</span><span class="manaBlue">/</span>Mi',
+          'U/R': '<span class="manaBlue">O</span><span class="manaRed">/</span>Im',
+          'R/B': '<span class="manaRed">O</span><span class="manaBlack">/</span>Ms',
+          'B/R': '<span class="manaBlack">O</span><span class="manaRed">/</span>Sm',
+          'U/G': '<span class="manaBlue">O</span><span class="manaGreen">/</span>If',
+          'G/U': '<span class="manaGreen">O</span><span class="manaBlue">/</span>Fi',
+          'G/W': '<span class="manaGreen">O</span><span class="manaWhite">/</span>Fp',
+          'W/G': '<span class="manaWhite">O</span><span class="manaGreen">/</span>Pf',
+          'G/B': '<span class="manaGreen">O</span><span class="manaBlack">/</span>Fs',
+          'B/G': '<span class="manaBlack">O</span><span class="manaGreen">/</span>Sf',
+          'W/P': '<span class="manaWhitePhy">O</span>Z',
+          'U/P': '<span class="manaBluePhy">O</span>Z',
+          'B/P': '<span class="manaBlackPhy">O</span>Z',
+          'R/P': '<span class="manaRedPhy">O</span>Z',
+          'G/P': '<span class="manaGreenPhy">O</span>Z',
+          '10': '<span class="manaGeneric">o</span>º',
+          '11': '<span class="manaGeneric">o</span>»',
+          '12': '<span class="manaGeneric">o</span>¼',
+          '13': '<span class="manaGeneric">o</span>½',
+          '14': '<span class="manaGeneric">o</span>¾',
+          '15': '<span class="manaGeneric">o</span>¿',
+          '16': '<span class="manaGeneric">o</span>À',
+          '17': '<span class="manaGeneric">o</span>Á',
+          '18': '<span class="manaGeneric">o</span>Â',
+          '19': '<span class="manaGeneric">o</span>Ã',
+          '20': '<span class="manaGeneric">o</span>Ä',
+        }
+      }
     },
     mounted() {
       this.adjustCardTitleSize();
@@ -97,10 +157,9 @@
             }
             i++;
           }
-          let wubrg = ['W', 'U', 'B', 'R', 'G'];
           // if hybridArr is not empty and all of its elemets are identical
           // AND if W, U, B, R, G are not in the costArr
-          if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
+          if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !this.wubrg.some(x => costArr.includes(x))) {
             returnString += hybridArr[0][0].toLowerCase();
           }else{
             returnString += 'm';
@@ -116,8 +175,10 @@
             }else{
               returnString += this.card.color_identity[0].toLowerCase() + 'l';
             }
-          }else {
+          }else if(this.card.type_line.includes('Artifact')) { 
             returnString += 'a';
+          }else{
+            returnString += 'c';
           }
         }
         return returnString + 'card'
@@ -155,6 +216,58 @@
       },
       formatPT(string){
         return string.replace(/\*/g,'<span class="smol">★</span>')
+      },
+      parseSymbols(costGroup) {
+        let costString = '<span class="symbolGroup">';
+        let costArr = costGroup.split(/[{}]+/);
+        costArr = costArr.filter(x => x);
+        costArr.forEach(cost => {
+          costString += '<span class="symbol">';
+          if(!isNaN(cost) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
+          else costString += this.symbols[cost] || cost;
+          costString += '</span>';
+        });
+        return costString + '</span>';
+      },
+      findSymbols(string) {
+        let symbolBuffer = '';
+        let readingGroup = false;
+        let readingSymbol = false;
+        let spacesCount = 0;
+        let composedString = '';
+
+        for(let i = 0; i < string.length; i++) {
+          if(!readingGroup) {
+            if(string[i] === '{') {
+              readingGroup = true;
+              readingSymbol = true;
+            }else{
+              composedString += string[i];
+            }
+          }
+          if(readingGroup) {
+            if(!readingSymbol) {
+              if(string[i] === '{') {
+                readingSymbol = true;
+                spacesCount = 0;
+              }else if(string[i] === ' ') {
+                spacesCount++;
+              }else{
+                readingGroup = false;
+                composedString += this.parseSymbols(symbolBuffer);
+                symbolBuffer = '';
+                for(let j = 0; j < spacesCount; j++) composedString += ' ';
+                spacesCount = 0;
+                composedString += string[i];
+              }
+            }
+            if(readingSymbol) {
+              symbolBuffer += string[i];
+              if(string[i] === '}') readingSymbol = false;
+            }
+          }
+        }
+        return composedString
       },
       adjustCardTitleSize() {
         const cardTitleElement = this.$refs.cardTitleElement;
@@ -232,7 +345,14 @@
     font-family: "Magic Symbols";
     font-style: normal;
     font-weight: 100;
-    src: url("~@/assets/fonts/MagicSymbols2008.ttf");
+    src: url("~@/assets/fonts/MagicSymbols2012 Z.ttf");
+  }
+  /* some updated symbols */
+  @font-face {
+    font-family: "Mana";
+    font-style: normal;
+    font-weight: 100;
+    src: url("~@/assets/fonts/mana.ttf");
   }
   /* magic symbols 04 */
   @font-face {
@@ -285,6 +405,8 @@
   }
   .cardManaCost, .symbolGroup {
     text-shadow: none;
+    font-family: "Magic Symbols";
+    font-style: normal;
   }
   .cardText, .cardManaCost, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
     font-family: "Plantin";
