@@ -129,6 +129,7 @@
           '18': '<span class="manaGeneric">o</span>Â',
           '19': '<span class="manaGeneric">o</span>Ã',
           '20': '<span class="manaGeneric">o</span>Ä',
+          'X': '<span class="manaGeneric">o</span>X',
         }
       }
     },
