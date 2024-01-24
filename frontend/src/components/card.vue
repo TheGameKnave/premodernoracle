@@ -9,6 +9,12 @@
           class="cardTemplate"
           alt="Card Template"
         >
+        <img
+          v-if="card.color_identity.length === 2 && !cardTemplate().includes('mcard')"
+          :src="require(`@/assets/images/card_templates/${cardTemplate2()}.jpg`)"
+          class="cardTemplate2"
+          alt="Card Template"
+        >
         <div class="cardTitle">{{ card.name }}</div>
         <div class="cardManaCost">{{ card.mana_cost }}</div>
         <div 
@@ -16,7 +22,7 @@
           class="cardImage"/>
         <div class="cardType">{{ card.type_line }}</div>
         <i :class="'cardExpansion stroke ss ss-' + card.set"/>
-        <i :class="'cardExpansion fill ss ss-' + card.set"/>
+        <i v-if="card.rarity !== 'common'" :class="'cardExpansion fill ss ss-' + card.set"/>
         <i :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"/>
         <div 
           class="cardText" 
@@ -52,16 +58,54 @@
     methods: {
       cardTemplate() {
         let returnString = '';
-        if(this.card.color_identity.length > 1) {
-          returnString += 'm';
+        if(this.card.colors.length > 1) {
+          let costArr = this.card.mana_cost.split(/[{}]+/);
+          costArr = costArr.filter(x => x);
+          let hybridArr = [];
+          for(let i = 0; i < costArr.length; i++) {
+            if(costArr[i].includes('/')) {
+              hybridArr.push(costArr.splice(i, 1)[0]);
+            }
+            i++;
+          }
+          let wubrg = ['W', 'U', 'B', 'R', 'G'];
+          // if hybridArr is not empty and all of its elemets are identical
+          // AND if W, U, B, R, G are not in the costArr
+          if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
+            returnString += hybridArr[0][0].toLowerCase();
+          }else{
+            returnString += 'm';
+          }
         } else if(this.card.colors.length === 1) {
           returnString += this.card.colors[0].toLowerCase();
         } else if(this.card.colors.length === 0) {
           if(this.card.type_line.includes('Land')){
-            returnString += this.card.color_identity[0].toLowerCase() + 'l';
+            if(this.card.color_identity.length > 2) {
+              returnString += 'ml';
+            }else if(this.card.color_identity.length === 0) {
+              returnString += 'cl';
+            }else{
+              returnString += this.card.color_identity[0].toLowerCase() + 'l';
+            }
           }else {
             returnString += 'a';
           }
+        }
+        return returnString + 'card'
+      },
+      cardTemplate2() {
+        let costArr = this.card.mana_cost.split(/[{}]+/);
+        costArr = costArr.filter(x => x);
+        let hybridArr = [];
+        for(let i = 0; i < costArr.length; i++) {
+          if(costArr[i].includes('/')) {
+            hybridArr.push(costArr.splice(i, 1)[0]);
+          }
+          i++;
+        }
+        let returnString = (hybridArr[0] ? hybridArr[0][2] : this.card.color_identity[1]).toLowerCase();
+        if(this.card.type_line.includes('Land')){
+          returnString += 'l';
         }
         return returnString + 'card'
       },
@@ -126,7 +170,14 @@
     position: relative;
     display: inline-block;
     background-color: black;
-    margin: 38px 36px
+    margin: 38px 36px;
+    overflow: hidden;
+  }
+  .cardTemplate2 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
   }
   .cardTitle, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
     text-shadow: 2px 2px 2px #000;
