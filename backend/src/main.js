@@ -89,12 +89,7 @@ server.register(plugins).then(() => {
 
   // Helper to create API routes. All routes handled by the
   // backend should use this helper.
-  function logRequestDetails(options) {
-    console.log('Outgoing HTTP request details:');
-    console.log('URL:', options.hostname + options.path);
-    console.log('Method:', options.method);
-    console.log('Headers:', options.headers);
-  }
+
   async function createApiRoute(path, options) {
     server.route({
       path: `/api/${path}`,

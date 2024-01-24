@@ -15,11 +15,13 @@
           :style="{ backgroundImage: 'url(' + card.image_uris.art_crop + ')' }" 
           class="cardImage"/>
         <div class="cardType">{{ card.type_line }}</div>
-        <div class="cardExpansion">{{ card.set }}</div>
+        <i :class="'cardExpansion stroke ss ss-' + card.set"/>
+        <i :class="'cardExpansion fill ss ss-' + card.set"/>
+        <i :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"/>
         <div 
           class="cardText" 
           v-html="formatText(card.oracle_text, card.flavor_text)"/>
-        <div class="cardArtist">{{ card.artist }}</div>
+        <div class="cardArtist"><span class="magicSymbol">L</span>{{ card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE!</div>
         <template v-if="card.power || card.toughness">
           <div 
@@ -52,10 +54,14 @@
         let returnString = '';
         if(this.card.color_identity.length > 1) {
           returnString += 'm';
-        } else if(this.card.color_identity.length === 1) {
-          returnString += this.card.color_identity[0].toLowerCase();
-        } else if(this.card.color_identity.length === 0) {
-          returnString += 'a';
+        } else if(this.card.colors.length === 1) {
+          returnString += this.card.colors[0].toLowerCase();
+        } else if(this.card.colors.length === 0) {
+          if(this.card.type_line.includes('Land')){
+            returnString += this.card.color_identity[0].toLowerCase() + 'l';
+          }else {
+            returnString += 'a';
+          }
         }
         return returnString + 'card'
       },
@@ -74,6 +80,39 @@
 </script>
 
 <style>
+  @import "https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css";
+  /* Magic Title */
+  @font-face {
+    font-family: "Magic";
+    font-style: normal;
+    font-weight: 100;
+    src: url("~@/assets/fonts/Goudy Medieval Alternate.ttf");
+  }
+  /* magic text */
+  @font-face {
+    font-family: "Plantin";
+    font-style: normal;
+    font-weight: 100;
+    src: url("~@/assets/fonts/Plantin.otf");
+  }
+  /* magic text italic */
+  @font-face {
+    font-family: "Plantin";
+    font-style: italic;
+    font-weight: 100;
+    src: url("~@/assets/fonts/Plantin-Italic.otf");
+  }
+  /* magic symbols */
+  @font-face {
+    font-family: "Magic Symbols";
+    font-style: normal;
+    font-weight: 100;
+    src: url("~@/assets/fonts/MagicSymbols2008.ttf");
+  }
+  .magicSymbol {
+    font-family: "Magic Symbols";
+  }
+    
   .cardBorder {
     display: inline-block;
     width: 744px;
@@ -89,20 +128,28 @@
     background-color: black;
     margin: 38px 36px
   }
-  .cardTitle, .cardManaCost, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
+  .cardTitle, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
     text-shadow: 2px 2px 2px #000;
+  }
+  .cardManaCost, .symbolGroup {
+    text-shadow: none;
+  }
+  .cardText, .cardManaCost, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
+    font-family: "Plantin";
   }
   .cardTitle {
     position: absolute;
     top: 8px;
-    left: 40px;
-    font-size: 35px;
+    left: 45px;
+    font-size: 42px;
     color: white;
+    font-family: "Magic";
+    letter-spacing: 2.4px;
   }
   .cardManaCost {
     position: absolute;
     top: 8px;
-    right: 40px;
+    right: 45px;
     font-size: 35px;
     color: white;
   }
@@ -119,16 +166,72 @@
   .cardType {
     position: absolute;
     top: 535px;
-    left: 40px;
+    left: 45px;
     font-size: 34px;
     color: white;
   }
   .cardExpansion {
     position: absolute;
-    top: 535px;
-    right: 40px;
-    font-size: 34px;
-    color: white;
+    top: 538px;
+    right: 45px;
+    font-size: 40px;
+  }
+  .cardExpansion:before{
+    background-size: cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    paint-order: stroke fill;
+  }
+  .cardExpansion.fill {
+    text-shadow: 
+    2px 2px 0 black, 
+    -2px -2px 0 black, 
+    -2px 2px 0 black, 
+    2px -2px 0 black,
+    2px 1px 0 black, 
+    -2px -1px 0 black, 
+    -2px 1px 0 black, 
+    2px -1px 0 black,
+    1px 2px 0 black, 
+    -1px -2px 0 black, 
+    -1px 2px 0 black, 
+    1px -2px 0 black,
+    0 2px 0 black,
+    0 -2px 0 black,
+    2px 0 0 black,
+    -2px 0 0 black;
+  }
+  .cardExpansion.stroke {
+    text-shadow: 
+      4px 4px 1px white, 
+      -4px -4px 1px white, 
+      -4px 4px 1px white, 
+      4px -4px 1px white,
+      0 4px 1px white,
+      0 -4px 1px white,
+      4px 0 1px white,
+      -4px 0 1px white,
+      2px 2px 1px white, 
+      -2px -4px 1px white, 
+      -2px 4px 1px white, 
+      2px -4px 1px white,
+      4px 2px 1px white, 
+      -4px -2px 1px white, 
+      -4px 2px 1px white, 
+      4px -2px 1px white;
+  }
+  .cardExpansion.common:before {
+    background-color: black;
+  }
+  .cardExpansion.uncommon:before {
+    background-image: radial-gradient(#ccc 0%, #333 100%);
+  }
+  .cardExpansion.rare:before {
+    background-image: radial-gradient(#dc8 0%, #984 100%);
+  }
+  .cardExpansion.mythic:before {
+    background-image: radial-gradient(#e90 0%, #b32 100%);
   }
   .cardText {
     position: absolute;
@@ -163,7 +266,7 @@
     width: 100%;
     position: absolute;
     border: 0;
-    height: 3px;
+    height: 2px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
   }
   .cardPowerToughness{
@@ -176,7 +279,7 @@
   .cardArtist{
     position: absolute;
     bottom: 35px;
-    left: 40px;
+    left: 45px;
     font-size: 30px;
     color: white;
   }
