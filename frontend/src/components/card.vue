@@ -15,13 +15,17 @@
           class="cardTemplate2"
           alt="Card Template"
         >
+        <span
+          v-if="tombstoneFrame()"
+          class="cardTombstone"
+        >Q</span>
         <div class="cardTitle">{{ card.name }}</div>
         <div class="cardManaCost">{{ card.mana_cost }}</div>
         <div 
           :style="{ backgroundImage: 'url(' + card.image_uris.art_crop + ')' }" 
           class="cardImage"/>
         <div class="cardType">{{ card.type_line }}</div>
-        <i :class="'cardExpansion stroke ss ss-' + card.set"/>
+        <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
         <i 
           v-if="card.rarity !== 'common'" 
           :class="'cardExpansion fill ss ss-' + card.set"/>
@@ -58,6 +62,13 @@
       card: {},
     },
     methods: {
+      tombstoneFrame() {
+        return (
+          this.card.frame_effects && this.card.frame_effects.includes('tombstone')
+          || (this.card.oracle_text.includes('this card') && this.card.oracle_text.includes('your graveyard'))
+          || (this.card.oracle_text.includes('return ' + this.card.name) && this.card.oracle_text.includes('your graveyard'))
+        )
+      },
       cardTemplate() {
         let returnString = '';
         if(this.card.colors.length > 1) {
@@ -163,6 +174,13 @@
     font-weight: 100;
     src: url("~@/assets/fonts/MagicSymbols2008.ttf");
   }
+  /* magic symbols 04 */
+  @font-face {
+    font-family: "Magic Symbols Old";
+    font-style: normal;
+    font-weight: 100;
+    src: url("~@/assets/fonts/magis2004.ttf");
+  }
   .magicSymbol {
     font-family: "Magic Symbols";
   }
@@ -198,6 +216,19 @@
   .cardText, .cardManaCost, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
     font-family: "Plantin";
   }
+  .cardTombstone {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    font-size: 38px;
+    color: gray;
+    font-family: "Magic Symbols Old";
+  }
+  .cardTombstone:before, .cardTombstone:after {
+    content: "Q";
+    position: absolute;
+    left: 0
+  }
   .cardTitle {
     position: absolute;
     top: 8px;
@@ -205,7 +236,7 @@
     font-size: 42px;
     color: white;
     font-family: "Magic";
-    letter-spacing: 2.4px;
+    letter-spacing: 2px;
   }
   .cardManaCost {
     position: absolute;
@@ -244,7 +275,7 @@
     -webkit-text-fill-color: transparent;
     paint-order: stroke fill;
   }
-  .cardExpansion.fill {
+  .cardExpansion.fill, .cardTombstone:after {
     text-shadow: 
     2px 2px 0 black, 
     -2px -2px 0 black, 
@@ -263,7 +294,7 @@
     2px 0 0 black,
     -2px 0 0 black;
   }
-  .cardExpansion.stroke {
+  .cardExpansion.stroke, .cardTombstone:before {
     text-shadow: 
       4px 4px 1px white, 
       -4px -4px 1px white, 
@@ -273,7 +304,7 @@
       0 -4px 1px white,
       4px 0 1px white,
       -4px 0 1px white,
-      2px 2px 1px white, 
+      2px 4px 1px white, 
       -2px -4px 1px white, 
       -2px 4px 1px white, 
       2px -4px 1px white,
@@ -281,6 +312,25 @@
       -4px -2px 1px white, 
       -4px 2px 1px white, 
       4px -2px 1px white;
+  }
+  .cardExpansion.common.stroke {
+    text-shadow: 
+      2px 2px 0 white, 
+      -2px -2px 0 white, 
+      -2px 2px 0 white, 
+      2px -2px 0 white,
+      0 2px 0 white,
+      0 -2px 0 white,
+      2px 0 0 white,
+      -2px 0 0 white,
+      1px 2px 0 white, 
+      -1px -2px 0 white, 
+      -1px 2px 0 white, 
+      1px -2px 0 white,
+      2px 1px 0 white, 
+      -2px -1px 0 white, 
+      -2px 1px 0 white, 
+      2px -1px 0 white;
   }
   .cardExpansion.common:before {
     background-color: black;
