@@ -22,7 +22,9 @@
           class="cardImage"/>
         <div class="cardType">{{ card.type_line }}</div>
         <i :class="'cardExpansion stroke ss ss-' + card.set"/>
-        <i v-if="card.rarity !== 'common'" :class="'cardExpansion fill ss ss-' + card.set"/>
+        <i 
+          v-if="card.rarity !== 'common'" 
+          :class="'cardExpansion fill ss ss-' + card.set"/>
         <i :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"/>
         <div 
           class="cardText" 
@@ -112,7 +114,15 @@
       formatText(text, flavorText) {
         let textBox = '<p>' + text.replace(/\n/g, '</p><p>').replace(/\(/g,'<i>(').replace(/\)/g,'<i>)') + '</p>';
         if (flavorText) {
-          textBox = textBox + '<hr><p><i>' + flavorText.replace(/\n/g, '<br>') + '</i></p>';
+          let ftxt = flavorText.replace(/\n/g, '<br>')
+            .replace(/\b\*/g, "<i>")      // Closing asterisk
+            .replace(/\*\b/g, "</i>")       // Opening singles
+            .replace(/\b'/g, "\u2019")     // Closing singles
+            .replace(/'\b/g, "\u2018")     // Opening singles
+            .replace(/\b"/g, "\u201d")     // Closing doubles
+            .replace(/"\b/g, "\u201c")     // Opening doubles
+            .replace(/--/g,  "\u2014")     // em-dashes
+          textBox = textBox + '<hr><p><i>' + ftxt + '</i></p>';
         }
         return textBox
       },
