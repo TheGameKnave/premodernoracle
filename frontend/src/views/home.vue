@@ -63,7 +63,9 @@ export default {
         .filter(card => card)
       // dedup the list
       cardList = cardList.filter(
-        (card, index) => cardList.indexOf(card) === index
+        (card, index) =>
+          cardList.indexOf(card) === index &&
+          !card.toLowerCase().includes('sideboard')
       )
       this.cardNames = cardList.join('\n')
       fetch('/api/cards', {
