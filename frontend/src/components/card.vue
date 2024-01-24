@@ -176,6 +176,16 @@
           cardTypeElement.style.fontSize = `${fontSize}px`;
         }
       },
+      adjustArtistSize() {
+        const cardArtistElement = this.$refs.cardArtistElement;
+        const cardPowerToughnessElement = this.$refs.cardPowerToughnessElement || null;
+        let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
+
+        while (cardArtistElement.clientWidth + (cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) > 580) {
+          fontSize--;
+          cardArtistElement.style.fontSize = `${fontSize}px`;
+        }
+      },
       adjustCardTextSize() {
         const cardTextElement = this.$refs.cardTextElement;
         let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
@@ -234,20 +244,33 @@
   .magicSymbol {
     font-family: "Magic Symbols";
   }
-    
+  .manaWhite { color: #FAF6D8; }
+  .manaWhitePhy { color: #E9E3B1; }
+  .manaBlue { color: #C1D7E9; }
+  .manaBluePhy { color: #8EBBD1; }
+  .manaBlack { color: #BAB1AB; }
+  .manaBlackPhy { color: #9B8E8A; }
+  .manaRed { color: #E49977; }
+  .manaRedPhy { color: #DE8166; }
+  .manaGreen { color: #A3C095; }
+  .manaGreenPhy { color: #80B092; }
+  .manaGeneric { color: #CAC5C0; }
+  .manaSnow { color: #fff; }
+  .manaEnergy { font-family: 'Mana';}
+  .manaColorless { font-family: 'Mana'; font-size: .78em; padding-left: .05em; }
   .cardBorder {
     display: inline-block;
     width: 744px;
     height: 1038px;
     margin: 10px;
     border-radius: 20px;
-    background-color: black;
+    background-color: #222;
     zoom: 0.5;
   }
   .card {
     position: relative;
     display: inline-block;
-    background-color: black;
+    background-color: #222;
     margin: 38px 36px;
     overflow: hidden;
   }
@@ -265,6 +288,9 @@
   }
   .cardText, .cardManaCost, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness {
     font-family: "Plantin";
+  }
+  .cardTitle, .cardType, .cardArtist {
+    white-space: nowrap;
   }
   .cardTombstone {
     position: absolute;
@@ -284,16 +310,15 @@
     top: 8px;
     left: 45px;
     font-size: 40px;
-    color: white;
+    color: #eee;
     font-family: "Magic";
     letter-spacing: 1px;
   }
   .cardManaCost {
     position: absolute;
-    top: 8px;
+    top: 5px;
     right: 45px;
-    font-size: 35px;
-    color: white;
+    font-size: 40px;
   }
   .cardImage {
     top: 61px;
@@ -310,7 +335,7 @@
     top: 535px;
     left: 45px;
     font-size: 33px;
-    color: white;
+    color: #eee;
   }
   .cardExpansion {
     position: absolute;
@@ -383,7 +408,7 @@
       2px -1px 0 white;
   }
   .cardExpansion.common:before {
-    background-color: black;
+    background-color: #222;
   }
   .cardExpansion.uncommon:before {
     background-image: radial-gradient(#ccc 0%, #333 100%);
@@ -399,7 +424,7 @@
     top: 585px;
     left: 60px;
     font-size: 33px;
-    color: black;
+    color: #222;
     width: 555px;
     max-height: 285px;
     overflow-x: scroll;
@@ -434,14 +459,14 @@
     bottom: 15px;
     right: 27px;
     font-size: 48px;
-    color: white;
+    color: #eee;
   }
   .cardArtist{
     position: absolute;
     bottom: 35px;
     left: 45px;
     font-size: 30px;
-    color: white;
+    color: #eee;
   }
   .cardDisclaimer{
     position: absolute;
@@ -450,6 +475,6 @@
     right: 0;
     text-align: center;
     font-size: 20px;
-    color: white;
+    color: #eee;
   }
 </style>
