@@ -123,11 +123,11 @@
         return returnString + 'card'
       },
       formatText(text, flavorText) {
-        let textBox = '<p>' + text.replace(/\n/g, '</p><p>').replace(/\(/g,'<i>(').replace(/\)/g,'<i>)') + '</p>';
+        let textBox = '<p>' + text.replace(/\n/g, '</p><p>').replace(/\(/g,'<i>(').replace(/\)/g,')</i>') + '</p>';
         if (flavorText) {
           let ftxt = flavorText.replace(/\n/g, '<br>')
-            .replace(/\b\*/g, "<i>")      // Closing asterisk
-            .replace(/\*\b/g, "</i>")       // Opening singles
+            .replace(/\b\*/g, "<i>")       // Closing asterisk
+            .replace(/\*\b/g, "</i>")      // Opening singles
             .replace(/\b'/g, "\u2019")     // Closing singles
             .replace(/'\b/g, "\u2018")     // Opening singles
             .replace(/\b"/g, "\u201d")     // Closing doubles
