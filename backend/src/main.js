@@ -139,7 +139,7 @@ server.register(plugins).then(() => {
         // Use Promise.all with an array to store the fetched data in the correct order
         await Promise.all(payload.cardList.map(async (cardName, index) => {
           cardData = [];
-          if (!cache[cardName.toLowerCase()] || (new Date().getTime() - (this.cache[cardName.toLowerCase()]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
+          if (!cache[cardName.toLowerCase()] || (new Date().getTime() - (cache[cardName.toLowerCase()]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
             const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=art&q=name%3D${encodeURIComponent(`"${cardName}"`)}`;
             const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
             cache[cardName.toLowerCase()] = {

@@ -5,18 +5,34 @@
         v-model="cardNames"
         placeholder="Enter card names, one per line"
       />
-      <button type="button" @click="fetchCards">Submit</button>
+      <button 
+        type="button" 
+        @click="fetchCards">Submit</button>
     </form>
 
     <template v-if="Object.keys(cardData).length">
       <h2>Cards</h2>
-      <div v-if="cardData.length === 0" class="error">No cards found</div>
-      <div v-if="missingCards.length > 0" class="error">
+      <div 
+        v-if="cardData.length === 0" 
+        class="error">No cards found</div>
+      <div 
+        v-if="missingCards.length > 0" 
+        class="error">
         Missing cards: {{ missingCards.join(', ') }}
       </div>
       <div class="cards">
         <template v-for="(card, key) in cardData">
-          <card v-if="card.name" :key="key" :card="card" />
+          <card 
+            v-if="card.name && !['transform','modal_dfc'].includes(card.layout)" 
+            :key="key" 
+            :card="card" />
+          <template v-if="['transform','modal_dfc'].includes(card.layout)">
+            <card 
+              v-for="(face, index) in card.card_faces" 
+              :key="index" 
+              :card="card" 
+              :face="index"/>
+          </template>
         </template>
       </div>
     </template>

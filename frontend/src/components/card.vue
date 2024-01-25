@@ -2,7 +2,7 @@
   <div class="cardBorder">
     <div class="card">
       <template
-        v-if="!card.layout !== 'split'"
+        v-if="card.layout === 'normal' || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
       >
         <img
           :src="require(`@/assets/images/card_templates/${cardTemplate()}.jpg`)"
@@ -10,7 +10,7 @@
           alt="Card Template"
         >
         <img
-          v-if="card.color_identity.length === 2 && !cardTemplate().includes('mcard')"
+          v-if="colorID.length === 2 && !cardTemplate().includes('mcard')"
           :src="require(`@/assets/images/card_templates/${cardTemplate2()}.jpg`)"
           class="cardTemplate2"
           alt="Card Template"
@@ -22,19 +22,27 @@
         <div
           ref="cardTitleElement"
           class="cardTitle"
-        >{{ card.name }}</div>
+        >{{ face !== undefined ? card.card_faces[face].name : card.name }}</div>
         <div
           ref="cardManaCostElement"
           class="cardManaCost"
-          v-html="parseSymbols(card.mana_cost)"
+          v-html="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost)"
         />
         <div 
-          :style="{ backgroundImage: 'url(' + card.image_uris.art_crop + ')' }" 
+          :style="{ backgroundImage: 'url(' + (face !== undefined ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop) + ')' }" 
           class="cardImage"/>
         <div
           ref="cardTypeElement"
           class="cardType"
-        >{{ card.type_line }}</div>
+        >
+          <span 
+            v-if="face === 0" 
+            class="dfc dfcFront">▲</span>
+          <span 
+            v-if="face === 1" 
+            class="dfc dfcBack">▼</span>
+          {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
+        </div>
         <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
         <i
           v-if="card.rarity !== 'common'" 
@@ -47,27 +55,23 @@
         <div 
           ref="cardTextElement"
           class="cardText"
-          v-html="findSymbols(formatText(card.oracle_text, card.flavor_text))"/>
+          v-html="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"/>
         <div
           ref="cardArtistElement"
           class="cardArtist"
-        ><span class="magicSymbol">L</span>{{ card.artist }}</div>
+        ><span class="magicSymbol">L</span>{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE!</div>
-        <template v-if="card.power || card.toughness">
+        <template v-if="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)">
           <div
             ref="cardPowerToughnessElement"
             class="cardPowerToughness" 
-            v-html="formatPT(card.power + '/' + card.toughness)"
+            v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : card.power) + '/' + (face !== undefined ? card.card_faces[face].toughness : card.toughness))"
           />
         </template>
       </template>
-      <template v-else>
+      <template v-if="card.layout === 'split'">
         <img
-          :src="card.card_faces[0].image_uris.art_crop"
-          alt="Card image"
-        >
-        <img
-          :src="card.card_faces[1].image_uris.art_crop"
+          :src="card.image_uris.art_crop"
           alt="Card image"
         >
       </template>
@@ -80,6 +84,7 @@
     name: 'Card',
     props: {
       card: {},
+      face: null
     },
     data() {
       return {
@@ -133,6 +138,22 @@
         }
       }
     },
+    computed: {
+      colorID() {
+        let colorID = this.face !== undefined ? (this.card.card_faces[this.face].colors || this.card.card_faces[this.face].color_indicator) : this.card.color_identity;
+        if((!colorID || colorID.length === 0) && (this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land'))) {
+          colorID = [];
+          let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
+          if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
+          if(text.includes('{W}')) colorID.push('W');
+          if(text.includes('{U}')) colorID.push('U');
+          if(text.includes('{B}')) colorID.push('B');
+          if(text.includes('{R}')) colorID.push('R');
+          if(text.includes('{G}')) colorID.push('G');
+        }
+        return colorID
+      }
+    },
     mounted() {
       this.adjustCardTitleSize();
       this.adjustCardTypeSize();
@@ -140,16 +161,20 @@
     },
     methods: {
       tombstoneFrame() {
+        let oracleText = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
         return (
           this.card.frame_effects && this.card.frame_effects.includes('tombstone')
-          || (this.card.oracle_text.includes('this card') && this.card.oracle_text.includes('your graveyard'))
-          || (this.card.oracle_text.includes('return ' + this.card.name) && this.card.oracle_text.includes('your graveyard'))
+          || (oracleText.includes('this card') && oracleText.includes('your graveyard'))
+          || (oracleText.includes('return ' + this.card.name) && oracleText.includes('your graveyard'))
         )
       },
       cardTemplate() {
+        let colors = this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors;
+        let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
+        let manaCost = this.face !== undefined ? this.card.card_faces[this.face].mana_cost : this.card.mana_cost;
         let returnString = '';
-        if(this.card.colors.length > 1) {
-          let costArr = this.card.mana_cost.split(/[{}]+/);
+        if(colors.length > 1) {
+          let costArr = manaCost.split(/[{}]+/);
           costArr = costArr.filter(x => x);
           let hybridArr = [];
           for(let i = 0; i < costArr.length; i++) {
@@ -165,18 +190,18 @@
           }else{
             returnString += 'm';
           }
-        } else if(this.card.colors.length === 1) {
-          returnString += this.card.colors[0].toLowerCase();
-        } else if(this.card.colors.length === 0) {
-          if(this.card.type_line.includes('Land')){
-            if(this.card.color_identity.length > 2) {
+        } else if(colors.length === 1) {
+          returnString += colors[0].toLowerCase();
+        } else if(colors.length === 0) {
+          if(typeLine.includes('Land')){
+            if(this.colorID.length > 2) {
               returnString += 'ml';
-            }else if(this.card.color_identity.length === 0) {
+            }else if(this.colorID.length === 0) {
               returnString += 'cl';
             }else{
-              returnString += this.card.color_identity[0].toLowerCase() + 'l';
+              returnString += this.colorID[0].toLowerCase() + 'l';
             }
-          }else if(this.card.type_line.includes('Artifact')) { 
+          }else if(typeLine.includes('Artifact')) { 
             returnString += 'a';
           }else{
             returnString += 'c';
@@ -185,7 +210,9 @@
         return returnString + 'card'
       },
       cardTemplate2() {
-        let costArr = this.card.mana_cost.split(/[{}]+/);
+        let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
+        let manaCost = this.face !== undefined ? this.card.card_faces[this.face].mana_cost : this.card.mana_cost;
+        let costArr = manaCost.split(/[{}]+/);
         costArr = costArr.filter(x => x);
         let hybridArr = [];
         for(let i = 0; i < costArr.length; i++) {
@@ -194,8 +221,9 @@
           }
           i++;
         }
-        let returnString = (hybridArr[0] ? hybridArr[0][2] : this.card.color_identity[1]).toLowerCase();
-        if(this.card.type_line.includes('Land')){
+        let returnString = '';
+        if(this.colorID[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID[1]).toLowerCase();
+        if(typeLine.includes('Land')){
           returnString += 'l';
         }
         return returnString + 'card'
@@ -271,48 +299,56 @@
         return composedString
       },
       adjustCardTitleSize() {
-        const cardTitleElement = this.$refs.cardTitleElement;
-        const cardManaCostElement = this.$refs.cardManaCostElement || null;
-        let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
-
-        while (cardTitleElement.clientWidth + (cardManaCostElement ? cardManaCostElement.clientWidth : 0) > 580) {
-          fontSize--;
-          cardTitleElement.style.fontSize = `${fontSize}px`;
+        const cardTitleElement = this.$refs.cardTitleElement || null;
+        if(cardTitleElement){
+          const cardManaCostElement = this.$refs.cardManaCostElement || null;
+          let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
+  
+          while (cardTitleElement.clientWidth + (cardManaCostElement ? cardManaCostElement.clientWidth : 0) > 580) {
+            fontSize--;
+            cardTitleElement.style.fontSize = `${fontSize}px`;
+          }
         }
       },
       adjustCardTypeSize() {
-        const cardTypeElement = this.$refs.cardTypeElement;
-        const cardExpansionElement = this.$refs.cardExpansionElement || null;
-        let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
-
-        while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 580) {
-          fontSize--;
-          cardTypeElement.style.fontSize = `${fontSize}px`;
+        const cardTypeElement = this.$refs.cardTypeElement || null;
+        if(cardTypeElement){
+          const cardExpansionElement = this.$refs.cardExpansionElement || null;
+          let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
+  
+          while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 580) {
+            fontSize--;
+            cardTypeElement.style.fontSize = `${fontSize}px`;
+          }
         }
       },
       adjustArtistSize() {
-        const cardArtistElement = this.$refs.cardArtistElement;
-        const cardPowerToughnessElement = this.$refs.cardPowerToughnessElement || null;
-        let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
-
-        while (cardArtistElement.clientWidth + (cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) > 580) {
-          fontSize--;
-          cardArtistElement.style.fontSize = `${fontSize}px`;
+        const cardArtistElement = this.$refs.cardArtistElement || null;
+        if(cardArtistElement){
+          const cardPowerToughnessElement = this.$refs.cardPowerToughnessElement || null;
+          let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
+  
+          while (cardArtistElement.clientWidth + (cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) > 580) {
+            fontSize--;
+            cardArtistElement.style.fontSize = `${fontSize}px`;
+          }
         }
       },
       adjustCardTextSize() {
-        const cardTextElement = this.$refs.cardTextElement;
-        let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
-
-        while (cardTextElement.scrollHeight > cardTextElement.clientHeight) {
-          fontSize--;
-          cardTextElement.style.fontSize = `${fontSize}px`;
+        const cardTextElement = this.$refs.cardTextElement || null;
+        if(cardTextElement){
+          let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
+  
+          while (cardTextElement.scrollHeight > cardTextElement.clientHeight) {
+            fontSize--;
+            cardTextElement.style.fontSize = `${fontSize}px`;
+          }
+          if(cardTextElement.clientHeight < 60) {
+            cardTextElement.style.textAlign = 'center';
+          }
+          let leftoverSpace = 285 - cardTextElement.clientHeight;
+          cardTextElement.style.paddingTop = `${leftoverSpace/3}px`;
         }
-        if(cardTextElement.clientHeight < 60) {
-          cardTextElement.style.textAlign = 'center';
-        }
-        let leftoverSpace = 285 - cardTextElement.clientHeight;
-        cardTextElement.style.paddingTop = `${leftoverSpace/3}px`;
       },
     }
   }
@@ -460,6 +496,27 @@
     font-size: 33px;
     color: #eee;
   }
+  .dfc {
+    color: #222;
+    text-shadow: 
+      2px 2px 0 white, 
+      -2px -2px 0 white, 
+      -2px 2px 0 white, 
+      2px -2px 0 white,
+      2px 1px 0 white, 
+      -2px -1px 0 white, 
+      -2px 1px 0 white, 
+      2px -1px 0 white,
+      1px 2px 0 white, 
+      -1px -2px 0 white, 
+      -1px 2px 0 white, 
+      1px -2px 0 white,
+      0 2px 0 white,
+      0 -2px 0 white,
+      2px 0 0 white,
+      -2px 0 0 white;
+  }
+  .dfcBack { position: relative; top: 4px }
   .cardExpansion {
     position: absolute;
     top: 538px;
