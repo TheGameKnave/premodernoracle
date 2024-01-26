@@ -54,7 +54,7 @@
         />
         <div 
           ref="cardTextElement"
-          class="cardText"
+          :class="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
           v-html="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"/>
         <div
           ref="cardArtistElement"
@@ -64,7 +64,7 @@
         <template v-if="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)">
           <div
             ref="cardPowerToughnessElement"
-            class="cardPowerToughness" 
+            :class="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
             v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : card.power) + '/' + (face !== undefined ? card.card_faces[face].toughness : card.toughness))"
           />
         </template>
@@ -229,17 +229,33 @@
         return returnString + 'card'
       },
       formatText(text, flavorText) {
-        let textBox = '<p>' + text.replace(/\n/g, '</p><p>').replace(/\(/g,'<i>(').replace(/\)/g,')</i>') + '</p>';
-        if (flavorText) {
-          let ftxt = flavorText.replace(/\n/g, '<br>')
-            .replace(/\b\*/g, "<i>")       // Closing asterisk
-            .replace(/\*\b/g, "</i>")      // Opening singles
-            .replace(/\b'/g, "\u2019")     // Closing singles
-            .replace(/'\b/g, "\u2018")     // Opening singles
-            .replace(/\b"/g, "\u201d")     // Closing doubles
-            .replace(/"\b/g, "\u201c")     // Opening doubles
-            .replace(/--/g,  "\u2014")     // em-dashes
-          textBox = textBox + '<hr><p><i>' + ftxt + '</i></p>';
+        let textBox = text;
+        textBox = '<p>' + textBox
+          .replace(/\n/g, '</p><p>')
+          .replace(/\(/g,'<i>(')
+          .replace(/\)/g,')</i>') + '</p>';
+        let ftxt = flavorText || '';
+        if(ftxt) {
+          ftxt = '<hr>' + ftxt.replace(/\n/g, '<br>');
+        }
+        textBox = (textBox + '<p><i>' + ftxt + '</i></p>')
+          .replace(/\b\*/g, "<i>")       // Closing asterisk
+          .replace(/\*\b/g, "</i>")      // Opening asterisk
+          .replace(/\b'/g, "\u2019")     // Closing singles
+          .replace(/'\b/g, "\u2018")     // Opening singles
+          .replace(/\b"/g, "\u201d")     // Closing doubles
+          .replace(/\."/g, ".\u201d")     // Closing doubles
+          .replace(/"$/g, "\u201d")      // Closing doubles
+          .replace(/"\b/g, "\u201c")     // Opening doubles
+          .replace(/"{/g, "\u201c{")     // Opening doubles
+          .replace(/^"/g, "\u201c")      // Opening doubles
+          .replace(/--/g,  "\u2014")     // em-dashes;
+        if(this.card.type_line.includes('Planeswalker')){
+        textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
+          .replace(/<p>\+([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp">+$1</span>')
+          .replace(/<p>−([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown">-$1</span>')
+          .replace(/<p>\+([1-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp textLoyaltyBig">+$1</span>')
+          .replace(/<p>−([1-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown textLoyaltyBig">-$1</span>');
         }
         return textBox
       },
@@ -305,7 +321,7 @@
           let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
   
           while (cardTitleElement.clientWidth + (cardManaCostElement ? cardManaCostElement.clientWidth : 0) > 580) {
-            fontSize--;
+            fontSize -= 0.25;
             cardTitleElement.style.fontSize = `${fontSize}px`;
           }
         }
@@ -317,7 +333,7 @@
           let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
   
           while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 580) {
-            fontSize--;
+            fontSize -= 0.25;
             cardTypeElement.style.fontSize = `${fontSize}px`;
           }
         }
@@ -328,8 +344,8 @@
           const cardPowerToughnessElement = this.$refs.cardPowerToughnessElement || null;
           let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
   
-          while (cardArtistElement.clientWidth + (cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) > 580) {
-            fontSize--;
+          while (cardArtistElement.clientWidth + ((cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) * 2) > 580) {
+            fontSize -= 0.25;
             cardArtistElement.style.fontSize = `${fontSize}px`;
           }
         }
@@ -340,7 +356,7 @@
           let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
   
           while (cardTextElement.scrollHeight > cardTextElement.clientHeight) {
-            fontSize--;
+            fontSize -= 0.25;
             cardTextElement.style.fontSize = `${fontSize}px`;
           }
           if(cardTextElement.clientHeight < 60) {
@@ -607,7 +623,71 @@
     color: #222;
     width: 555px;
     max-height: 285px;
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
+  }
+  .cardText.planeswalkerText p.loyaltyAbility {
+    position: relative;
+    padding-left: 25px;
+  }
+  .textLoyalty, .textLoyaltyUp, .textLoyaltyDown {
+    position: absolute;
+    right: calc(100% - 5px);
+    z-index: 1;
+    color: #eee;
+    font-size: 28px;
+  }
+  .textLoyalty:after, .textLoyaltyUp:after, .textLoyaltyDown:after {
+    color: #222;
+    content: ":";
+    position: absolute;
+    right: -0.4em;
+  }
+  .textLoyalty:before, .textLoyaltyUp:before, .textLoyaltyDown:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    font-size: 1.8em;
+    left: 0;
+    color:#222;
+    text-shadow:
+      2px 2px 0 white,
+      -2px -2px 0 white,
+      -2px 2px 0 white,
+      2px -2px 0 white,
+      0 2px 0 white,
+      0 -2px 0 white,
+      2px 0 0 white,
+      -2px 0 0 white;
+    font-family: "Mana";
+  }
+  .textLoyalty {
+    right: calc(100% - 10px);
+    padding: 0 0.7em
+  }
+  .textLoyalty:before {
+    content: "";
+    top: -0.18em;
+  }
+  .textLoyalty:after {
+    right: -0.25em;
+  }
+  .textLoyaltyUp {
+    padding: 0 0.3em
+  }
+  .textLoyaltyUp:before {
+    content: "";
+    top: -0.22em;
+  }
+  .textLoyaltyDown {
+    padding: 0 0.45em
+  }
+  .textLoyaltyDown:before {
+    content: "";
+    top: -0.15em;
+  }
+  .textLoyaltyBig:before {
+    transform: scaleX(1.3);
+    left: 0.18em;
   }
   .smol {
     font-size: .7em;
@@ -641,10 +721,37 @@
     font-size: 48px;
     color: #eee;
   }
+  .cardLoyalty {
+    z-index: 1;
+    right: 20px;
+    bottom: 30px;
+    width: 100px;
+    text-align: center;
+  }
+  .cardLoyalty:after {
+    content: "";
+    font-family: "Mana";
+    position: absolute;
+    bottom: -22px;
+    right: 0;
+    font-size: 100px;
+    z-index: -1;
+    color: #222;
+    text-shadow:
+      2px 2px 0 white,
+      -2px -2px 0 white,
+      -2px 2px 0 white,
+      2px -2px 0 white,
+      0 2px 0 white,
+      0 -2px 0 white,
+      2px 0 0 white,
+      -2px 0 0 white;
+  }
   .cardArtist{
     position: absolute;
     bottom: 35px;
-    left: 45px;
+    left: 50%;
+    transform: translate(-50%, 0);
     font-size: 30px;
     color: #eee;
   }
