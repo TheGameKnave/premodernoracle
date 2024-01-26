@@ -2,6 +2,7 @@ const path = require('path');
 const Hapi = require('hapi');
 const fs = require('fs');
 const https = require('https');
+const data = require('../src/data.json');
 
 // ---
 // Config
@@ -147,7 +148,7 @@ server.register(plugins).then(() => {
               data: findFirstPrinting(cardName,cardData),
             };
           }
-          results[cardName] = cache[cardName.toLowerCase()].data || {};
+          results[cardName] = data[cardName.toLowerCase()]?.data || cache[cardName.toLowerCase()].data || {};
         }));
 
         let orderedResults = {};
