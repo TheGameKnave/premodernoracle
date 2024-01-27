@@ -91,85 +91,187 @@ server.register(plugins).then(() => {
   // Helper to create API routes. All routes handled by the
   // backend should use this helper.
 
-  async function createApiRoute(path, options) {
+  async function createApiRoute(path, method, options) {
+    server.route({
+      path: '/api/random',
+      method: 'GET',
+      handler: handleGetRandom,
+      options: {
+        ...options
+      }
+    });
     server.route({
       path: `/api/${path}`,
       method: 'POST',
-      handler: async (request, h) => {
-        const payload = request.payload; // Access the payload from the request
-        console.log(payload);
-        const results = {};
-        let cardData = [];
-  
-        async function fetchPage(url) {
-          const pageUrl = new URL(url); // Parse the next_page URL
-  
-          const pageOptions = {
-            hostname: pageUrl.hostname,
-            path: pageUrl.pathname + pageUrl.search, // Use the path and query from the URL
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            method: 'GET', // Use GET method
-          };
-  
-          return new Promise((resolve, reject) => {
-            const proxyRequest = https.request(pageOptions, (proxyResponse) => {
-              let data = '';
-  
-              proxyResponse.on('data', (chunk) => {
-                data += chunk;
-              });
-  
-              proxyResponse.on('end', () => {
-                const responseData = JSON.parse(data);
-                if(responseData?.data) cardData.push(...responseData.data);
-                resolve(); // Resolve the promise when the fetch operation is complete
-              });
-            });
-  
-            proxyRequest.on('error', (error) => {
-              console.error('Error proxying request to 3rd party API:', error);
-              reject(new Error('Error proxying request to 3rd party API')); // Reject the promise with an error
-            });
-  
-            proxyRequest.end();
-          });
-        }
-  
-        // Use Promise.all with an array to store the fetched data in the correct order
-        await Promise.all(payload.cardList.map(async (cardName, index) => {
-          cardData = [];
-          if (!cache[cardName.toLowerCase()] || (new Date().getTime() - (cache[cardName.toLowerCase()]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
-            const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=art&q=name%3D${encodeURIComponent(`"${cardName}"`)}`;
-            const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
-            cache[cardName.toLowerCase()] = {
-              time: new Date(),
-              data: findFirstPrinting(cardName,cardData),
-            };
-          }
-          results[cardName] = data[cardName.toLowerCase()]?.data || cache[cardName.toLowerCase()].data || {};
-        }));
-
-        let orderedResults = {};
-        payload.cardList.forEach(cardName => {
-          orderedResults[cache[cardName.toLowerCase()].data?.name || cardName] = results[cardName];
-        });
-
-        return h.response(orderedResults); // Return the aggregated results in the same order as the request
-      },
+      handler: handlePostCards,
       options: {
         ...options
       }
     });
   }
 
+  // Function to fetch all expansion sets from the Scryfall API
+  async function fetchExpansionSets() {
+    console.log('fetchExpansionSets');
+    return new Promise((resolve, reject) => {
+      https.get('https://api.scryfall.com/sets', (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          console.log('data', JSON.parse(data));
+          const sealedProductSets = JSON.parse(data).data.filter((set) => ['core','expansion','draft_innovation'].includes(set.set_type) && set.digital === false);
+          // sort exapansions by released_at ascending
+          sealedProductSets.sort((a, b) => new Date(a.released_at) - new Date(b.released_at));
+          console.log('sealedProductSets', Object.keys(sealedProductSets).length, sealedProductSets);
+          resolve(sealedProductSets);
+        });
+      }).on('error', (error) => {
+        console.log(error);
+        reject(error);
+      });
+    });
+  }
+  // Function to fetch a random card from a specific expansion set
+  async function fetchRandomCard(setCode) {
+    console.log('fetchRandomCard', setCode);
+    return new Promise((resolve, reject) => {
+      https.get(`https://api.scryfall.com/cards/random?q=e%3A${setCode}`, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          resolve(JSON.parse(data));
+        });
+      }).on('error', (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  // Function to display random card from each expansion set
+  async function displayRandomCardsFromEachSet() {
+    try {
+      const expansionSets = await fetchExpansionSets();
+      const randomCards = [];
+
+      for (const set of expansionSets) {
+        const randomCard = await fetchRandomCard(set.code);
+        console.log(set.name, set.code, randomCard.name);
+        randomCards.push({ set: set.name, card: randomCard.name });
+      }
+      // create an object with the set as the key and the card as the value
+      const randomCardsObject = randomCards.reduce((obj, item) => {
+        obj[item.set] = item.card;
+        return obj;
+      }, {});
+
+      return randomCardsObject;
+    } catch (error) {
+      console.error('Error fetching random cards:', error);
+      throw error;
+    }
+  }
+
+  // Handler function for the GET /api/random route
+  async function handleGetRandom(request, h) {
+    try {
+      const randomCards = await displayRandomCardsFromEachSet();
+      return h.response(randomCards);
+    } catch (error) {
+      return h.response('An error occurred while fetching random cards').code(500);
+    }
+  }
+
+  async function handlePostCards (request, h) {
+    const payload = request.payload; // Access the payload from the request
+    console.log('payload',payload);
+    const results = {};
+    let cardData = [];
+
+    async function fetchPage(url) {
+      const pageUrl = new URL(url); // Parse the next_page URL
+
+      const pageOptions = {
+        hostname: pageUrl.hostname,
+        path: pageUrl.pathname + pageUrl.search, // Use the path and query from the URL
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'GET', // Use GET method
+      };
+
+      return new Promise((resolve, reject) => {
+        const proxyRequest = https.request(pageOptions, (proxyResponse) => {
+          let data = '';
+
+          proxyResponse.on('data', (chunk) => {
+            data += chunk;
+          });
+
+          proxyResponse.on('end', () => {
+            const responseData = JSON.parse(data);
+            console.log(url,'data', responseData.data);
+            if(responseData?.data) cardData.push(...responseData.data);
+            resolve(); // Resolve the promise when the fetch operation is complete
+          });
+        });
+
+        proxyRequest.on('error', (error) => {
+          console.error('Error proxying request to 3rd party API:', error);
+          reject(new Error('Error proxying request to 3rd party API')); // Reject the promise with an error
+        });
+
+        proxyRequest.end();
+      });
+    }
+
+    // Use Promise.all with an array to store the fetched data in the correct order
+    await Promise.all(payload.cardList.map(async (cardName, index) => {
+      cardData = [];
+      if (!cache[cardName.toLowerCase()] || (new Date().getTime() - (cache[cardName.toLowerCase()]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
+        const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=name%3D${encodeURIComponent(`"${cardName}"`)}`;
+        const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
+        console.log('fetchedData',fetchedData);
+        console.log(cardData)
+        cache[cardName.toLowerCase()] = {
+          time: new Date(),
+          data: findFirstPrinting(cardName,cardData),
+        };
+      }
+      results[cardName] = data[cardName.toLowerCase()]?.data || cache[cardName.toLowerCase()].data || {};
+    }));
+
+    let orderedResults = {};
+    payload.cardList.forEach(cardName => {
+      orderedResults[cache[cardName.toLowerCase()].data?.name || cardName] = results[cardName];
+    });
+    console.log('results:',orderedResults);
+
+    return h.response(orderedResults); // Return the aggregated results in the same order as the request
+  }
+
   function findFirstPrinting(cardName,cardData){
-    return cardData.find(card => card.name.toLowerCase() === cardName.toLowerCase() && card.reprint === false);
+    let possibilities = cardData.filter(card => card.name.toLowerCase().includes(cardName.toLowerCase()) && card.reprint === false);
+    if (possibilities.length > 1) {
+      let narrowedPossibilities = possibilities.filter(card => card.name.toLowerCase() === cardName.toLowerCase());
+      if(narrowedPossibilities.length === 1){
+        console.log('Found one', narrowedPossibilities[0].name);
+        return narrowedPossibilities[0];
+      }
+        console.log('Found more than one', possibilities[0].name);
+    }
+    return possibilities[0];
   }
   
   // Create an example route for `/api/cards`.
-  createApiRoute('cards', {});
+  createApiRoute('cards', 'POST', {});
 
   // ----------
   // SPA routes
