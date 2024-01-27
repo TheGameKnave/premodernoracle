@@ -7,7 +7,8 @@
       />
       <button 
         type="button" 
-        @click="fetchCards">Submit</button>
+        @click="fetchCards">Submit
+      </button>
     </form>
 
     <template v-if="Object.keys(cardData).length">
@@ -25,7 +26,8 @@
           <card 
             v-if="card.name && !['transform','modal_dfc'].includes(card.layout)" 
             :key="key" 
-            :card="card" />
+            :card="card"
+          />
           <template v-if="['transform','modal_dfc'].includes(card.layout)">
             <card 
               v-for="(face, index) in card.card_faces" 
@@ -40,10 +42,10 @@
 </template>
 
 <script>
-import Card from '@/components/card.vue'
+import card from '@/components/card.vue'
 export default {
   components: {
-    Card,
+    card,
   },
   data() {
     return {
@@ -101,6 +103,7 @@ export default {
         .catch(error => {
           console.error('Fetch error:', error)
         })
+      console.log(this.cardData)
     },
   },
 }
@@ -118,7 +121,7 @@ export default {
   font-family: 'Plantin';
   font-style: normal;
   font-weight: 100;
-  src: url('~@/assets/fonts/Plantin.otf');
+  src: url('~@/assets/fonts/PlantinMTProLight.ttf');
 }
 textarea,
 h2 {
