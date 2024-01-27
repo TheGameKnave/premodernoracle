@@ -103,7 +103,6 @@ export default {
         .catch(error => {
           console.error('Fetch error:', error)
         })
-      console.log(this.cardData)
     },
   },
 }

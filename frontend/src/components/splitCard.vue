@@ -34,19 +34,25 @@
     >
       {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
     </div>
-    <i :class="'splitCardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
-    <i
-      v-if="card.rarity !== 'common'" 
-      :class="'splitCardExpansion fill ss ss-' + card.set"
-    />
-    <i
-      ref="cardExpansionElement"
-      :class="'splitCardExpansion ' + card.rarity + ' ss ss-' + card.set"
-    />
+    <div class="splitCardExpansionWrapper">
+      <i
+        v-if="card.rarity === 'common'"
+        :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"
+      />
+      <i
+        v-if="card.rarity !== 'common'" 
+        :class="'cardExpansion fill ss ss-' + card.set"
+      />
+      <i
+        ref="cardExpansionElement"
+        :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"
+      />
+    </div>
     <div 
       ref="cardTextElement"
       :class="'splitCardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
       v-html="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"/>
+    <div class="splitCardCopyright">©&nbsp;<span>∑</span></div>
     <div
       ref="cardArtistElement"
       class="splitCardArtist"
@@ -225,7 +231,7 @@
           .replace(/\)/g,')</i>') + '</p>';
         let ftxt = flavorText || '';
         if(ftxt) {
-          ftxt = '<hr>' + ftxt.replace(/\n/g, '<br>');
+          ftxt = (this.card.oracle_text ? '<hr>' : '') + ftxt.replace(/\n/g, '<br>');
         }
         textBox = (textBox + '<p><i>' + ftxt + '</i></p>')
           .replace(/\b\*/g, "<i>")       // Closing asterisk
@@ -343,11 +349,11 @@
         const cardTextElement = this.$refs.cardTextElement || null;
         if(cardTextElement){
           let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
-  
-          while (cardTextElement.scrollHeight > 220 && fontSize > 16) {
-            if(fontSize > 16) fontSize -= 0.25;
+          let letterSpacing = 0;
+
+          while (cardTextElement.scrollHeight > 220 && fontSize > 14) {
+            if(fontSize > 14) fontSize -= 0.25;
             else letterSpacing -= 0.25;
-            console.log(cardTextElement.scrollHeight, cardTextElement.clientHeight, fontSize)
             cardTextElement.style.fontSize = `${fontSize}px`;
             cardTextElement.style.letterSpacing = `${letterSpacing}px`;
           }
@@ -440,7 +446,7 @@
     top: 0;
     -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
   }
-  .splitCardTitle, .splitCardType, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness {
+  .splitCardTitle, .splitCardType, .splitCardCopyright, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness {
     text-shadow: 2px 2px 2px #000;
   }
   .splitCardManaCost, .symbolGroup {
@@ -501,108 +507,11 @@
     font-size: 33px;
     color: #eee;
   }
-  .dfc {
-    color: #222;
-    text-shadow: 
-      2px 2px 0 white, 
-      -2px -2px 0 white, 
-      -2px 2px 0 white, 
-      2px -2px 0 white,
-      2px 1px 0 white, 
-      -2px -1px 0 white, 
-      -2px 1px 0 white, 
-      2px -1px 0 white,
-      1px 2px 0 white, 
-      -1px -2px 0 white, 
-      -1px 2px 0 white, 
-      1px -2px 0 white,
-      0 2px 0 white,
-      0 -2px 0 white,
-      2px 0 0 white,
-      -2px 0 0 white;
-  }
-  .dfcBack { position: relative; top: 4px }
-  .splitCardExpansion {
+  .splitCardExpansionWrapper {
     position: absolute;
-    top: 326px;
-    right: 35px;
-    font-size: 35px !important;
-  }
-  .splitCardExpansion:before{
-    background-size: cover;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    paint-order: stroke fill;
-  }
-  .splitCardExpansion.fill, .splitCardTombstone:after {
-    text-shadow: 
-    2px 2px 0 black, 
-    -2px -2px 0 black, 
-    -2px 2px 0 black, 
-    2px -2px 0 black,
-    2px 1px 0 black, 
-    -2px -1px 0 black, 
-    -2px 1px 0 black, 
-    2px -1px 0 black,
-    1px 2px 0 black, 
-    -1px -2px 0 black, 
-    -1px 2px 0 black, 
-    1px -2px 0 black,
-    0 2px 0 black,
-    0 -2px 0 black,
-    2px 0 0 black,
-    -2px 0 0 black;
-  }
-  .splitCardExpansion.stroke, .splitCardTombstone:before {
-    text-shadow: 
-      3.5px 3.5px 1px white, 
-      -3.5px -3.5px 1px white, 
-      -3.5px 3.5px 1px white, 
-      3.5px -3.5px 1px white,
-      0 3.5px 1px white,
-      0 -3.5px 1px white,
-      3.5px 0 1px white,
-      -3.5px 0 1px white,
-      1.5px 3.5px 1px white, 
-      -1.5px -3.5px 1px white, 
-      -1.5px 3.5px 1px white, 
-      1.5px -3.5px 1px white,
-      3.5px 1.5px 1px white, 
-      -3.5px -1.5px 1px white, 
-      -3.5px 1.5px 1px white, 
-      3.5px -1.5px 1px white;
-  }
-  .splitCardExpansion.common.stroke {
-    text-shadow: 
-      2px 2px 0 white, 
-      -2px -2px 0 white, 
-      -2px 2px 0 white, 
-      2px -2px 0 white,
-      0 2px 0 white,
-      0 -2px 0 white,
-      2px 0 0 white,
-      -2px 0 0 white,
-      1px 2px 0 white, 
-      -1px -2px 0 white, 
-      -1px 2px 0 white, 
-      1px -2px 0 white,
-      2px 1px 0 white, 
-      -2px -1px 0 white, 
-      -2px 1px 0 white, 
-      2px -1px 0 white;
-  }
-  .splitCardExpansion.common:before {
-    background-color: #222;
-  }
-  .splitCardExpansion.uncommon:before {
-    background-image: radial-gradient(#ccc 0%, #333 100%);
-  }
-  .splitCardExpansion.rare:before {
-    background-image: radial-gradient(#dc8 0%, #984 100%);
-  }
-  .splitCardExpansion.mythic:before {
-    background-image: radial-gradient(#e90 0%, #b32 100%);
+    top: 344px;
+    right: 44px;
+    font-size: 38px;
   }
   .splitCardText {
     position: absolute;
@@ -639,14 +548,14 @@
     left: 0;
     color:#222;
     text-shadow:
-      2px 2px 0 white,
-      -2px -2px 0 white,
-      -2px 2px 0 white,
-      2px -2px 0 white,
-      0 2px 0 white,
-      0 -2px 0 white,
-      2px 0 0 white,
-      -2px 0 0 white;
+      2px 2px 0 #eee,
+      -2px -2px 0 #eee,
+      -2px 2px 0 #eee,
+      2px -2px 0 #eee,
+      0 2px 0 #eee,
+      0 -2px 0 #eee,
+      2px 0 0 #eee,
+      -2px 0 0 #eee;
     font-family: "Mana";
   }
   .textLoyalty {
@@ -703,39 +612,16 @@
     height: 2px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
   }
-  .splitCardPowerToughness{
+  .splitCardCopyright {
     position: absolute;
-    bottom: 7px;
-    right: 27px;
-    font-size: 48px;
-    letter-spacing: 3px;
+    bottom: 12px;
+    left: 12px;
+    font-size: 21px;
     color: #eee;
   }
-  .splitCardLoyalty {
-    z-index: 1;
-    right: 20px;
-    bottom: 20px;
-    width: 100px;
-    text-align: center;
-  }
-  .splitCardLoyalty:after {
-    content: "";
-    font-family: "Mana";
-    position: absolute;
-    bottom: -12px;
-    right: 0;
-    font-size: 100px;
-    z-index: -1;
-    color: #222;
-    text-shadow:
-      2px 2px 0 white,
-      -2px -2px 0 white,
-      -2px 2px 0 white,
-      2px -2px 0 white,
-      0 2px 0 white,
-      0 -2px 0 white,
-      2px 0 0 white,
-      -2px 0 0 white;
+  .splitCardCopyright span {
+    font-size: 42px;
+    font-family: "Magic Symbols";
   }
   .splitCardArtist{
     position: absolute;
