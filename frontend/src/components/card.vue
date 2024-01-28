@@ -69,7 +69,7 @@
         ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE</div>
         <div
-          v-if="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)"
+          v-if="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)) && !card.layout === 'leveler'"
           ref="cardPowerToughnessElement"
           :class="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
           v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : card.power) + '/' + (face !== undefined ? card.card_faces[face].toughness : card.toughness))"
@@ -259,8 +259,9 @@
         let ftxt = flavorText || '';
         if(ftxt) {
           ftxt = (this.card.oracle_text ? '<hr>' : '') + ftxt.replace(/\n/g, '<br>');
+          textBox = (textBox + '<p><i>' + ftxt + '</i></p>');
         }
-        textBox = (textBox + '<p><i>' + ftxt + '</i></p>')
+        textBox = textBox
           .replace(/\b\*/g, "<i>")       // Closing asterisk
           .replace(/\*\b/g, "</i>")      // Opening asterisk
           .replace(/\b'/g, "\u2019")     // Closing singles
@@ -284,7 +285,12 @@
             .replace(/<p>\+([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp textLoyaltyBig">+$1</span>')
             .replace(/<p>−([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown textLoyaltyBig">-$1</span>');
         }
-        textBox = textBox.replace(/<p>LEVEL.*[0-9]*\/[0-9]*<\/p>/g,'<p class="levelAbility"><div class="levelText"></div></p>');
+        textBox = textBox
+          .replace(/<p>Level up (.*)<\/p><p>LEVEL 1-([0-9]*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?<p>LEVEL ([0-9]\+*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?/g,
+            `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[face].toughness : this.card.toughness))}</div></div>
+<div class="levelAbility"><div class="levelSpread">1–$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
+<div class="levelAbility"><div class="levelSpread">$6</div><div class="levelText">$9</div><div class="levelPT">$7</div></div>`);
+        console.log(textBox)
         return textBox
       },
       formatPT(string){
@@ -457,7 +463,7 @@
     -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
     mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
   }
-  .cardTitle, .cardType, .cardCopyright, .cardArtist, .cardDisclaimer, .cardPowerToughness {
+  .cardTitle, .cardType, .cardCopyright, .cardArtist, .cardDisclaimer, .cardPowerToughness, .levelPT {
     text-shadow: 2px 2px 2px #000;
   }
   .cardManaCost, .symbolGroup {
@@ -982,6 +988,64 @@
   .textLoyaltyBig:before {
     transform: scaleX(1.3);
     left: 10px;
+  }
+  .levelAbility {
+    display: flex;
+    min-height: 90px;
+  }
+  .levelReminder {
+    font-size: 29px;
+    line-height: 35px;
+  }
+  .levelSpread {
+    flex: 0 0 75px;
+    color: #eee;
+    position: relative;
+    text-align: center;
+    align-self: center;
+    font-size: 40px;
+    z-index: 99;
+  }
+  .levelSpread:before {
+    content: "Level";
+    font-size: 28px;
+    color: #eee;
+    position: absolute;
+    top: -30px;
+    right: 50%;
+    transform: translate(50%, 0);
+    z-index: 99;
+    font-size: 20px;
+  }
+  .levelSpread:after {
+    content: "\2617";
+    position: absolute;
+    top: -15px;
+    transform: rotate(90deg);
+    color: #222;
+    left: -20px;
+    z-index: -1;
+    font-size: 90px;
+    text-shadow:
+      2px 2px 0 #eee,
+      -2px -2px 0 #eee,
+      -2px 2px 0 #eee,
+      2px -2px 0 #eee,
+      0 2px 0 #eee,
+      0 -2px 0 #eee,
+      2px 0 0 #eee,
+      -2px 0 0 #eee;
+  }
+  .levelText {
+    flex: 1 1 auto;
+    padding-left: 20px;
+  }
+  .levelPT {
+    flex: 0 0 50px;
+    font-size: 45px;
+    letter-spacing: 1px;
+    color: #eee;
+    align-self: center;
   }
   .smol {
     font-size: .7em;
