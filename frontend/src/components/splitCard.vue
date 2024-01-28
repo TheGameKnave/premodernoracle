@@ -6,7 +6,7 @@
       alt="Card Template"
     >
     <img
-      v-if="colorID.length === 2 && !cardTemplate().includes('mcard')"
+      v-if="colorID.length === 2 && !cardTemplate().includes('msplit')"
       :src="require(`@/assets/images/card_templates/${cardTemplate2()}.jpg`)"
       class="splitCardTemplate2"
       alt="Card Template"
