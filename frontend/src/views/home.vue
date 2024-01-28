@@ -109,18 +109,48 @@ export default {
 </script>
 
 <style>
+@import "https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css";
+/* Magic Title */
 @font-face {
-  font-family: 'Magic';
+  font-family: "Magic";
   font-style: normal;
   font-weight: 100;
-  src: url('~@/assets/fonts/Goudy Medieval Alternate.ttf');
+  src: url("~@/assets/fonts/Goudy Mediaeval Light.ttf");
 }
 /* magic text */
 @font-face {
-  font-family: 'Plantin';
+  font-family: "Plantin";
   font-style: normal;
   font-weight: 100;
-  src: url('~@/assets/fonts/PlantinMTProLight.ttf');
+  src: url("~@/assets/fonts/PlantinMTProLight.ttf");
+}
+/* magic text italic */
+@font-face {
+  font-family: "Plantin";
+  font-style: italic;
+  font-weight: 100;
+  src: url("~@/assets/fonts/PlantinMTProLightIt.ttf");
+}
+/* magic symbols */
+@font-face {
+  font-family: "Magic Symbols";
+  font-style: normal;
+  font-weight: 100;
+  src: url("~@/assets/fonts/MagicSymbols2012 Z.ttf");
+}
+/* some updated symbols */
+@font-face {
+  font-family: "Mana";
+  font-style: normal;
+  font-weight: 100;
+  src: url("~@/assets/fonts/mana.ttf");
+}
+/* magic symbols 04 */
+@font-face {
+  font-family: "Magic Symbols Old";
+  font-style: normal;
+  font-weight: 100;
+  src: url("~@/assets/fonts/magis2004.ttf");
 }
 textarea,
 h2 {
