@@ -35,10 +35,7 @@
       {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
     </div>
     <div class="splitCardExpansionWrapper">
-      <i
-        v-if="card.rarity === 'common'"
-        :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"
-      />
+      <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set" />
       <i
         v-if="card.rarity !== 'common'" 
         :class="'cardExpansion fill ss ss-' + card.set"
@@ -147,6 +144,7 @@
       this.adjustCardTitleSize();
       this.adjustCardTypeSize();
       this.adjustCardTextSize();
+      this.adjustArtistSize();
     },
     methods: {
       tombstoneFrame() {
@@ -433,18 +431,18 @@
   }
   .splitCardTitle {
     position: absolute;
-    top: 6px;
-    left: 35px;
-    font-size: 40px;
+    top: 3px;
+    left: 36px;
+    font-size: 42px;
     color: #eee;
     font-family: "Magic";
-    letter-spacing: 1px;
+    letter-spacing: 0.07em;
   }
   .splitCardManaCost {
     position: absolute;
-    top: 5px;
-    right: 20px;
-    font-size: 40px;
+    top: 1px;
+    right: 14px;
+    font-size: 44px;
   }
   .splitCardImage {
     top: 58px;
@@ -461,21 +459,22 @@
   .splitCardType {
     position: absolute;
     top: 327px;
-    left: 35px;
-    font-size: 33px;
+    left: 30px;
+    font-size: 34px;
     color: #eee;
   }
   .splitCardExpansionWrapper {
     position: absolute;
     top: 344px;
-    right: 44px;
+    right: 52px;
     font-size: 38px;
   }
   .splitCardText {
     position: absolute;
     top: 375px;
     left: 43px;
-    font-size: 33px;
+    font-size: 38px;
+    line-height: 1.075em;
     color: #222;
     width: 375px;
     max-height: 220px;
@@ -484,74 +483,13 @@
     position: relative;
     padding-left: 25px;
   }
-  .textLoyalty, .textLoyaltyUp, .textLoyaltyDown {
-    position: absolute;
-    right: calc(100% - 5px);
-    z-index: 1;
-    color: #eee;
-    font-size: 28px;
-  }
-  .textLoyalty:after, .textLoyaltyUp:after, .textLoyaltyDown:after {
-    color: #222;
-    content: ":";
-    position: absolute;
-    right: -12px;
-    top: -3px;
-  }
-  .textLoyalty:before, .textLoyaltyUp:before, .textLoyaltyDown:before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    font-size: 1.8em;
-    left: 0;
-    color:#222;
-    text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
-    font-family: "Mana";
-  }
-  .textLoyalty {
-    right: calc(100% - 10px);
-    padding: 0 0.7em
-  }
-  .textLoyalty:before {
-    content: "";
-    top: -0.23em;
-  }
-  .textLoyalty:after {
-    right: -0.25em;
-  }
-  .textLoyaltyUp {
-    padding: 0 0.3em
-  }
-  .textLoyaltyUp:before {
-    content: "";
-    top: -0.25em;
-  }
-  .textLoyaltyDown {
-    padding: 0 0.45em
-  }
-  .textLoyaltyDown:before {
-    content: "";
-    top: -0.2em;
-  }
-  .textLoyaltyBig:before {
-    transform: scaleX(1.3);
-    left: 0.18em;
-  }
   .smol {
     font-size: .7em;
     position: relative;
     top: -8px;
   }
   .splitCardText p {
-    margin: 10px 0;
+    margin: 0.25em 0;
   }
   hr {
     border: 0;
@@ -572,14 +510,16 @@
   }
   .splitCardCopyright {
     position: absolute;
-    bottom: 12px;
-    left: 12px;
+    bottom: 16px;
+    left: 16px;
     font-size: 21px;
     color: #eee;
   }
   .splitCardCopyright span {
     font-size: 42px;
     font-family: "Magic Symbols";
+    position: relative;
+    left: -10px;
   }
   .splitCardArtist{
     position: absolute;
@@ -591,11 +531,11 @@
   }
   .splitCardDisclaimer{
     position: absolute;
-    bottom: 10px;
+    bottom: 17px;
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     color: #eee;
   }
 </style>

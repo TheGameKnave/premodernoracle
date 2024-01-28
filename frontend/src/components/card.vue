@@ -1,8 +1,9 @@
 <template>
   <div class="cardBorder">
-    <div class="card">
+    <img v-if="originalCard" :src="face !== undefined ? card.card_faces[face].image_uris.large : card.image_uris.large" class="originalCard" />
+    <div :class="'card ' + (originalCard ? 'originalPresent' : '')">
       <template
-        v-if="['normal','mutate','prototype','meld','class','case','saga'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
+        v-if="['normal','mutate','prototype','meld','class','case','saga','leveler'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
       >
         <img
           :src="require(`@/assets/images/card_templates/${cardTemplate()}.jpg`)"
@@ -44,10 +45,7 @@
           {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
         </div>
         <div class="cardExpansionWrapper">
-          <i
-            v-if="card.rarity === 'common'"
-            :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"
-          />
+          <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
           <i
             v-if="card.rarity !== 'common'" 
             :class="'cardExpansion fill ss ss-' + card.set"
@@ -106,6 +104,7 @@
     },
     data() {
       return {
+        originalCard: false,
         wubrg: ['W', 'U', 'B', 'R', 'G'],
         symbols: {
           'T': '<span class="manaGeneric">o</span>T',
@@ -181,6 +180,7 @@
       this.adjustCardTitleSize();
       this.adjustCardTypeSize();
       this.adjustCardTextSize();
+      this.adjustArtistSize();
     },
     methods: {
       tombstoneFrame() {
@@ -266,21 +266,27 @@
           .replace(/\b\*/g, "<i>")       // Closing asterisk
           .replace(/\*\b/g, "</i>")      // Opening asterisk
           .replace(/\b'/g, "\u2019")     // Closing singles
+          .replace(/'$/g, "\u2019")      // Closing singles
+          .replace(/'</g, "\u2019<")     // Closing singles
+          .replace(/\.'/g, "\u2019")     // Closing singles
           .replace(/'\b/g, "\u2018")     // Opening singles
+          .replace(/'{/g, "\u2018{")     // Opening singles
           .replace(/\b"/g, "\u201d")     // Closing doubles
-          .replace(/\."/g, ".\u201d")     // Closing doubles
+          .replace(/\."/g, ".\u201d")    // Closing doubles
           .replace(/"$/g, "\u201d")      // Closing doubles
+          .replace(/"</g, "\u201d<")     // Closing doubles
           .replace(/"\b/g, "\u201c")     // Opening doubles
           .replace(/"{/g, "\u201c{")     // Opening doubles
           .replace(/^"/g, "\u201c")      // Opening doubles
           .replace(/--/g,  "\u2014")     // em-dashes;
         if(this.card.type_line.includes('Planeswalker')){
-        textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
-          .replace(/<p>\+([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp">+$1</span>')
-          .replace(/<p>−([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown">-$1</span>')
-          .replace(/<p>\+([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp textLoyaltyBig">+$1</span>')
-          .replace(/<p>−([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown textLoyaltyBig">-$1</span>');
+          textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
+            .replace(/<p>\+([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp">+$1</span>')
+            .replace(/<p>−([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown">-$1</span>')
+            .replace(/<p>\+([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp textLoyaltyBig">+$1</span>')
+            .replace(/<p>−([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown textLoyaltyBig">-$1</span>');
         }
+        textBox = textBox.replace(/<p>LEVEL.*[0-9]*\/[0-9]*<\/p>/g,'<p class="levelAbility"><div class="levelText"></div></p>');
         return textBox
       },
       formatPT(string){
@@ -341,10 +347,12 @@
       adjustCardTitleSize() {
         const cardTitleElement = this.$refs.cardTitleElement || null;
         if(cardTitleElement){
-          const cardManaCostElement = this.$refs.cardManaCostElement || null;
           let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
   
-          while (cardTitleElement.clientWidth + (cardManaCostElement ? cardManaCostElement.clientWidth : 0) > 580) {
+          //count the number of mana symbols in mana_cost
+          const countInstancesOfCharacter = (inputString, character) => inputString.split(character).length - 1;
+          let manaCount = countInstancesOfCharacter(this.card.mana_cost || '', '{');
+          while (cardTitleElement.clientWidth + (manaCount * 40) > 560) {
             fontSize -= 0.25;
             cardTitleElement.style.fontSize = `${fontSize}px`;
           }
@@ -365,10 +373,9 @@
       adjustArtistSize() {
         const cardArtistElement = this.$refs.cardArtistElement || null;
         if(cardArtistElement){
-          const cardPowerToughnessElement = this.$refs.cardPowerToughnessElement || null;
           let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
   
-          while (cardArtistElement.clientWidth + ((cardPowerToughnessElement ? cardPowerToughnessElement.clientWidth : 0) * 2) > 580) {
+          while (cardArtistElement.clientWidth > 380) {
             fontSize -= 0.25;
             cardArtistElement.style.fontSize = `${fontSize}px`;
           }
@@ -380,7 +387,7 @@
           let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
           let letterSpacing = 0;
   
-          while (cardTextElement.scrollHeight > 295 && fontSize > 18) {
+          while (cardTextElement.scrollHeight > 270 && fontSize > 18) {
             if(fontSize > 18) fontSize -= 0.25;
             else letterSpacing -= 0.25;
             cardTextElement.style.fontSize = `${fontSize}px`;
@@ -417,13 +424,21 @@
   .manaColorless { font-family: 'Mana'; font-size: .78em; padding-left: .05em; }
   .cardBorder {
     display: inline-block;
+    position: relative;
     width: 744px;
     height: 1038px;
     overflow: hidden;
     margin: 10px;
     border-radius: 20px;
     background-color: #222;
-    zoom: 0.5;
+    /* zoom: 0.5; */
+  }
+  .originalCard {
+    position: absolute;
+    top: -3px;
+    left: -2px;
+    width: 746px;
+    z-index: 0;
   }
   .card {
     position: relative;
@@ -433,6 +448,9 @@
     overflow: hidden;
     width: 672px;
     height: 962px;
+  }
+  .card.originalPresent {
+    opacity: 0.75;
   }
   .cardTemplate2 {
     position: absolute;
@@ -496,16 +514,17 @@
   .cardTitle {
     position: absolute;
     top: 8px;
-    left: 45px;
-    font-size: 40px;
+    left: 44px;
+    font-size: 39px;
+    letter-spacing: 0.039em;
     color: #eee;
     font-family: 'Magic';
   }
   .cardManaCost {
     position: absolute;
-    top: 5px;
-    right: 30px;
-    font-size: 42px;
+    top: 2px;
+    right: 20px;
+    font-size: 46px;
   }
   .cardImage {
     top: 61px;
@@ -519,16 +538,16 @@
   }
   .cardType {
     position: absolute;
-    top: 535px;
-    left: 45px;
-    font-size: 33px;
+    top: 537px;
+    left: 42px;
+    font-size: 33.5px;
     line-height: 50px;
     color: #eee;
   }
   .cardExpansionWrapper {
     position: absolute;
     top: 558px;
-    right: 58px;
+    right: 68px;
     font-size: 40px;
   }
   .cardExpansion {
@@ -538,6 +557,13 @@
     transform: translate(50%, -50%) !important;
   }
   .stroke.ss-wth:after,
+  .stroke.ss-por:after,
+  .stroke.ss-som:after,
+  .stroke.ss-rtr:after,
+  .stroke.ss-bbd:after,
+  .stroke.ss-mh2:after,
+  .stroke.ss-clb:after,
+  .stroke.ss-mom:after,
   .stroke.ss-m10:after,
   .stroke.ss-m11:after,
   .stroke.ss-m12:after,
@@ -558,8 +584,30 @@
     border-radius: 0.2em;
     transform: translate(50%, -50%);
   }
-  .fill.ss-som:after,
+  .stroke.ss-som:after {
+    height: 71%;
+    width: 83%;
+    top: 19px;
+  }
+  .stroke.ss-por:after {
+    height: 19%;
+    width: 76%;
+    top: 28px;
+  }
+  .stroke.ss-bbd:after {
+    height: 34%;
+    width: 48%;
+    top: 10px;
+  }
   .fill.ss-afr:after,
+  .fill.ss-vis:after,
+  .fill.ss-usg:after,
+  .fill.ss-zen:after,
+  .fill.ss-som:after,
+  .fill.ss-mbs:after,
+  .fill.ss-bbd:after,
+  .fill.ss-lci:after,
+  .fill.ss-dmu:after,
   .fill.ss-mid:after, .stroke.ss-mid:after,
   .fill.ss-m10:after,
   .fill.ss-m11:after,
@@ -573,7 +621,7 @@
     content: '';
     position: absolute;
     z-index: -1;
-    width: 75%;
+    width: 90%;
     height: 45%;
     background: #222;
     top: 50%;
@@ -581,54 +629,172 @@
     border-radius: 0.2em;
     transform: translate(50%, -50%);
   }
+  .fill.ss-afr:after {
+    height: 67%;
+    width: 79%;
+    top: 24px;
+  }
+  .fill.ss-dmu:after {
+    height: 55%;
+    width: 60%;
+    top: 25px;
+  }
+  .fill.ss-vis:after {
+    height: 55%;
+    width: 60%;
+    top: 13px;
+  }
+  .fill.ss-usg:after {
+    height: 19%;
+    width: 76%;
+    top: 28px;
+  }
+  .fill.ss-som:after {
+    height: 71%;
+    width: 83%;
+    top: 19px;
+  }
+  .fill.ss-bbd:after {
+    height: 65%;
+    width: 66%;
+    top: 8px;
+    left: 4px;
+    transform: rotate(45deg);
+  }
+  .fill.ss-lci:after {
+    height: 22%;
+    width: 57%;
+    top: 25px;
+  }
+  .cardExpansion.ss-lea { font-size: 1em; }
+  .cardExpansion.ss-leb { font-size: 1em; }
+  .cardExpansion.ss-2ed { font-size: 1em; }
   .cardExpansion.ss-arn { font-size: 2em; }
   .cardExpansion.ss-atq { font-size: 1.2em; }
-  .cardExpansion.ss-all { font-size: 1.75em; }
-  .cardExpansion.ss-wth { font-size: 1.3em; }
-  .cardExpansion.ss-exo { font-size: 1.625em; }
-  .cardExpansion.ss-usg { font-size: 1.375em; }
-  .cardExpansion.ss-vis { font-size: 0.9em; }
+  .cardExpansion.ss-3ed { font-size: 1em; }
+  .cardExpansion.ss-fbb { font-size: 1em; }
+  .cardExpansion.ss-leg { font-size: 1em; }
+  .cardExpansion.ss-sum { font-size: 1em; }
+  .cardExpansion.ss-drk { font-size: 1em; }
+  .cardExpansion.ss-fem { font-size: 1em; }
+  .cardExpansion.ss-4bb { font-size: 1em; }
+  .cardExpansion.ss-4ed { font-size: 1em; }
+  .cardExpansion.ss-ice { font-size: 1em; }
+  .cardExpansion.ss-hml { font-size: 1em; }
+  .cardExpansion.ss-all { font-size: 1.7em; }
+  .cardExpansion.ss-mir { font-size: 1em; }
+  .cardExpansion.ss-vis { font-size: 1em; }
+  .cardExpansion.ss-5ed { font-size: 1em; }
+  .cardExpansion.ss-wth { font-size: 1.4em; }
+  .cardExpansion.ss-tmp { font-size: 1.1em; }
+  .cardExpansion.ss-sth { font-size: 1em; }
+  .cardExpansion.ss-exo { font-size: 1.8em; }
+  .cardExpansion.ss-usg { font-size: 1.4em; }
   .cardExpansion.ss-ulg { font-size: 1.5em; }
-  .cardExpansion.ss-pls { font-size: 1.25em; }
-  .cardExpansion.ss-pcy { font-size: 1.125em; }
-  .cardExpansion.ss-plc { font-size: 1.16em; }
-  .cardExpansion.ss-jud { font-size: 1.125em; }
-  .cardExpansion.ss-lgn { font-size: 1.75em; }
+  .cardExpansion.ss-6ed { font-size: 1em; }
+  .cardExpansion.ss-uds { font-size: 1em; }
+  .cardExpansion.ss-mmq { font-size: 1em; }
+  .cardExpansion.ss-nem { font-size: 1.8em; }
+  .cardExpansion.ss-pcy { font-size: 1.1em; }
+  .cardExpansion.ss-inv { font-size: 1.1em; }
+  .cardExpansion.ss-pls { font-size: 1.4em; }
+  .cardExpansion.ss-7ed { font-size: 1em; }
+  .cardExpansion.ss-apc { font-size: 1em; }
+  .cardExpansion.ss-ody { font-size: 1em; }
+  .cardExpansion.ss-tor { font-size: 1em; }
+  .cardExpansion.ss-jud { font-size: 1.1em; }
+  .cardExpansion.ss-ons { font-size: 1.2em; }
+  .cardExpansion.ss-lgn { font-size: 1.6em; }
+  .cardExpansion.ss-scg { font-size: 1em; }
+  .cardExpansion.ss-8ed { font-size: 1em; }
   .cardExpansion.ss-mrd { font-size: 1.5em; }
-  .cardExpansion.ss-gpt { font-size: 1.15em; }
-  .cardExpansion.ss-som { font-size: 1.15em; }
+  .cardExpansion.ss-dst { font-size: 1em; }
+  .cardExpansion.ss-5dn { font-size: 1em; }
+  .cardExpansion.ss-chk { font-size: 1.1em; }
+  .cardExpansion.ss-bok { font-size: 1.1em; }
+  .cardExpansion.ss-sok { font-size: 1em; }
+  .cardExpansion.ss-9ed { font-size: 1em; }
+  .cardExpansion.ss-rav { font-size: 1em; }
+  .cardExpansion.ss-gpt { font-size: 1.1em; }
+  .cardExpansion.ss-dis { font-size: 1em; }
+  .cardExpansion.ss-csp { font-size: .9em; }
+  .cardExpansion.ss-tsp { font-size: 1em; }
+  .cardExpansion.ss-tsb { font-size: 1em; }
+  .cardExpansion.ss-plc { font-size: 1.2em; }
   .cardExpansion.ss-fut { font-size: 1.3em; }
-  .cardExpansion.ss-lrw { font-size: 1.1em; }
-  .cardExpansion.ss-shm { font-size: 1.4em; }
-  .cardExpansion.ss-nem { font-size: 1.75em; }
-  .cardExpansion.ss-gtc { font-size: 1.25em; }
-  .cardExpansion.ss-dgm { font-size: 1.175em; }
+  .cardExpansion.ss-10e { font-size: 1em; }
+  .cardExpansion.ss-lrw { font-size: 1em; }
+  .cardExpansion.ss-mor { font-size: 1em; }
+  .cardExpansion.ss-shm { font-size: 1.3em; }
+  .cardExpansion.ss-eve { font-size: 1.1em; }
+  .cardExpansion.ss-ala { font-size: 1.1em; }
+  .cardExpansion.ss-con { font-size: 1em; }
+  .cardExpansion.ss-arb { font-size: 1.1em; }
+  .cardExpansion.ss-zen { font-size: 1em; }
+  .cardExpansion.ss-wwk { font-size: 1.1em; }
+  .cardExpansion.ss-roe { font-size: 1.1em; }
+  .cardExpansion.ss-som { font-size: 1em; }
+  .cardExpansion.ss-mbs { font-size: 1em; }
+  .cardExpansion.ss-nph { font-size: 1em; }
+  .cardExpansion.ss-isd { font-size: 1em; }
   .cardExpansion.ss-dka { font-size: 1.2em; }
-  .cardExpansion.ss-emn { font-size: 1.3em; }
-  .cardExpansion.ss-znr { font-size: 0.925em; }
-  .cardExpansion.ss-vow { font-size: 1.175em; }
-  .cardExpansion.ss-snc { font-size: 1.4em; }
-  .cardExpansion.ss-grn { font-size: 1.2em; }
-  .cardExpansion.ss-rna { font-size: 1.15em; }
-  .cardExpansion.ss-bng { font-size: 1.25em; }
-  .cardExpansion.ss-thb { font-size: 0.85em; }
-  .cardExpansion.ss-kld { font-size: 1.15em; }
-  .cardExpansion.ss-aer { font-size: 1.15em; }
-  .cardExpansion.ss-soi { font-size: 1.15em; }
-  .cardExpansion.ss-xln { font-size: 1.15em; }
-  .cardExpansion.ss-rix { font-size: 1.15em; }
-  .cardExpansion.ss-neo { font-size: 1.6em; }
-  .cardExpansion.ss-j22 { font-size: 1.3em; }
-  .cardExpansion.ss-stx { font-size: 1.15em; }
-  .cardExpansion.ss-mh2 { font-size: 1.25em; }
-  .cardExpansion.ss-mh1 { font-size: 1.25em; }
-  .cardExpansion.ss-afr { font-size: 1.25em; }
-  .cardExpansion.ss-mom { font-size: 1.2em; }
-  .cardExpansion.ss-ltr { font-size: 1.2em; }
-  .cardExpansion.ss-woe { font-size: 1.45em; }
-  .cardExpansion.ss-lci { font-size: 1.25em; }
-  .cardExpansion.ss-vow { font-size: 1.25em; }
+  .cardExpansion.ss-avr { font-size: 1.1em; }
+  .cardExpansion.ss-rtr { font-size: 1em; }
+  .cardExpansion.ss-gtc { font-size: 1.3em; }
+  .cardExpansion.ss-dgm { font-size: 1.2em; }
+  .cardExpansion.ss-ths { font-size: 1em; }
+  .cardExpansion.ss-bng { font-size: 1em; }
+  .cardExpansion.ss-jou { font-size: 1.1em; }
+  .cardExpansion.ss-cns { font-size: 1em; }
+  .cardExpansion.ss-ktk { font-size: 1.1em; }
+  .cardExpansion.ss-frf { font-size: 1.2em; }
+  .cardExpansion.ss-dtk { font-size: 1.1em; }
+  .cardExpansion.ss-ori { font-size: 1.2em; }
+  .cardExpansion.ss-bfz { font-size: 1.1em; }
+  .cardExpansion.ss-ogw { font-size: 1em; }
+  .cardExpansion.ss-soi { font-size: 1.1em; }
+  .cardExpansion.ss-emn { font-size: 1.2em; }
+  .cardExpansion.ss-cn2 { font-size: .9em; }
+  .cardExpansion.ss-kld { font-size: 1.1em; }
+  .cardExpansion.ss-aer { font-size: 1em; }
+  .cardExpansion.ss-akh { font-size: 1em; }
+  .cardExpansion.ss-hou { font-size: 1em; }
+  .cardExpansion.ss-xln { font-size: 1.1em; }
+  .cardExpansion.ss-rix { font-size: 1em; }
+  .cardExpansion.ss-dom { font-size: .9em; }
+  .cardExpansion.ss-bbd { font-size: .9em; }
+  .cardExpansion.ss-grn { font-size: 1.3em; }
+  .cardExpansion.ss-rna { font-size: 1.2em; }
+  .cardExpansion.ss-war { font-size: 1em; }
+  .cardExpansion.ss-mh1 { font-size: 1.3em; }
+  .cardExpansion.ss-eld { font-size: 1em; }
+  .cardExpansion.ss-thb { font-size: 1em; }
+  .cardExpansion.ss-iko { font-size: 1.1em; }
+  .cardExpansion.ss-jmp { font-size: 1em; }
+  .cardExpansion.ss-znr { font-size: .9em; }
+  .cardExpansion.ss-cmr { font-size: 1em; }
+  .cardExpansion.ss-khm { font-size: 1em; }
+  .cardExpansion.ss-stx { font-size: 1.2em; }
+  .cardExpansion.ss-h1r { font-size: 1em; }
+  .cardExpansion.ss-mh2 { font-size: 1.3em; }
+  .cardExpansion.ss-afr { font-size: 1.2em; }
   .cardExpansion.ss-mid { font-size: 1.2em; }
+  .cardExpansion.ss-vow { font-size: 1.3em; }
+  .cardExpansion.ss-dbl { font-size: 1em; }
+  .cardExpansion.ss-neo { font-size: 1.5em; }
+  .cardExpansion.ss-snc { font-size: 1.3em; }
+  .cardExpansion.ss-clb { font-size: 1em; }
+  .cardExpansion.ss-dmu { font-size: 1em; }
+  .cardExpansion.ss-broj22 { font-size: 1em; }
+  .cardExpansion.ss-one { font-size: .9em; }
+  .cardExpansion.ss-mom { font-size: 1.2em; }
+  .cardExpansion.ss-mat { font-size: 1em; }
+  .cardExpansion.ss-ltr { font-size: 1.3em; }
+  .cardExpansion.ss-woe { font-size: 1.4em; }
+  .cardExpansion.ss-lci { font-size: 1.3em; }
+  .cardExpansion.ss-clu { font-size: 1em; }
+  .cardExpansion.ss-mkm { font-size: 1em; }
+  .cardExpansion.ss-otj { font-size: 1em; }
   .cardExpansion.ss-m10,
   .cardExpansion.ss-m11,
   .cardExpansion.ss-m12,
@@ -640,7 +806,7 @@
   .cardExpansion.ss-m19,
   .cardExpansion.ss-m20,
   .cardExpansion.ss-m21 {
-    font-size: 1.7em;
+    font-size: 1.6em;
   }
   .cardExpansion:before {
     background-size: cover;
@@ -651,41 +817,60 @@
   }
   .cardExpansion.fill, .cardTombstone:after {
     text-shadow: 
-    1.5px 1.5px 0 #222, 
-    -1.5px -1.5px 0 #222, 
-    -1.5px 1.5px 0 #222, 
-    1.5px -1.5px 0 #222,
-    1.5px 1px 0 #222, 
-    -1.5px -1px 0 #222, 
-    -1.5px 1px 0 #222, 
-    1.5px -1px 0 #222,
-    1px 1.5px 0 #222, 
-    -1px -1.5px 0 #222, 
-    -1px 1.5px 0 #222, 
-    1px -1.5px 0 #222,
-    0 1.5px 0 #222,
-    0 -1.5px 0 #222,
-    1.5px 0 0 #222,
-    -1.5px 0 0 #222;
+    1px 1px 0 #222, 
+    -1px -1px 0 #222, 
+    -1px 1px 0 #222, 
+    1px -1px 0 #222,
+    1px 0.75px 0 #222, 
+    -1px -0.75px 0 #222, 
+    -1px 0.75px 0 #222, 
+    1px -0.75px 0 #222,
+    0.75px 1px 0 #222, 
+    -0.75px -1px 0 #222, 
+    -0.75px 1px 0 #222, 
+    0.75px -1px 0 #222,
+    0 1px 0 #222,
+    0 -1px 0 #222,
+    1px 0 0 #222,
+    -1px 0 0 #222;
+  }
+  .cardExpansion.stroke {
+    text-shadow: 
+      3px 3px 1.5px #eee, 
+      -3px -3px 1.5px #eee, 
+      -3px 3px 1.5px #eee, 
+      3px -3px 1.5px #eee,
+      0 3px 1.5px #eee,
+      0 -3px 1.5px #eee,
+      3px 0 1.5px #eee,
+      -3px 0 1.5px #eee,
+      2px 3px 1.5px #eee, 
+      -2px -3px 1.5px #eee, 
+      -2px 3px 1.5px #eee, 
+      2px -3px 1.5px #eee,
+      3px 2px 1.5px #eee, 
+      -3px -2px 1.5px #eee, 
+      -3px 2px 1.5px #eee, 
+      3px -2px 1.5px #eee;
   }
   .cardExpansion.common.stroke {
     text-shadow: 
-      2px 2px 0 #eee, 
-      -2px -2px 0 #eee, 
-      -2px 2px 0 #eee, 
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee,
-      1px 2px 0 #eee, 
-      -1px -2px 0 #eee, 
-      -1px 2px 0 #eee, 
-      1px -2px 0 #eee,
-      2px 1px 0 #eee, 
-      -2px -1px 0 #eee, 
-      -2px 1px 0 #eee, 
-      2px -1px 0 #eee;
+      1.75px 1.75px 1.5px #eee, 
+      -1.75px -1.75px 1.5px #eee, 
+      -1.75px 1.75px 1.5px #eee, 
+      1.75px -1.75px 1.5px #eee,
+      0 1.75px 1.5px #eee,
+      0 -1.75px 1.5px #eee,
+      1.75px 0 1.5px #eee,
+      -1.75px 0 1.5px #eee,
+      1px 1.75px 1.5px #eee, 
+      -1px -1.75px 1.5px #eee, 
+      -1px 1.75px 1.5px #eee, 
+      1px -1.75px 1.5px #eee,
+      1.75px 1px 1.5px #eee, 
+      -1.75px -1px 1.5px #eee, 
+      -1.75px 1px 1.5px #eee, 
+      1.75px -1px 1.5px #eee;
   }
   .cardTombstone:before {
     text-shadow: 
@@ -720,13 +905,17 @@
   }
   .cardText {
     position: absolute;
-    top: 585px;
+    top: 592px;
     left: 60px;
-    font-size: 33px;
+    font-size: 38px;
+    line-height: 1.075em;
     color: #000;
     width: 555px;
-    max-height: 295px;
+    max-height: 270px;
     /* overflow-x: scroll; */
+  }
+  .cardText p {
+    margin: 0.25em 0;
   }
   .cardText.planeswalkerText p.loyaltyAbility {
     position: relative;
@@ -734,17 +923,22 @@
   }
   .textLoyalty, .textLoyaltyUp, .textLoyaltyDown {
     position: absolute;
-    right: calc(100% - 5px);
+    right: calc(100% - 8px);
     z-index: 1;
     color: #eee;
     font-size: 28px;
     white-space: nowrap;
+    width: 50px;
+    text-align: center;
+  }
+  .textLoyaltyBig {
+    width: 65px;
   }
   .textLoyalty:after, .textLoyaltyUp:after, .textLoyaltyDown:after {
     color: #000;
     content: ":";
     position: absolute;
-    right: -12px;
+    right: -10px;
     top: -3px;
   }
   .textLoyalty:before, .textLoyaltyUp:before, .textLoyaltyDown:before {
@@ -765,42 +959,26 @@
       -2px 0 0 #eee;
     font-family: "Mana";
   }
-  .textLoyalty {
-    right: calc(100% - 10px);
-    padding: 0 0.7em
-  }
   .textLoyalty:before {
     content: "";
-    top: -0.23em;
-  }
-  .textLoyalty:after {
-    right: -0.25em;
-  }
-  .textLoyaltyUp {
-    padding: 0 0.3em
+    top: -4px;
   }
   .textLoyaltyUp:before {
     content: "";
-    top: -0.25em;
-  }
-  .textLoyaltyDown {
-    padding: 0 0.45em
+    top: -5px;
   }
   .textLoyaltyDown:before {
     content: "";
-    top: -0.2em;
+    top: -4px;
   }
   .textLoyaltyBig:before {
     transform: scaleX(1.3);
-    left: 0.18em;
+    left: 10px;
   }
   .smol {
     font-size: .7em;
     position: relative;
     top: -8px;
-  }
-  .cardText p {
-    margin: 10px 0;
   }
   hr {
     border: 0;
@@ -821,9 +999,9 @@
   }
   .cardPowerToughness, .cardDefense {
     position: absolute;
-    bottom: 7px;
-    right: 27px;
-    font-size: 48px;
+    bottom: 9px;
+    right: 23px;
+    font-size: 45px;
     letter-spacing: 1px;
     color: #eee;
   }
@@ -862,7 +1040,7 @@
     content: "";
     font-family: "Mana";
     position: absolute;
-    bottom: -12px;
+    bottom: -15px;
     right: 0;
     font-size: 100px;
     z-index: -1;
@@ -879,30 +1057,32 @@
   }
   .cardCopyright {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 18px;
+    left: 24px;
     font-size: 25px;
     color: #eee;
   }
   .cardCopyright span {
     font-size: 45px;
     font-family: "Magic Symbols";
+    position: relative;
+    left: -10px
   }
   .cardArtist{
     position: absolute;
-    bottom: 35px;
+    bottom: 36px;
     left: 50%;
     transform: translate(-50%, 0);
-    font-size: 30px;
+    font-size: 27px;
     color: #eee;
   }
   .cardDisclaimer{
     position: absolute;
-    bottom: 10px;
+    bottom: 19px;
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     color: #eee;
   }
 </style>

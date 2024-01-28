@@ -23,11 +23,14 @@
       </div>
       <div class="cards">
         <template v-for="(card, key) in cardData">
-          <card 
+          <template
             v-if="card.name && !['transform','modal_dfc'].includes(card.layout)" 
-            :key="key" 
-            :card="card"
-          />
+          >
+            <card 
+              :key="key" 
+              :card="card"
+            />
+          </template>
           <template v-if="['transform','modal_dfc'].includes(card.layout)">
             <card 
               v-for="(face, index) in card.card_faces" 
@@ -115,7 +118,7 @@ export default {
   font-family: "Magic";
   font-style: normal;
   font-weight: 100;
-  src: url("~@/assets/fonts/Goudy Mediaeval Light.ttf");
+  src: url("~@/assets/fonts/Goudy Medieval Alternate.ttf");
 }
 /* magic text */
 @font-face {
@@ -155,6 +158,7 @@ export default {
 textarea,
 h2 {
   font-family: 'Magic';
+  letter-spacing: 0.05em;
 }
 form {
   display: flex;
