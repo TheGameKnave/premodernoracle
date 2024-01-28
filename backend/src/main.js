@@ -124,9 +124,9 @@ server.register(plugins).then(() => {
         res.on('end', () => {
           console.log('data', JSON.parse(data));
           const sealedProductSets = JSON.parse(data).data.filter((set) => ['core','expansion','draft_innovation'].includes(set.set_type) && set.digital === false);
-          // sort exapansions by released_at ascending
+          // sort expansions by released_at ascending
           sealedProductSets.sort((a, b) => new Date(a.released_at) - new Date(b.released_at));
-          console.log('sealedProductSets', Object.keys(sealedProductSets).length, sealedProductSets);
+          console.log('sealedProductSets', sealedProductSets.length, JSON.stringify(sealedProductSets.map(set => set.code)));
           resolve(sealedProductSets);
         });
       }).on('error', (error) => {
@@ -136,16 +136,15 @@ server.register(plugins).then(() => {
     });
   }
   // Function to fetch a random card from a specific expansion set
-  async function fetchRandomCard(setCode) {
-    console.log('fetchRandomCard', setCode);
+  async function fetchAllCardsFromSet(setCode) {
     return new Promise((resolve, reject) => {
-      https.get(`https://api.scryfall.com/cards/random?q=e%3A${setCode}`, (res) => {
+      https.get(`https://api.scryfall.com/cards/search?q=set%3A${setCode}`, (res) => {
         let data = '';
-
+  
         res.on('data', (chunk) => {
           data += chunk;
         });
-
+  
         res.on('end', () => {
           resolve(JSON.parse(data));
         });
@@ -159,16 +158,27 @@ server.register(plugins).then(() => {
   async function displayRandomCardsFromEachSet() {
     try {
       const expansionSets = await fetchExpansionSets();
-      const randomCards = [];
+      let randomCards = [];
 
       for (const set of expansionSets) {
-        const randomCard = await fetchRandomCard(set.code);
-        console.log(set.name, set.code, randomCard.name);
-        randomCards.push({ set: set.name, card: randomCard.name });
+        const allCards = await fetchAllCardsFromSet(set.code);
+        // select one common at random from the set (if there are any)
+        const commons = allCards.data?.filter(card => card.rarity === 'common' && !['Plains','Island','Swamp','Mountain','Forest'].includes(card.name));
+        const randomCommon = commons?.length ? commons[Math.floor(Math.random() * commons?.length)] : null;
+        const uncommons = allCards.data?.filter(card => card.rarity === 'uncommon');
+        const randomUncommon = uncommons?.length ? uncommons[Math.floor(Math.random() * uncommons?.length)] : null;
+        const rares = allCards.data?.filter(card => card.rarity === 'rare');
+        const randomRare = rares?.length ? rares[Math.floor(Math.random() * rares?.length)] : null;
+        const mythics = allCards.data?.filter(card => card.rarity === 'mythic');
+        const randomMythic = mythics?.length ? mythics[Math.floor(Math.random() * mythics?.length)] : null;
+        const randoms = [randomCommon, randomUncommon, randomRare, randomMythic].filter(card => card !== null)
+        const randomReturn = randoms.map(card => ({set: set.name, card: card.name }));
+        console.log('randomReturn', randomReturn);
+        randomCards = [...randomCards, ...randomReturn];
       }
       // create an object with the set as the key and the card as the value
-      const randomCardsObject = randomCards.reduce((obj, item) => {
-        obj[item.set] = item.card;
+      const randomCardsObject = randomCards.reduce((obj, item, index) => {
+        obj[index + ' ' + item.set] = item.card;
         return obj;
       }, {});
 
@@ -191,7 +201,7 @@ server.register(plugins).then(() => {
 
   async function handlePostCards (request, h) {
     const payload = request.payload; // Access the payload from the request
-    console.log('payload',payload);
+    console.log('payload',payload,request.path);
     const results = {};
     let cardData = [];
 
@@ -216,6 +226,8 @@ server.register(plugins).then(() => {
           });
 
           proxyResponse.on('end', () => {
+            // console log the first 80 characters of data
+            console.log(url,'data', data.slice(0, 80));
             const responseData = JSON.parse(data);
             console.log(url,'data', responseData.data);
             if(responseData?.data) cardData.push(...responseData.data);
