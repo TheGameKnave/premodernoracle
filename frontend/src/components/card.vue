@@ -160,16 +160,19 @@
     },
     computed: {
       colorID() {
-        let colorID = this.face !== undefined ? (this.card.card_faces[this.face].colors || this.card.card_faces[this.face].color_indicator) : this.card.color_identity;
-        if((!colorID || colorID.length === 0) && (this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land'))) {
-          colorID = [];
-          let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
-          if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
-          if(text.includes('{W}')) colorID.push('W');
-          if(text.includes('{U}')) colorID.push('U');
-          if(text.includes('{B}')) colorID.push('B');
-          if(text.includes('{R}')) colorID.push('R');
-          if(text.includes('{G}')) colorID.push('G');
+        let colorID = [];
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land')){
+          let colorID = this.face !== undefined ? (this.card.card_faces[this.face].colors || this.card.card_faces[this.face].color_indicator) : this.card.color_identity;
+          if((!colorID || colorID.length === 0) && (this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land'))) {
+            colorID = [];
+            let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
+            if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
+            if(text.includes('{W}')) colorID.push('W');
+            if(text.includes('{U}')) colorID.push('U');
+            if(text.includes('{B}')) colorID.push('B');
+            if(text.includes('{R}')) colorID.push('R');
+            if(text.includes('{G}')) colorID.push('G');
+          }
         }
         return colorID
       }
