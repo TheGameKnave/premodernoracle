@@ -11,10 +11,13 @@
       class="splitCardTemplate2"
       alt="Card Template"
     >
-    <span
+    <div
+      class="splitCardTombstoneWrapper"
       v-if="tombstoneFrame()"
-      class="splitCardTombstone"
-    >Q</span>
+    >
+      <span class="splitCardTombstone" >Q</span>
+      <span class="splitCardTombstoneShadow" >Q</span>
+    </div>
     <div
       ref="cardTitleElement"
       class="splitCardTitle"
@@ -66,6 +69,7 @@
 </template>
 
 <script>
+  import { tombstoneList } from '@/constants';
   export default {
     name: 'SplitCard',
     props: {
@@ -149,12 +153,7 @@
     methods: {
       tombstoneFrame() {
         let oracleText = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
-        return (
-          this.card.frame_effects && this.card.frame_effects.includes('tombstone')
-          || (oracleText.includes('this card') && oracleText.includes('your graveyard'))
-          || (oracleText.includes('this spell') && oracleText.includes('your graveyard'))
-          || (oracleText.includes(this.card.name) && oracleText.includes('your graveyard'))
-        )
+        return tombstoneList.includes(this.card.name) && oracleText.includes('your graveyard')
       },
       getColorsFromCost(cost){
         let costArr = cost.split(/[{}]+/);
@@ -416,18 +415,48 @@
   .splitCardTitle, .splitCardType, .splitCardArtist {
     white-space: nowrap;
   }
-  .splitCardTombstone {
+
+  .splitCardTombstoneWrapper {
     position: absolute;
-    top: 8px;
-    left: 11px;
-    font-size: 30px;
+    top: 6px;
+    left: 12px;
+    font-size: 32px;
     color: #999;
     font-family: "Magic Symbols Old";
   }
-  .splitCardTombstone:before, .splitCardTombstone:after {
-    content: "Q";
+  .splitCardTombstone {
+    color: #999;
+    position: relative;
+    z-index: 2;
+  }
+  .splitCardTombstone:before, .splitCardTombstone:after, .splitCardTombstoneShadow:before, .splitCardTombstoneShadow:after {
+    content: 'Q';
     position: absolute;
-    left: 0
+    left: 0;
+  }
+  .splitCardTombstone:before {
+    text-shadow: 
+      2px 2px 0 #eee, 
+      2px -1px 0 #eee;
+  }
+  .splitCardTombstoneShadow {
+    text-shadow: 
+      -2px 2px 0 #eee, 
+      0 2px 0 #eee,
+      0 -1.5px 0 #eee,
+      1px -1.5px 0 #eee,
+      1px -1.5px 0 #eee,
+      -2px 0 0 #eee,
+      -1px 1px 0 #eee, 
+      -1px -1px 0 #eee,
+      -2px 1px 0 #eee, 
+      -2px -1px 0 #eee;
+  }
+  .splitCardTombstoneShadow {
+    position: absolute;
+    left: -3px;
+    z-index: 1;
+    color: #666;
   }
   .splitCardTitle {
     position: absolute;

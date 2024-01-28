@@ -16,12 +16,15 @@
           class="cardTemplate2"
           alt="Card Template"
         >
-        <span
-          v-if="tombstoneFrame()"
-          class="cardTombstone"
-        >Q</span>
+        <div
+          class="cardTombstoneWrapper"
+          v-if="tombstoneFrame() && !face"
+        >
+          <span class="cardTombstone" >Q</span>
+          <span class="cardTombstoneShadow" >Q</span>
+        </div>
         <span 
-          v-if="face === 0" 
+          v-if="face === 0 && !tombstoneFrame()" 
           class="dfc dfcFront">▲</span>
         <span 
           v-if="face === 1" 
@@ -92,7 +95,8 @@
 </template>
 
 <script>
-  import splitCard from '@/components/splitCard.vue'
+  import splitCard from '@/components/splitCard.vue';
+  import { tombstoneList } from '@/constants';
   export default {
     name: 'Card',
     components: {
@@ -184,13 +188,7 @@
     },
     methods: {
       tombstoneFrame() {
-        let oracleText = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
-        return (
-          this.card.frame_effects && this.card.frame_effects.includes('tombstone')
-          || (oracleText.includes('this card') && oracleText.includes('your graveyard'))
-          || (oracleText.includes(this.card.name) && oracleText.includes('your graveyard'))
-          || (oracleText.includes('return ' + this.card.name) && oracleText.includes('your graveyard'))
-        )
+        return tombstoneList.includes(this.card.name)
       },
       cardTemplate() {
         let colors = this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors;
@@ -431,7 +429,7 @@
     margin: 10px;
     border-radius: 20px;
     background-color: #222;
-    /* zoom: 0.5; */
+    zoom: 0.5;
   }
   .originalCard {
     position: absolute;
@@ -473,13 +471,47 @@
   .cardTitle, .cardType, .cardArtist {
     white-space: nowrap;
   }
-  .cardTombstone {
+  .cardTombstoneWrapper {
     position: absolute;
     top: 10px;
     left: 15px;
     font-size: 35px;
     color: #999;
     font-family: "Magic Symbols Old";
+  }
+  .cardTombstone {
+    color: #999;
+    position: relative;
+    z-index: 2;
+  }
+  .cardTombstone:before, .cardTombstone:after, .cardTombstoneShadow:before, .cardTombstoneShadow:after {
+    content: 'Q';
+    position: absolute;
+    left: 0;
+  }
+  .cardTombstone:before {
+    text-shadow: 
+      3px 3px 0 #eee, 
+      3px -2px 0 #eee;
+  }
+  .cardTombstoneShadow {
+    text-shadow: 
+      -3px 3px 0 #eee, 
+      0 3px 0 #eee,
+      0 -2.5px 0 #eee,
+      1px -2.5px 0 #eee,
+      2px -2.5px 0 #eee,
+      -3px 0 0 #eee,
+      -2px 2px 0 #eee, 
+      -2px -2px 0 #eee,
+      -3px 2px 0 #eee, 
+      -3px -2px 0 #eee;
+  }
+  .cardTombstoneShadow {
+    position: absolute;
+    left: -3px;
+    z-index: 1;
+    color: #666;
   }
   .dfc {
     color: #222;
@@ -506,11 +538,6 @@
       -2px 0 0 #eee;
   }
   .dfcBack { top: 6px }
-  .cardTombstone:before, .cardTombstone:after {
-    content: 'Q';
-    position: absolute;
-    left: 0;
-  }
   .cardTitle {
     position: absolute;
     top: 8px;
@@ -815,7 +842,7 @@
     -webkit-text-fill-color: transparent;
     paint-order: stroke fill;
   }
-  .cardExpansion.fill, .cardTombstone:after {
+  .cardExpansion.fill, .cardTombstone:after, .cardTombstoneShadow:after {
     text-shadow: 
     1px 1px 0 #222, 
     -1px -1px 0 #222, 
@@ -871,25 +898,6 @@
       -1.75px -1px 1.5px #eee, 
       -1.75px 1px 1.5px #eee, 
       1.75px -1px 1.5px #eee;
-  }
-  .cardTombstone:before {
-    text-shadow: 
-      3px 3px 0 #eee, 
-      -3px -3px 0 #eee, 
-      -3px 3px 0 #eee, 
-      3px -3px 0 #eee,
-      0 3px 0 #eee,
-      0 -3px 0 #eee,
-      3px 0 0 #eee,
-      -3px 0 0 #eee,
-      2px 3px 0 #eee, 
-      -2px -3px 0 #eee, 
-      -2px 3px 0 #eee, 
-      2px -3px 0 #eee,
-      3px 2px 0 #eee, 
-      -3px -2px 0 #eee, 
-      -3px 2px 0 #eee, 
-      3px -2px 0 #eee;
   }
   .cardExpansion.common:before {
     background-color: #222;
