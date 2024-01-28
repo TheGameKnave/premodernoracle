@@ -445,6 +445,7 @@
     left: 0;
     top: 0;
     -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
+    mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%);
   }
   .splitCardTitle, .splitCardType, .splitCardCopyright, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness {
     text-shadow: 2px 2px 2px #000;
