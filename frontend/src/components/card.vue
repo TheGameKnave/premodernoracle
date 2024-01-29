@@ -3,16 +3,16 @@
     <img v-if="originalCard" :src="face !== undefined ? card.card_faces[face].image_uris.large : card.image_uris.large" class="originalCard" />
     <div :class="'card ' + (originalCard ? 'originalPresent' : '')">
       <template
-        v-if="['normal','mutate','prototype','meld','class','case','saga','leveler'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
+        v-if="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
       >
         <img
-          :src="require(`@/assets/images/card_templates/${cardTemplate()}.jpg`)"
+          :src="require(`@/assets/images/card_templates/${cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'))}.jpg`)"
           class="cardTemplate"
           alt="Card Template"
         >
         <img
-          v-if="colorID.length === 2 && !cardTemplate().includes('mcard')"
-          :src="require(`@/assets/images/card_templates/${cardTemplate2()}.jpg`)"
+          v-if="colorID.length === 2 && !cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card')).find('m') !== 0"
+          :src="require(`@/assets/images/card_templates/${cardTemplate2((this.card.layout === 'adventure' ? 'adventurer' : 'card'))}.jpg`)"
           class="cardTemplate2"
           alt="Card Template"
         >
@@ -32,11 +32,11 @@
         <div
           ref="cardTitleElement"
           class="cardTitle"
-        >{{ face !== undefined ? card.card_faces[face].name : card.name }}</div>
+        >{{ face !== undefined ? card.card_faces[face].name : (card.layout === 'adventure' ? card.card_faces[0].name : card.name) }}</div>
         <div
           ref="cardManaCostElement"
           class="cardManaCost"
-          v-html="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost)"
+          v-html="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost))"
         />
         <div 
           :style="{ backgroundImage: 'url(' + (face !== undefined ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop) + ')' }" 
@@ -45,7 +45,7 @@
           ref="cardTypeElement"
           class="cardType"
         >
-          {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
+          {{ face !== undefined ? card.card_faces[face].type_line : (card.layout === 'adventure' ? card.card_faces[0].type_line : card.type_line) }}
         </div>
         <div class="cardExpansionWrapper">
           <i :class="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"/>
@@ -58,10 +58,15 @@
             :class="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"
           />
         </div>
+        <adventure
+          v-if="card.layout === 'adventure'"
+          :card="card"
+          :face="1"
+        />
         <div 
           ref="cardTextElement"
-          :class="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
-          v-html="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"/>
+          :class="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"
+          v-html="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"/>
         <div class="cardCopyright">©&nbsp;<span>∑</span></div>
         <div
           ref="cardArtistElement"
@@ -69,10 +74,10 @@
         ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE</div>
         <div
-          v-if="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)) && !card.layout === 'leveler'"
+          v-if="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness))) && card.layout !== 'leveler'"
           ref="cardPowerToughnessElement"
           :class="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
-          v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : card.power) + '/' + (face !== undefined ? card.card_faces[face].toughness : card.toughness))"
+          v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : (card.layout === 'adventure' ? card.card_faces[0].power : card.power)) + '/' + (face !== undefined ? card.card_faces[face].toughness : (card.layout === 'adventure' ? card.card_faces[0].toughness : card.toughness)))"
         />
         <div
           v-if="face !== undefined ? (card.card_faces[face].defense) : (card.defense)"
@@ -96,11 +101,13 @@
 
 <script>
   import splitCard from '@/components/splitCard.vue';
+  import adventure from '@/components/adventure.vue';
   import { tombstoneList } from '@/constants';
   export default {
     name: 'Card',
     components: {
       splitCard,
+      adventure,
     },
     props: {
       card: {},
@@ -190,10 +197,10 @@
       tombstoneFrame() {
         return tombstoneList.includes(this.card.name)
       },
-      cardTemplate() {
-        let colors = this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors;
-        let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
-        let manaCost = this.face !== undefined ? this.card.card_faces[this.face].mana_cost : this.card.mana_cost;
+      cardTemplate(base = 'card',face) {
+        let colors = face !== undefined ? this.card.card_faces[face].colors : this.card.colors;
+        let typeLine = face !== undefined ? this.card.card_faces[face].type_line : this.card.type_line;
+        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : this.card.mana_cost;
         let returnString = '';
         if(colors.length > 1) {
           let costArr = manaCost.split(/[{}]+/);
@@ -229,11 +236,11 @@
             returnString += 'c';
           }
         }
-        return returnString + 'card'
+        return returnString + base
       },
-      cardTemplate2() {
-        let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
-        let manaCost = this.face !== undefined ? this.card.card_faces[this.face].mana_cost : this.card.mana_cost;
+      cardTemplate2(base = 'card',face) {
+        let typeLine = face !== undefined ? this.card.card_faces[face].type_line : this.card.type_line;
+        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : this.card.mana_cost;
         let costArr = manaCost.split(/[{}]+/);
         costArr = costArr.filter(x => x);
         let hybridArr = [];
@@ -248,7 +255,7 @@
         if(typeLine.includes('Land')){
           returnString += 'l';
         }
-        return returnString + 'card'
+        return returnString + base
       },
       formatText(text, flavorText) {
         let textBox = text;
@@ -258,7 +265,7 @@
           .replace(/\)/g,')</i>') + '</p>';
         let ftxt = flavorText || '';
         if(ftxt) {
-          ftxt = (this.card.oracle_text ? '<hr>' : '') + ftxt.replace(/\n/g, '<br>');
+          ftxt = ((this.card.layout === 'adventure' ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + ftxt.replace(/\n/g, '<br>');
           textBox = (textBox + '<p><i>' + ftxt + '</i></p>');
         }
         textBox = textBox
@@ -290,7 +297,6 @@
             `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[face].toughness : this.card.toughness))}</div></div>
 <div class="levelAbility"><div class="levelSpread">1–$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
 <div class="levelAbility"><div class="levelSpread">$6</div><div class="levelText">$9</div><div class="levelPT">$7</div></div>`);
-        console.log(textBox)
         return textBox
       },
       formatPT(string){
@@ -355,7 +361,7 @@
   
           //count the number of mana symbols in mana_cost
           const countInstancesOfCharacter = (inputString, character) => inputString.split(character).length - 1;
-          let manaCount = countInstancesOfCharacter(this.card.mana_cost || '', '{');
+          let manaCount = countInstancesOfCharacter(this.card.card_faces ? this.card.card_faces[0].mana_cost : this.card.mana_cost || '', '{');
           while (cardTitleElement.clientWidth + (manaCount * 40) > 560) {
             fontSize -= 0.25;
             cardTitleElement.style.fontSize = `${fontSize}px`;
@@ -927,6 +933,10 @@
     width: 555px;
     max-height: 270px;
     /* overflow-x: scroll; */
+  }
+  .cardText {
+    left: 355px;
+    width: 255px;
   }
   .cardText p {
     margin: 0.25em 0;
