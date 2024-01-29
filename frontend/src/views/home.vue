@@ -24,14 +24,14 @@
       <div class="cards">
         <template v-for="(card, key) in cardData">
           <template
-            v-if="card.name && !['transform','modal_dfc'].includes(card.layout)" 
+            v-if="card.name && !['transform','modal_dfc','flip'].includes(card.layout)" 
           >
             <card 
               :key="key" 
               :card="card"
             />
           </template>
-          <template v-if="['transform','modal_dfc'].includes(card.layout)">
+          <template v-if="['transform','modal_dfc','flip'].includes(card.layout)">
             <card 
               v-for="(face, index) in card.card_faces" 
               :key="index" 

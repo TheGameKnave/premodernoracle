@@ -3,7 +3,7 @@
     <img v-if="originalCard" :src="face !== undefined ? card.card_faces[face].image_uris.large : card.image_uris.large" class="originalCard" />
     <div :class="'card ' + (originalCard ? 'originalPresent' : '')">
       <template
-        v-if="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
+        v-if="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
       >
         <img
           :src="require(`@/assets/images/card_templates/${cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'))}.jpg`)"
@@ -39,7 +39,7 @@
           v-html="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost))"
         />
         <div 
-          :style="{ backgroundImage: 'url(' + (face !== undefined ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop) + ')' }" 
+          :style="{ backgroundImage: 'url(' + (face !== undefined && card.card_faces[face].image_uris ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop) + ')' }" 
           class="cardImage"/>
         <div
           ref="cardTypeElement"
@@ -294,7 +294,7 @@
         }
         textBox = textBox
           .replace(/<p>Level up (.*)<\/p><p>LEVEL 1-([0-9]*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?<p>LEVEL ([0-9]\+*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?/g,
-            `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[face].toughness : this.card.toughness))}</div></div>
+            `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[this.face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[this.face].toughness : this.card.toughness))}</div></div>
 <div class="levelAbility"><div class="levelSpread">1–$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
 <div class="levelAbility"><div class="levelSpread">$6</div><div class="levelText">$9</div><div class="levelPT">$7</div></div>`);
         return textBox
@@ -934,7 +934,7 @@
     max-height: 270px;
     /* overflow-x: scroll; */
   }
-  .cardText {
+  .cardText.adventureText {
     left: 355px;
     width: 255px;
   }
