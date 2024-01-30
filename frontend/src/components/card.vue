@@ -117,6 +117,7 @@
       return {
         originalCard: false,
         wubrg: ['W', 'U', 'B', 'R', 'G'],
+        lands: ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'],
         symbols: {
           'T': '<span class="manaGeneric">o</span>T',
           'Q': '<span class="manaGeneric">o</span>Q',
@@ -212,7 +213,11 @@
     },
     methods: {
       tombstoneFrame() {
-        return tombstoneList.includes(this.card.name)
+        // test for the presence of /Dredge [0-9]/
+        let dredge = new RegExp(/Dredge [0-9]/);
+        // test oracletext for dredge
+
+        return tombstoneList.includes(this.card.name) || dredge.test(this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text)
       },
       cardTemplate(base = 'card',face) {
         let returnString = '';
@@ -287,8 +292,13 @@
         let textBox = text;
         textBox = '<div class=rulesText><p>' + textBox
           .replace(/\n/g, '</p><p>')
-          .replace(/\(/g,'<i class=reminderText>(')
+          .replace(/\(/g,'<i class="reminderText">(')
           .replace(/\)/g,')</i>') + '</p></div>';
+        let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
+        // if typeline includes any basic lands from the `lands` variable...
+        if(this.lands.some(land => typeLine.includes(land))) {
+          textBox = textBox.replace(/reminderText/, 'reminderText basicLands');
+        }
         let ftxt = flavorText || '';
         if(ftxt) {
           ftxt = ftxt.replace(/\n/g, '<br>');
@@ -297,21 +307,31 @@
         textBox = textBox
           .replace(/\b\*/g, "<i>")       // Closing asterisk
           .replace(/\*\b/g, "</i>")      // Opening asterisk
+
           .replace(/\b'/g, "\u2019")     // Closing singles
           .replace(/'$/g, "\u2019")      // Closing singles
           .replace(/'</g, "\u2019<")     // Closing singles
           .replace(/\.'/g, "\u2019")     // Closing singles
+
           .replace(/'\b/g, "\u2018")     // Opening singles
           .replace(/'{/g, "\u2018{")     // Opening singles
+
           .replace(/\b"/g, "\u201d")     // Closing doubles
           .replace(/\."/g, ".\u201d")    // Closing doubles
+          .replace(/,"/g, ",\u201d")    // Closing doubles
           .replace(/"$/g, "\u201d")      // Closing doubles
           .replace(/"</g, "\u201d<")     // Closing doubles
+
           .replace(/"\b/g, "\u201c")     // Opening doubles
           .replace(/"{/g, "\u201c{")     // Opening doubles
           .replace(/^"/g, "\u201c")      // Opening doubles
           .replace(/--/g,  "\u2014")     // em-dashes;
           .replace(/dd {/g,  "dd&nbsp;{")// add mana nobreak;
+          .replace(/=“/, '="')           // fix closing double quotes
+          .replace(/”>/, '">')          // fix closing double quotes
+        if(this.card.type_line.includes('Class')){
+          textBox = textBox.replace(/(<p>{.*Level 2)(.*)(<p>{.*Level 3)/g,'<hr>$1$2<hr>$3');
+        }
         if(this.card.type_line.includes('Planeswalker')){
           textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
             .replace(/<p>\+([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp">+$1</span>')
@@ -963,6 +983,9 @@
     width: 555px;
     max-height: 270px;
     /* overflow-x: scroll; */
+  }
+  .reminderText:not(.basicLands) {
+    display: none;
   }
   .cardText.adventurerText {
     left: 355px;
