@@ -137,28 +137,12 @@
       },
       colorID() {
         let colorID = [];
-        switch (this.cardType) {
-          case 'Land':
-            colorID = (this.face !== undefined ? this.card.card_faces[this.face].color_identity : this.card.color_identity) || [];
-            let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
-            if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
-            if(text.includes('{W}')) colorID.push('W');
-            if(text.includes('{U}')) colorID.push('U');
-            if(text.includes('{B}')) colorID.push('B');
-            if(text.includes('{R}')) colorID.push('R');
-            if(text.includes('{G}')) colorID.push('G');
-            if(text.includes('Plains')) colorID.push('W');
-            if(text.includes('Island')) colorID.push('U');
-            if(text.includes('Swamp')) colorID.push('B');
-            if(text.includes('Mountain')) colorID.push('R');
-            if(text.includes('Forest')) colorID.push('G');
-            break;
-        
-          case 'Artifact':
-          default:
-            colorID = (this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors) || this.card.colors || [];
-            break;
+        if(this.face !== undefined) {
+          colorID = this.getColorsFromCost(this.card.card_faces[this.face].mana_cost);
+        } else {
+          colorID = this.getColorsFromCost(this.card.mana_cost);
         }
+
         // dedup colorID
         colorID = Array.from(new Set(colorID));
         return colorID || []
