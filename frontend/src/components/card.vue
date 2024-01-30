@@ -6,13 +6,13 @@
         v-if="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
       >
         <img
-          :src="require(`@/assets/images/card_templates/${cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'))}.jpg`)"
+          :src="require(`@/assets/images/card_templates/${cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face)}.jpg`)"
           class="cardTemplate"
           alt="Card Template"
         >
         <img
-          v-if="colorID.length === 2 && !cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card')).find('m') !== 0"
-          :src="require(`@/assets/images/card_templates/${cardTemplate2((this.card.layout === 'adventure' ? 'adventurer' : 'card'))}.jpg`)"
+          v-if="colorID.length === 2 && cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face).indexOf('m') !== 0"
+          :src="require(`@/assets/images/card_templates/${cardTemplate2((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face)}.jpg`)"
           class="cardTemplate2"
           alt="Card Template"
         >
@@ -74,7 +74,7 @@
         ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
         <div class="cardDisclaimer">Playtest card—NOT FOR SALE</div>
         <div
-          v-if="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness))) && card.layout !== 'leveler'"
+          v-if="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
           ref="cardPowerToughnessElement"
           :class="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
           v-html="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : (card.layout === 'adventure' ? card.card_faces[0].power : card.power)) + '/' + (face !== undefined ? card.card_faces[face].toughness : (card.layout === 'adventure' ? card.card_faces[0].toughness : card.toughness)))"
@@ -169,12 +169,17 @@
       }
     },
     computed: {
+      cardType(){
+        let cardType = 'nonland';
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land')) cardType = 'Land';
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Artifact') : this.card.type_line.includes('Artifact')) cardType = 'Artifact';
+        return cardType
+      },
       colorID() {
         let colorID = [];
-        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land')){
-          colorID = this.face !== undefined ? (this.card.card_faces[this.face].colors || this.card.card_faces[this.face].color_indicator) : this.card.color_identity;
-          if((!colorID || colorID.length === 0) && (this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land'))) {
-            colorID = [];
+        switch (this.cardType) {
+          case 'Land':
+            colorID = (this.face !== undefined ? this.card.card_faces[this.face].color_identity : this.card.color_identity) || [];
             let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
             if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
             if(text.includes('{W}')) colorID.push('W');
@@ -182,9 +187,21 @@
             if(text.includes('{B}')) colorID.push('B');
             if(text.includes('{R}')) colorID.push('R');
             if(text.includes('{G}')) colorID.push('G');
-          }
+            if(text.includes('Plains')) colorID.push('W');
+            if(text.includes('Island')) colorID.push('U');
+            if(text.includes('Swamp')) colorID.push('B');
+            if(text.includes('Mountain')) colorID.push('R');
+            if(text.includes('Forest')) colorID.push('G');
+            break;
+        
+          case 'Artifact':
+          default:
+            colorID = (this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors) || this.card.colors || [];
+            break;
         }
-        return colorID
+        // dedup colorID
+        colorID = Array.from(new Set(colorID));
+        return colorID || []
       }
     },
     mounted() {
@@ -198,58 +215,67 @@
         return tombstoneList.includes(this.card.name)
       },
       cardTemplate(base = 'card',face) {
-        let colors = face !== undefined ? this.card.card_faces[face].colors : this.card.colors;
-        let typeLine = face !== undefined ? this.card.card_faces[face].type_line : this.card.type_line;
-        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : this.card.mana_cost;
         let returnString = '';
-        if(colors.length > 1) {
-          let costArr = manaCost.split(/[{}]+/);
-          costArr = costArr.filter(x => x);
-          let hybridArr = [];
-          for(let i = 0; i < costArr.length; i++) {
-            if(costArr[i].includes('/')) {
-              hybridArr.push(costArr.splice(i, 1)[0]);
-            }
-            i++;
+        let colors = this.colorID;
+        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : (this.card.layout === 'adventure' ? this.card.card_faces[0].mana_cost : this.card.mana_cost);
+        let costArr = manaCost.split(/[{}]+/);
+        costArr = costArr.filter(x => x);
+        let hybridArr = [];
+        costArr.forEach((cost,i) => {
+          if(costArr[i].includes('/')) {
+            hybridArr.push(costArr.splice(i, 1)[0]);
           }
-          // if hybridArr is not empty and all of its elemets are identical
-          // AND if W, U, B, R, G are not in the costArr
-          if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !this.wubrg.some(x => costArr.includes(x))) {
-            returnString += hybridArr[0][0].toLowerCase();
-          }else{
-            returnString += 'm';
-          }
-        } else if(colors.length === 1) {
-          returnString += colors[0].toLowerCase();
-        } else if(colors.length === 0) {
-          if(typeLine.includes('Land')){
-            if(this.colorID.length > 2) {
+        });
+        switch (this.cardType) {
+          case 'Land':
+            if(colors.length > 2) {
               returnString += 'ml';
-            }else if(this.colorID.length === 0) {
+            }else if(colors.length === 0) {
               returnString += 'cl';
             }else{
-              returnString += this.colorID[0].toLowerCase() + 'l';
+              returnString += colors[0].toLowerCase() + 'l';
             }
-          }else if(typeLine.includes('Artifact')) { 
+            break;
+          case 'Artifact':
+            // if(colors.length > 2) {
+            //   returnString += 'ma';
+            // }else if(colors.length === 0) {
+            //   returnString += 'ca';
+            // }else{
+            //   returnString += colors[0].toLowerCase() + 'a';
+            // }
             returnString += 'a';
-          }else{
-            returnString += 'c';
-          }
+            break;
+        
+          default:
+            if(colors.length > 1) {
+              // if hybridArr is not empty and all of its elemets are identical
+              // AND if W, U, B, R, G are not in the costArr
+              if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !this.wubrg.some(x => costArr.includes(x))) {
+                returnString += hybridArr[0][0].toLowerCase();
+              }else{
+                returnString += 'm';
+              }
+            } else if(colors.length === 1) {
+              returnString += colors[0].toLowerCase();
+            } else if(colors.length === 0) {
+              returnString += 'c';
+            }
+            break;
         }
         return returnString + base
       },
       cardTemplate2(base = 'card',face) {
-        let typeLine = face !== undefined ? this.card.card_faces[face].type_line : this.card.type_line;
-        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : this.card.mana_cost;
+        let typeLine = face !== undefined ? this.card.card_faces[face].type_line : (this.card.layout === 'adventure' ? this.card.card_faces[0].type_line : this.card.type_line);
+        let manaCost = face !== undefined ? this.card.card_faces[face].mana_cost : (this.card.layout === 'adventure' ? this.card.card_faces[0].mana_cost : this.card.mana_cost);
         let costArr = manaCost.split(/[{}]+/);
         costArr = costArr.filter(x => x);
         let hybridArr = [];
-        for(let i = 0; i < costArr.length; i++) {
+        costArr.forEach((cost,i) => {
           if(costArr[i].includes('/')) {
             hybridArr.push(costArr.splice(i, 1)[0]);
           }
-          i++;
-        }
+        });
         let returnString = '';
         if(this.colorID[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID[1]).toLowerCase();
         if(typeLine.includes('Land')){
@@ -259,14 +285,14 @@
       },
       formatText(text, flavorText) {
         let textBox = text;
-        textBox = '<p>' + textBox
+        textBox = '<div class=rulesText><p>' + textBox
           .replace(/\n/g, '</p><p>')
-          .replace(/\(/g,'<i>(')
-          .replace(/\)/g,')</i>') + '</p>';
+          .replace(/\(/g,'<i class=reminderText>(')
+          .replace(/\)/g,')</i>') + '</p></div>';
         let ftxt = flavorText || '';
         if(ftxt) {
-          ftxt = ((this.card.layout === 'adventure' ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + ftxt.replace(/\n/g, '<br>');
-          textBox = (textBox + '<p><i>' + ftxt + '</i></p>');
+          ftxt = ftxt.replace(/\n/g, '<br>');
+          textBox = (textBox + ((this.card.layout === 'adventure' ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + '<div class="flavorText"><p><i>' + ftxt + '</i></p></div>');
         }
         textBox = textBox
           .replace(/\b\*/g, "<i>")       // Closing asterisk
@@ -285,6 +311,7 @@
           .replace(/"{/g, "\u201c{")     // Opening doubles
           .replace(/^"/g, "\u201c")      // Opening doubles
           .replace(/--/g,  "\u2014")     // em-dashes;
+          .replace(/dd {/g,  "dd&nbsp;{")// add mana nobreak;
         if(this.card.type_line.includes('Planeswalker')){
           textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
             .replace(/<p>\+([1-9X]): /g, '<p class="loyaltyAbility"><span class="textLoyaltyUp">+$1</span>')
@@ -293,9 +320,9 @@
             .replace(/<p>−([0-9X]*): /g, '<p class="loyaltyAbility"><span class="textLoyaltyDown textLoyaltyBig">-$1</span>');
         }
         textBox = textBox
-          .replace(/<p>Level up (.*)<\/p><p>LEVEL 1-([0-9]*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?<p>LEVEL ([0-9]\+*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?/g,
+          .replace(/<p>Level up (.*)<\/p><p>LEVEL ([0-9]*-[0-9]*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?<p>LEVEL ([0-9]\+*)<\/p><p>([0-9]*\/[0-9]*)<\/p>(<p>(.*)<\/p>)?/g,
             `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[this.face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[this.face].toughness : this.card.toughness))}</div></div>
-<div class="levelAbility"><div class="levelSpread">1–$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
+<div class="levelAbility"><div class="levelSpread">$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
 <div class="levelAbility"><div class="levelSpread">$6</div><div class="levelText">$9</div><div class="levelPT">$7</div></div>`);
         return textBox
       },
@@ -397,17 +424,19 @@
           let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
           let letterSpacing = 0;
   
+
           while (cardTextElement.scrollHeight > 270 && fontSize > 18) {
             if(fontSize > 18) fontSize -= 0.25;
             else letterSpacing -= 0.25;
             cardTextElement.style.fontSize = `${fontSize}px`;
             cardTextElement.style.letterSpacing = `${letterSpacing}px`;
           }
-          if(cardTextElement.clientHeight < 60) {
+          
+          if(cardTextElement.scrollHeight < 70) {
             cardTextElement.style.textAlign = 'center';
           }
-          let leftoverSpace = 285 - cardTextElement.clientHeight;
-          cardTextElement.style.paddingTop = `${leftoverSpace/3}px`;
+          let leftoverSpace = 285 - cardTextElement.scrollHeight;
+          cardTextElement.style.paddingTop = `${leftoverSpace/2.5}px`;
         }
       },
     }
@@ -555,6 +584,7 @@
     top: 8px;
     left: 44px;
     font-size: 39px;
+    line-height: 44px;
     letter-spacing: 0.039em;
     color: #eee;
     font-family: 'Magic';
@@ -740,10 +770,10 @@
   .cardExpansion.ss-7ed { font-size: 1em; }
   .cardExpansion.ss-apc { font-size: 1em; }
   .cardExpansion.ss-ody { font-size: 1em; }
-  .cardExpansion.ss-tor { font-size: 1em; }
-  .cardExpansion.ss-jud { font-size: 1.1em; }
+  .cardExpansion.ss-tor { font-size: 1.1em; }
+  .cardExpansion.ss-jud { font-size: 1.2em; }
   .cardExpansion.ss-ons { font-size: 1.2em; }
-  .cardExpansion.ss-lgn { font-size: 1.6em; }
+  .cardExpansion.ss-lgn { font-size: 1.75em; }
   .cardExpansion.ss-scg { font-size: 1em; }
   .cardExpansion.ss-8ed { font-size: 1em; }
   .cardExpansion.ss-mrd { font-size: 1.5em; }
@@ -802,8 +832,8 @@
   .cardExpansion.ss-rix { font-size: 1em; }
   .cardExpansion.ss-dom { font-size: .9em; }
   .cardExpansion.ss-bbd { font-size: .9em; }
-  .cardExpansion.ss-grn { font-size: 1.3em; }
-  .cardExpansion.ss-rna { font-size: 1.2em; }
+  .cardExpansion.ss-grn { font-size: 1.4em; }
+  .cardExpansion.ss-rna { font-size: 1.4em; }
   .cardExpansion.ss-war { font-size: 1em; }
   .cardExpansion.ss-mh1 { font-size: 1.3em; }
   .cardExpansion.ss-eld { font-size: 1em; }
@@ -927,14 +957,14 @@
     position: absolute;
     top: 592px;
     left: 60px;
-    font-size: 38px;
+    font-size: 40px;
     line-height: 1.075em;
     color: #000;
     width: 555px;
     max-height: 270px;
     /* overflow-x: scroll; */
   }
-  .cardText.adventureText {
+  .cardText.adventurerText {
     left: 355px;
     width: 255px;
   }
@@ -1048,7 +1078,7 @@
   }
   .levelText {
     flex: 1 1 auto;
-    padding-left: 20px;
+    padding: 10px 10px 10px 20px;
   }
   .levelPT {
     flex: 0 0 50px;

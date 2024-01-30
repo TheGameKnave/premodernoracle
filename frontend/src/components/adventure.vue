@@ -92,19 +92,39 @@
       }
     },
     computed: {
+      cardType(){
+        let cardType = 'nonland';
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land')) cardType = 'Land';
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Artifact') : this.card.type_line.includes('Artifact')) cardType = 'Artifact';
+        return cardType
+      },
       colorID() {
-        let colorID = this.face !== undefined ? (this.getColorsFromCost(this.card.card_faces[this.face].mana_cost) || this.card.card_faces[this.face].color_indicator) : this.card.color_identity;
-        if((!colorID || colorID.length === 0) && (this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Land') : this.card.type_line.includes('Land'))) {
-          colorID = [];
-          let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
-          if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
-          if(text.includes('{W}')) colorID.push('W');
-          if(text.includes('{U}')) colorID.push('U');
-          if(text.includes('{B}')) colorID.push('B');
-          if(text.includes('{R}')) colorID.push('R');
-          if(text.includes('{G}')) colorID.push('G');
+        let colorID = [];
+        switch (this.cardType) {
+          case 'Land':
+            colorID = (this.face !== undefined ? this.card.card_faces[this.face].color_identity : this.card.color_identity) || [];
+            let text = this.face !== undefined ? this.card.card_faces[this.face].oracle_text : this.card.oracle_text;
+            if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
+            if(text.includes('{W}')) colorID.push('W');
+            if(text.includes('{U}')) colorID.push('U');
+            if(text.includes('{B}')) colorID.push('B');
+            if(text.includes('{R}')) colorID.push('R');
+            if(text.includes('{G}')) colorID.push('G');
+            if(text.includes('Plains')) colorID.push('W');
+            if(text.includes('Island')) colorID.push('U');
+            if(text.includes('Swamp')) colorID.push('B');
+            if(text.includes('Mountain')) colorID.push('R');
+            if(text.includes('Forest')) colorID.push('G');
+            break;
+        
+          case 'Artifact':
+          default:
+            colorID = (this.face !== undefined ? this.card.card_faces[this.face].colors : this.card.colors) || this.card.colors || [];
+            break;
         }
-        return colorID
+        // dedup colorID
+        colorID = Array.from(new Set(colorID));
+        return colorID || []
       }
     },
     mounted() {
@@ -130,12 +150,11 @@
           let costArr = manaCost.split(/[{}]+/);
           costArr = costArr.filter(x => x);
           let hybridArr = [];
-          for(let i = 0; i < costArr.length; i++) {
+          costArr.forEach((cost,i) => {
             if(costArr[i].includes('/')) {
               hybridArr.push(costArr.splice(i, 1)[0]);
             }
-            i++;
-          }
+          });
           // if hybridArr is not empty and all of its elemets are identical
           // AND if W, U, B, R, G are not in the costArr
           if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !this.wubrg.some(x => costArr.includes(x))) {
@@ -168,12 +187,11 @@
         let costArr = manaCost.split(/[{}]+/);
         costArr = costArr.filter(x => x);
         let hybridArr = [];
-        for(let i = 0; i < costArr.length; i++) {
+        costArr.forEach((cost,i) => {
           if(costArr[i].includes('/')) {
             hybridArr.push(costArr.splice(i, 1)[0]);
           }
-          i++;
-        }
+        });
         let returnString = '';
         if(this.colorID[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID[1]).toLowerCase();
         if(typeLine.includes('Land')){

@@ -27,14 +27,14 @@
             v-if="card.name && !['transform','modal_dfc','flip'].includes(card.layout)" 
           >
             <card 
-              :key="key" 
+              :key="card.name+key" 
               :card="card"
             />
           </template>
           <template v-if="['transform','modal_dfc','flip'].includes(card.layout)">
             <card 
               v-for="(face, index) in card.card_faces" 
-              :key="index" 
+              :key="card.name+index" 
               :card="card" 
               :face="index"/>
           </template>
@@ -85,8 +85,9 @@ export default {
       // dedup the list
       cardList = cardList.filter(
         (card, index) =>
-          cardList.indexOf(card) === index &&
-          !card.toLowerCase().includes('sideboard')
+          cardList.indexOf(card) === index
+          && !card.toLowerCase().includes('sideboard')
+          && card !== 'Deck' && card !== 'Deck:'
       )
       this.cardNames = cardList.join('\n')
       fetch('/api/cards', {
