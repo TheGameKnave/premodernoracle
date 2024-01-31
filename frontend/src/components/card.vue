@@ -292,19 +292,26 @@
       },
       formatText(text, flavorText) {
         let textBox = text;
-        textBox = '<div class=rulesText><p>' + textBox
+        textBox = '<p>' + textBox
           .replace(/\n/g, '</p><p>')
-          .replace(/\(/g,'<i class="reminderText">(')
-          .replace(/\)/g,')</i>') + '</p></div>';
+          .replace(/\(/g,'@@@<i class="reminderText">(')
+          .replace(/\)/g,')</i>@@@') + '</p>';
+        let reminderArr = textBox.split('@@@');
+        reminderArr.forEach((reminder,i) => {
+          if(reminder.includes('reminderText') && ((text ? text.length : 0) + (flavorText ? flavorText.length : 0)) > 220) {
+            reminderArr[i] = reminderArr[i].replace(/reminderText/g, 'reminderText reminderTextLong');
+          }
+        });
+        textBox = reminderArr.join('');
         let typeLine = this.face !== undefined ? this.card.card_faces[this.face].type_line : this.card.type_line;
         // if typeline includes any basic lands from the `lands` variable...
         if(this.lands.some(land => typeLine.includes(land))) {
-          textBox = textBox.replace(/reminderText/, 'reminderText basicLands');
+          textBox = textBox.replace(/reminderText/g, 'reminderText basicLands');
         }
         let ftxt = flavorText || '';
         if(ftxt) {
           ftxt = ftxt.replace(/\n/g, '<br>');
-          textBox = (textBox + ((this.card.layout === 'adventure' ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + '<div class="flavorText"><p><i>' + ftxt + '</i></p></div>');
+          textBox = (textBox + (((this.face !== undefined || this.card.layout === 'adventure') ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + '<div class="flavorText"><p><i>' + ftxt + '</i></p></div>');
         }
         textBox = textBox
           .replace(/\b\*/g, "<i>")       // Closing asterisk
@@ -313,6 +320,7 @@
           .replace(/\b'/g, "\u2019")     // Closing singles
           .replace(/'$/g, "\u2019")      // Closing singles
           .replace(/'</g, "\u2019<")     // Closing singles
+          .replace(/' /g, "\u2019 ")     // Closing singles
           .replace(/\.'/g, "\u2019")     // Closing singles
 
           .replace(/'\b/g, "\u2018")     // Opening singles
@@ -326,11 +334,31 @@
 
           .replace(/"\b/g, "\u201c")     // Opening doubles
           .replace(/"{/g, "\u201c{")     // Opening doubles
+          .replace(/>"/g, ">\u201c")      // Opening doubles
           .replace(/^"/g, "\u201c")      // Opening doubles
           .replace(/--/g,  "\u2014")     // em-dashes;
           .replace(/dd {/g,  "dd&nbsp;{")// add mana nobreak;
-          .replace(/=“/, '="')           // fix closing double quotes
-          .replace(/”>/, '">')          // fix closing double quotes
+          .replace(/=“/g, '="')           // fix closing double quotes
+          .replace(/”>/g, '">')          // fix closing double quotes
+        if(this.face !== undefined ? this.card.card_faces[this.face].type_line.includes('Saga') : this.card.type_line.includes('Saga')){
+          let textArr = textBox.split('<p>');
+          textArr = textArr.filter(x => x);
+          textArr.forEach((textLine,i) => {
+            textArr[i] = textLine
+              .replace('</p>','')
+              .replace(/([IV, ]*) — /,'$1@@@');
+            let lineArr = textArr[i].split('@@@');
+            if(lineArr.length > 1) {
+              let chaptersArr = lineArr[0].split(', ');
+              lineArr[0] = '<div class="chapterNumbers"><div class="chapterNumber">' + chaptersArr.join('</div><div class="chapterNumber">') + '</div></div>';
+              lineArr[1] = '<div class="chapterAbility">' + lineArr[1] + '</div>';
+              textArr[i] = (chaptersArr[0] !== 'I' ? '<hr>' : '') + '<div class="sagaChapter">' + lineArr.join('') + '</div>';
+            }else{
+              textArr[i] = '<p>' + textArr[i] + '</p>';
+            }
+          });
+          textBox = textArr.join('');
+        }
         if(this.card.type_line.includes('Class')){
           textBox = textBox.replace(/(<p>({.*:) (Level 2)<\/p>)<p>(.*)<\/p>(<p>({.*:) (Level 3)<\/p>)<p>(.*)<\/p>/g,
             `<div class="levelAbility"><div class="levelCost level2">$2</div><div class="levelText">$4</div></div>
@@ -348,6 +376,7 @@
             `<div class="levelAbility"><div class="levelReminder">Level up $1</div><div class="levelPT">${this.formatPT((this.face !== undefined ? this.card.card_faces[this.face].power : this.card.power) + '/' + (this.face !== undefined ? this.card.card_faces[this.face].toughness : this.card.toughness))}</div></div>
 <div class="levelAbility"><div class="levelSpread">$2</div><div class="levelText">$5</div><div class="levelPT">$3</div></div>
 <div class="levelAbility"><div class="levelSpread">$6</div><div class="levelText">$9</div><div class="levelPT">$7</div></div>`);
+        textBox = '<div class=rulesText>' + textBox + '</div>';
         return textBox
       },
       formatPT(string){
@@ -448,12 +477,11 @@
           let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
           let letterSpacing = 0;
   
-
-          while (cardTextElement.scrollHeight > 270 && fontSize > 18) {
+          while (cardTextElement.scrollHeight > 280 && fontSize > 18) {
             if(fontSize > 18) fontSize -= 0.25;
             else letterSpacing -= 0.25;
             cardTextElement.style.fontSize = `${fontSize}px`;
-            cardTextElement.style.letterSpacing = `${letterSpacing}px`;
+            if(letterSpacing) cardTextElement.style.letterSpacing = `${letterSpacing}px`;
           }
           
           if(cardTextElement.scrollHeight < 70) {
@@ -856,7 +884,7 @@
   .cardExpansion.ss-soi { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-emn { font-size: 1.4em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-cn2 { font-size: 1em; transform: translate(50%, -53%) !important; }
-  .cardExpansion.ss-kld { font-size: 1.1em; }
+  .cardExpansion.ss-kld { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-aer { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-akh { font-size: 1em; }
   .cardExpansion.ss-hou { font-size: 1em; }
@@ -996,7 +1024,10 @@
     max-height: 270px;
     /* overflow-x: scroll; */
   }
-  .reminderText:not(.basicLands) {
+  .reminderText {
+    font-size: .95em
+  }
+  .reminderTextLong:not(.basicLands) {
     display: none;
   }
   .cardText.adventurerText {
@@ -1064,6 +1095,34 @@
     transform: scaleX(1.3);
     left: 10px;
   }
+  .sagaChapter {
+    display: flex;
+    margin: 0.3em 0 0 -60px;
+  }
+  .chapterNumbers {
+    flex: 0 0 80px;
+    margin: -5px 0 0px;
+  }
+  .chapterNumber {
+    text-align: center;
+    position: relative;
+    font-size: 25px;
+    line-height: 46px;
+    color: #eda;
+    z-index: 2;
+    margin-bottom: -10px;
+  }
+  .chapterNumber:after {
+    content: "⬢";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 65px;
+    color: #222;
+    z-index: -1;
+    transform: translate(-50%, -50%) scaleX(1.2);
+    text-shadow: 1px 1px 0 #eda, -1px 1px 0 #eda,1px -1px 0 #eda,-1px -1px 0 #eda;
+  }
   .levelAbility {
     display: flex;
     min-height: 90px;
@@ -1075,7 +1134,7 @@
   .levelReminder {
     font-size: 29px;
     line-height: 35px;
-    flex: 1 0 auto;
+    flex: auto;
     margin-left: 45px;
   }
   .levelSpread {
@@ -1191,6 +1250,9 @@
     border: 0;
     height: 2px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  }
+  .flavorText {
+    font-size: .95em;
   }
   .cardPowerToughness, .cardDefense {
     position: absolute;
