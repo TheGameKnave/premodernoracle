@@ -250,19 +250,22 @@ server.register(plugins).then(() => {
       if (!cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] || (new Date().getTime() - (cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
         const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=name%3D${encodeURIComponent(`${cardName}`)}`;
         const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
-        console.log('fetchedData',fetchedData);
+        console.log('fetchedData',initialPageUrl,fetchedData);
         console.log(cardData)
-        cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] = {
-          time: new Date(),
-          data: findFirstPrinting(cardName,cardData),
-        };
+        let firstPrinting = findFirstPrinting(cardName,cardData)
+        if(firstPrinting){
+          cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] = {
+            time: new Date(),
+            data: firstPrinting,
+          };
+        }
       }
-      results[cardName] = data[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.data || cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")].data || {};
+      results[cardName] = data[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.data || cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.data || {};
     }));
 
     let orderedResults = {};
     payload.cardList.forEach(cardName => {
-      orderedResults[cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")].data?.name || cardName] = results[cardName];
+      orderedResults[cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.data?.name || cardName] = results[cardName];
     });
     console.log('results:',orderedResults);
 
@@ -272,7 +275,7 @@ server.register(plugins).then(() => {
   function findFirstPrinting(cardName,cardData){
     let possibilities = cardData.filter(card => {
       console.log(card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""),cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""))
-      return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false && !card.promo_types
+      return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false && (!card.promo_types || card.promo_types.includes('planeswalkerdeck') || card.promo_types.includes('themepack'));
     });
     console.log('possibilities',possibilities);
     if (possibilities.length > 1) {
