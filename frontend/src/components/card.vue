@@ -242,14 +242,13 @@
             }
             break;
           case 'Artifact':
-            // if(colors.length > 2) {
-            //   returnString += 'ma';
-            // }else if(colors.length === 0) {
-            //   returnString += 'ca';
-            // }else{
-            //   returnString += colors[0].toLowerCase() + 'a';
-            // }
-            returnString += 'a';
+            if(colors.length > 2) {
+              returnString += 'ma';
+            }else if(colors.length === 0) {
+              returnString += 'a';
+            }else{
+              returnString += colors[0].toLowerCase() + 'a';
+            }
             break;
         
           default:
@@ -283,8 +282,11 @@
         });
         let returnString = '';
         if(this.colorID[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID[1]).toLowerCase();
-        if(typeLine.includes('Land')){
+        if(this.cardType === 'Land'){
           returnString += 'l';
+        }
+        if(this.cardType === 'Artifact'){
+          returnString += 'a';
         }
         return returnString + base
       },

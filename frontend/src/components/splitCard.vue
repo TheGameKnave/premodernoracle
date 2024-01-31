@@ -226,7 +226,7 @@
         let textBox = text;
         textBox = '<p>' + textBox
           .replace(/\n/g, '</p><p>')
-          .replace(/\(/g,'<i>(')
+          .replace(/\(/g,'<i class=reminderText>(')
           .replace(/\)/g,')</i>') + '</p>';
         let ftxt = flavorText || '';
         if(ftxt) {
