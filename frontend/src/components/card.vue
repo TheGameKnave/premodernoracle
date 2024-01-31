@@ -332,7 +332,9 @@
           .replace(/=“/, '="')           // fix closing double quotes
           .replace(/”>/, '">')          // fix closing double quotes
         if(this.card.type_line.includes('Class')){
-          textBox = textBox.replace(/(<p>{.*Level 2)(.*)(<p>{.*Level 3)/g,'<hr>$1$2<hr>$3');
+          textBox = textBox.replace(/(<p>({.*:) (Level 2)<\/p>)<p>(.*)<\/p>(<p>({.*:) (Level 3)<\/p>)<p>(.*)<\/p>/g,
+            `<div class="levelAbility"><div class="levelCost level2">$2</div><div class="levelText">$4</div></div>
+<div class="levelAbility"><div class="levelCost level3">$6</div><div class="levelText">$8</div></div>`);
         }
         if(this.card.type_line.includes('Planeswalker')){
           textBox = textBox.replace(/<p>0: /g, '<p class="loyaltyAbility"><span class="textLoyalty">0</span>')
@@ -1057,10 +1059,16 @@
   .levelAbility {
     display: flex;
     min-height: 90px;
+    margin-left: -45px;
+  }
+  .levelAbility > * {
+    align-self: center;
   }
   .levelReminder {
     font-size: 29px;
     line-height: 35px;
+    flex: 1 0 auto;
+    margin-left: 45px;
   }
   .levelSpread {
     flex: 0 0 75px;
@@ -1073,7 +1081,6 @@
   }
   .levelSpread:before {
     content: "Level";
-    font-size: 28px;
     color: #eee;
     position: absolute;
     top: -30px;
@@ -1091,6 +1098,49 @@
     left: -20px;
     z-index: -1;
     font-size: 90px;
+    text-shadow:
+      2px 2px 0 #eee,
+      -2px -2px 0 #eee,
+      -2px 2px 0 #eee,
+      2px -2px 0 #eee,
+      0 2px 0 #eee,
+      0 -2px 0 #eee,
+      2px 0 0 #eee,
+      -2px 0 0 #eee;
+  }
+  .levelCost {
+    flex: 0 0 75px;
+    position: relative;
+    text-align: center;
+    align-self: flex-start;
+    font-size: 24px;
+    z-index: 99;
+  }
+  .levelCost:before {
+    white-space: nowrap;
+    font-size: 20px;
+    color: #eee;
+    position: absolute;
+    top: 30px;
+    right: 50%;
+    transform: translate(50%, 0);
+    z-index: 99;
+  }
+  .levelCost.level2:before {
+    content: "Level 2";
+  }
+  .levelCost.level3:before {
+    content: "Level 3";
+  }
+  .levelCost:after {
+    content: "\2617";
+    position: absolute;
+    top: 15px;
+    transform: rotate(90deg);
+    color: #222;
+    left: -24px;
+    z-index: -1;
+    font-size: 94px;
     text-shadow:
       2px 2px 0 #eee,
       -2px -2px 0 #eee,
