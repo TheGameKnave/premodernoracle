@@ -496,7 +496,7 @@
   }
   .splitCardExpansionWrapper {
     position: absolute;
-    top: 344px;
+    top: 347px;
     right: 52px;
     font-size: 38px;
   }

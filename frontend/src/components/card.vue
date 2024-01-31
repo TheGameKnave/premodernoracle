@@ -556,21 +556,21 @@
   }
   .cardTombstone:before {
     text-shadow: 
-      3px 3px 0 #eee, 
-      3px -2px 0 #eee;
+      2px 2px 0 #eee, 
+      2px -1px 0 #eee;
   }
   .cardTombstoneShadow {
     text-shadow: 
-      -3px 3px 0 #eee, 
-      0 3px 0 #eee,
-      0 -2.5px 0 #eee,
-      1px -2.5px 0 #eee,
-      2px -2.5px 0 #eee,
-      -3px 0 0 #eee,
       -2px 2px 0 #eee, 
-      -2px -2px 0 #eee,
-      -3px 2px 0 #eee, 
-      -3px -2px 0 #eee;
+      0 2px 0 #eee,
+      0 -1.5px 0 #eee,
+      1px -1.5px 0 #eee,
+      1px -1.5px 0 #eee,
+      -2px 0 0 #eee,
+      -1px 1px 0 #eee, 
+      -1px -1px 0 #eee,
+      -2px 1px 0 #eee, 
+      -2px -1px 0 #eee;
   }
   .cardTombstoneShadow {
     position: absolute;
@@ -650,7 +650,9 @@
     transform: translate(50%, -50%) !important;
   }
   .stroke.ss-wth:after,
+  .stroke.ss-all:after,
   .stroke.ss-por:after,
+  .stroke.ss-pls:after,
   .stroke.ss-som:after,
   .stroke.ss-rtr:after,
   .stroke.ss-bbd:after,
@@ -676,6 +678,12 @@
     right: 50%;
     border-radius: 0.2em;
     transform: translate(50%, -50%);
+  }
+  .stroke.ss-all:after {
+    height: 20%;
+    width: 30%;
+    top: 30px;
+    left: 30px;
   }
   .stroke.ss-som:after {
     height: 71%;
@@ -759,24 +767,24 @@
     width: 57%;
     top: 25px;
   }
-  .cardExpansion.ss-lea { font-size: 1em; }
-  .cardExpansion.ss-leb { font-size: 1em; }
-  .cardExpansion.ss-2ed { font-size: 1em; }
+  .cardExpansion.ss-lea { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-leb { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-2ed { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-arn { font-size: 2em; }
-  .cardExpansion.ss-atq { font-size: 1.2em; }
+  .cardExpansion.ss-atq { font-size: 1.25em; }
   .cardExpansion.ss-3ed { font-size: 1em; }
   .cardExpansion.ss-fbb { font-size: 1em; }
-  .cardExpansion.ss-leg { font-size: 1em; }
+  .cardExpansion.ss-leg { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-sum { font-size: 1em; }
-  .cardExpansion.ss-drk { font-size: 1em; }
-  .cardExpansion.ss-fem { font-size: 1em; }
+  .cardExpansion.ss-drk { font-size: 1.1em; transform: translate(50%, -60%) !important; }
+  .cardExpansion.ss-fem { font-size: 1.15em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-4bb { font-size: 1em; }
   .cardExpansion.ss-4ed { font-size: 1em; }
   .cardExpansion.ss-ice { font-size: 1em; }
-  .cardExpansion.ss-hml { font-size: 1em; }
-  .cardExpansion.ss-all { font-size: 1.7em; }
-  .cardExpansion.ss-mir { font-size: 1em; }
-  .cardExpansion.ss-vis { font-size: 1em; }
+  .cardExpansion.ss-hml { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-all { font-size: 1.75em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-mir { font-size: 1em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-vis { font-size: .95em; }
   .cardExpansion.ss-5ed { font-size: 1em; }
   .cardExpansion.ss-wth { font-size: 1.4em; }
   .cardExpansion.ss-tmp { font-size: 1.1em; }
@@ -785,81 +793,81 @@
   .cardExpansion.ss-usg { font-size: 1.4em; }
   .cardExpansion.ss-ulg { font-size: 1.5em; }
   .cardExpansion.ss-6ed { font-size: 1em; }
-  .cardExpansion.ss-uds { font-size: 1em; }
-  .cardExpansion.ss-mmq { font-size: 1em; }
-  .cardExpansion.ss-nem { font-size: 1.8em; }
-  .cardExpansion.ss-pcy { font-size: 1.1em; }
+  .cardExpansion.ss-uds { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-mmq { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-nem { font-size: 1.9em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-pcy { font-size: 1.15em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-inv { font-size: 1.1em; }
   .cardExpansion.ss-pls { font-size: 1.4em; }
   .cardExpansion.ss-7ed { font-size: 1em; }
-  .cardExpansion.ss-apc { font-size: 1em; }
-  .cardExpansion.ss-ody { font-size: 1em; }
-  .cardExpansion.ss-tor { font-size: 1.1em; }
-  .cardExpansion.ss-jud { font-size: 1.2em; }
-  .cardExpansion.ss-ons { font-size: 1.2em; }
-  .cardExpansion.ss-lgn { font-size: 1.75em; }
-  .cardExpansion.ss-scg { font-size: 1em; }
+  .cardExpansion.ss-apc { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-ody { font-size: 1.1em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-tor { font-size: 1.15em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-jud { font-size: 1.3em; transform: translate(50%, -57%) !important; }
+  .cardExpansion.ss-ons { font-size: 1.3em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-lgn { font-size: 2em; }
+  .cardExpansion.ss-scg { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-8ed { font-size: 1em; }
-  .cardExpansion.ss-mrd { font-size: 1.5em; }
-  .cardExpansion.ss-dst { font-size: 1em; }
-  .cardExpansion.ss-5dn { font-size: 1em; }
-  .cardExpansion.ss-chk { font-size: 1.1em; }
-  .cardExpansion.ss-bok { font-size: 1.1em; }
-  .cardExpansion.ss-sok { font-size: 1em; }
+  .cardExpansion.ss-mrd { font-size: 1.7em; }
+  .cardExpansion.ss-dst { font-size: 1.08em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-5dn { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-chk { font-size: 1.3em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-bok { font-size: 1.2em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-sok { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-9ed { font-size: 1em; }
-  .cardExpansion.ss-rav { font-size: 1em; }
-  .cardExpansion.ss-gpt { font-size: 1.1em; }
-  .cardExpansion.ss-dis { font-size: 1em; }
-  .cardExpansion.ss-csp { font-size: .9em; }
-  .cardExpansion.ss-tsp { font-size: 1em; }
+  .cardExpansion.ss-rav { font-size: 1.05em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-gpt { font-size: 1.15em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-dis { font-size: 1.2em; }
+  .cardExpansion.ss-csp { font-size: 1.05em; }
+  .cardExpansion.ss-tsp { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-tsb { font-size: 1em; }
-  .cardExpansion.ss-plc { font-size: 1.2em; }
-  .cardExpansion.ss-fut { font-size: 1.3em; }
+  .cardExpansion.ss-plc { font-size: 1.3em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-fut { font-size: 1.3em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-10e { font-size: 1em; }
-  .cardExpansion.ss-lrw { font-size: 1em; }
-  .cardExpansion.ss-mor { font-size: 1em; }
-  .cardExpansion.ss-shm { font-size: 1.3em; }
-  .cardExpansion.ss-eve { font-size: 1.1em; }
-  .cardExpansion.ss-ala { font-size: 1.1em; }
-  .cardExpansion.ss-con { font-size: 1em; }
+  .cardExpansion.ss-lrw { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-mor { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-shm { font-size: 1.3em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-eve { font-size: 1.2em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-ala { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-con { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-arb { font-size: 1.1em; }
-  .cardExpansion.ss-zen { font-size: 1em; }
+  .cardExpansion.ss-zen { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-wwk { font-size: 1.1em; }
   .cardExpansion.ss-roe { font-size: 1.1em; }
   .cardExpansion.ss-som { font-size: 1em; }
-  .cardExpansion.ss-mbs { font-size: 1em; }
+  .cardExpansion.ss-mbs { font-size: 1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-nph { font-size: 1em; }
-  .cardExpansion.ss-isd { font-size: 1em; }
+  .cardExpansion.ss-isd { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-dka { font-size: 1.2em; }
   .cardExpansion.ss-avr { font-size: 1.1em; }
   .cardExpansion.ss-rtr { font-size: 1em; }
-  .cardExpansion.ss-gtc { font-size: 1.3em; }
-  .cardExpansion.ss-dgm { font-size: 1.2em; }
-  .cardExpansion.ss-ths { font-size: 1em; }
-  .cardExpansion.ss-bng { font-size: 1em; }
+  .cardExpansion.ss-gtc { font-size: 1.35em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-dgm { font-size: 1.25em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-ths { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-bng { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-jou { font-size: 1.1em; }
   .cardExpansion.ss-cns { font-size: 1em; }
-  .cardExpansion.ss-ktk { font-size: 1.1em; }
-  .cardExpansion.ss-frf { font-size: 1.2em; }
-  .cardExpansion.ss-dtk { font-size: 1.1em; }
+  .cardExpansion.ss-ktk { font-size: 1.2em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-frf { font-size: 1.2em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-dtk { font-size: 1.15em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-ori { font-size: 1.2em; }
   .cardExpansion.ss-bfz { font-size: 1.1em; }
-  .cardExpansion.ss-ogw { font-size: 1em; }
-  .cardExpansion.ss-soi { font-size: 1.1em; }
-  .cardExpansion.ss-emn { font-size: 1.2em; }
-  .cardExpansion.ss-cn2 { font-size: .9em; }
+  .cardExpansion.ss-ogw { font-size: 1.1em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-soi { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-emn { font-size: 1.4em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-cn2 { font-size: 1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-kld { font-size: 1.1em; }
-  .cardExpansion.ss-aer { font-size: 1em; }
+  .cardExpansion.ss-aer { font-size: 1.1em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-akh { font-size: 1em; }
   .cardExpansion.ss-hou { font-size: 1em; }
   .cardExpansion.ss-xln { font-size: 1.1em; }
-  .cardExpansion.ss-rix { font-size: 1em; }
-  .cardExpansion.ss-dom { font-size: .9em; }
+  .cardExpansion.ss-rix { font-size: 1.1em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-dom { font-size: 1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-bbd { font-size: .9em; }
   .cardExpansion.ss-grn { font-size: 1.4em; }
   .cardExpansion.ss-rna { font-size: 1.4em; }
-  .cardExpansion.ss-war { font-size: 1em; }
-  .cardExpansion.ss-mh1 { font-size: 1.3em; }
+  .cardExpansion.ss-war { font-size: 1.05em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-mh1 { font-size: 1.3em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-eld { font-size: 1em; }
   .cardExpansion.ss-thb { font-size: 1em; }
   .cardExpansion.ss-iko { font-size: 1.1em; }
@@ -869,21 +877,21 @@
   .cardExpansion.ss-khm { font-size: 1em; }
   .cardExpansion.ss-stx { font-size: 1.2em; }
   .cardExpansion.ss-h1r { font-size: 1em; }
-  .cardExpansion.ss-mh2 { font-size: 1.3em; }
+  .cardExpansion.ss-mh2 { font-size: 1.35em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-afr { font-size: 1.2em; }
   .cardExpansion.ss-mid { font-size: 1.2em; }
   .cardExpansion.ss-vow { font-size: 1.3em; }
   .cardExpansion.ss-dbl { font-size: 1em; }
-  .cardExpansion.ss-neo { font-size: 1.5em; }
-  .cardExpansion.ss-snc { font-size: 1.3em; }
+  .cardExpansion.ss-neo { font-size: 1.6em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-snc { font-size: 1.4em; }
   .cardExpansion.ss-clb { font-size: 1em; }
   .cardExpansion.ss-dmu { font-size: 1em; }
-  .cardExpansion.ss-broj22 { font-size: 1em; }
+  .cardExpansion.ss-j22 { font-size: 1.25em; }
   .cardExpansion.ss-one { font-size: .9em; }
   .cardExpansion.ss-mom { font-size: 1.2em; }
   .cardExpansion.ss-mat { font-size: 1em; }
   .cardExpansion.ss-ltr { font-size: 1.3em; }
-  .cardExpansion.ss-woe { font-size: 1.4em; }
+  .cardExpansion.ss-woe { font-size: 1.6em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-lci { font-size: 1.3em; }
   .cardExpansion.ss-clu { font-size: 1em; }
   .cardExpansion.ss-mkm { font-size: 1em; }
