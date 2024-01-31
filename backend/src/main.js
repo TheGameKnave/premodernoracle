@@ -220,7 +220,7 @@ server.register(plugins).then(() => {
       return new Promise((resolve, reject) => {
         const proxyRequest = https.request(pageOptions, (proxyResponse) => {
           let data = '';
-
+          proxyResponse.setEncoding('utf8');
           proxyResponse.on('data', (chunk) => {
             data += chunk;
           });
@@ -275,13 +275,12 @@ server.register(plugins).then(() => {
   function findFirstPrinting(cardName,cardData){
     let possibilities = cardData.filter(card => {
       console.log(card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""),cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""))
-      return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false && (!card.promo_types || card.promo_types.includes('planeswalkerdeck') || card.promo_types.includes('themepack'));
+      return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false;
     });
-    console.log('possibilities',possibilities);
     if (possibilities.length > 1) {
       let narrowedPossibilities = possibilities.filter(card => card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "") === cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""));
       console.log('narrowedPossibilities',narrowedPossibilities.map(card => card.name));
-      if(narrowedPossibilities.length === 1){
+      if(narrowedPossibilities.length >= 1){
         console.log('Found one', narrowedPossibilities[0].name);
         return narrowedPossibilities[0];
       }
