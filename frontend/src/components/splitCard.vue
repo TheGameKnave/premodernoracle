@@ -160,9 +160,12 @@
         return tombstoneList.includes(this.card.name) && oracleText.includes('your graveyard')
       },
       getColorsFromCost(cost){
-        let costArr = cost.split(/[{}]+/);
+        let costArr = cost.split(/[{}/]+/);
         costArr = costArr.filter(x => x);
-        return costArr.filter(x => this.wubrg.includes(x));
+        costArr = costArr.filter(x => this.wubrg.includes(x));
+        // dedup costArr
+        costArr = [...new Set(costArr)];
+        return costArr;
       },
       cardTemplate() {
         let colors = this.face !== undefined ? this.getColorsFromCost(this.card.card_faces[this.face].mana_cost) : this.card.colors;

@@ -134,7 +134,7 @@
     },
     methods: {
       getColorsFromCost(cost){
-        let costArr = cost.split(/[{}]+/);
+        let costArr = cost.split(/[{}/]+/);
         costArr = costArr.filter(x => x);
         costArr = costArr.filter(x => this.wubrg.includes(x));
         // dedup costArr
