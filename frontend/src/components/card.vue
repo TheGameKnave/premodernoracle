@@ -442,7 +442,7 @@
           //count the number of mana symbols in mana_cost
           const countInstancesOfCharacter = (inputString, character) => inputString.split(character).length - 1;
           let manaCount = countInstancesOfCharacter(this.card.card_faces ? this.card.card_faces[0].mana_cost : this.card.mana_cost || '', '{');
-          while (cardTitleElement.clientWidth + (manaCount * 40) > 560) {
+          while (cardTitleElement.clientWidth + (manaCount * 40) > 600) {
             fontSize -= 0.25;
             cardTitleElement.style.fontSize = `${fontSize}px`;
           }
@@ -584,21 +584,22 @@
   }
   .cardTombstone:before {
     text-shadow: 
-      2px 2px 0 #eee, 
-      2px -1px 0 #eee;
+      2px 2px 0 #ddd, 
+      2px -2px 0 #ddd,
+      1px -2px 0 #ddd;
   }
   .cardTombstoneShadow {
     text-shadow: 
-      -2px 2px 0 #eee, 
-      0 2px 0 #eee,
-      0 -1.5px 0 #eee,
-      1px -1.5px 0 #eee,
-      1px -1.5px 0 #eee,
-      -2px 0 0 #eee,
-      -1px 1px 0 #eee, 
-      -1px -1px 0 #eee,
-      -2px 1px 0 #eee, 
-      -2px -1px 0 #eee;
+      -2px 2px 0 #ddd, 
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      1px -2px 0 #ddd,
+      1px -1.5px 0 #ddd,
+      -2px 0 0 #ddd,
+      -1px 1px 0 #ddd, 
+      -1px -2px 0 #ddd,
+      -2px 1px 0 #ddd, 
+      -2px -1.5px 0 #ddd;
   }
   .cardTombstoneShadow {
     position: absolute;
@@ -613,22 +614,22 @@
     left: 5px;
     top: 2px;
     text-shadow: 
-      2px 2px 0 #eee, 
-      -2px -2px 0 #eee, 
-      -2px 2px 0 #eee, 
-      2px -2px 0 #eee,
-      2px 1px 0 #eee, 
-      -2px -1px 0 #eee, 
-      -2px 1px 0 #eee, 
-      2px -1px 0 #eee,
-      1px 2px 0 #eee, 
-      -1px -2px 0 #eee, 
-      -1px 2px 0 #eee, 
-      1px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd, 
+      -2px -2px 0 #ddd, 
+      -2px 2px 0 #ddd, 
+      2px -2px 0 #ddd,
+      2px 1px 0 #ddd, 
+      -2px -1px 0 #ddd, 
+      -2px 1px 0 #ddd, 
+      2px -1px 0 #ddd,
+      1px 2px 0 #ddd, 
+      -1px -2px 0 #ddd, 
+      -1px 2px 0 #ddd, 
+      1px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
   }
   .dfcBack { top: 6px }
   .cardTitle {
@@ -638,7 +639,7 @@
     font-size: 39px;
     line-height: 44px;
     letter-spacing: 0.039em;
-    color: #eee;
+    color: #ddd;
     font-family: 'Magic';
   }
   .cardManaCost {
@@ -663,7 +664,7 @@
     left: 42px;
     font-size: 33.5px;
     line-height: 50px;
-    color: #eee;
+    color: #ddd;
   }
   .cardExpansionWrapper {
     position: absolute;
@@ -701,7 +702,7 @@
     z-index: -1;
     width: 70%;
     height: 45%;
-    background: #eee;
+    background: #ddd;
     top: 50%;
     right: 50%;
     border-radius: 0.2em;
@@ -965,41 +966,41 @@
   }
   .cardExpansion.stroke {
     text-shadow: 
-      3px 3px 1.5px #eee, 
-      -3px -3px 1.5px #eee, 
-      -3px 3px 1.5px #eee, 
-      3px -3px 1.5px #eee,
-      0 3px 1.5px #eee,
-      0 -3px 1.5px #eee,
-      3px 0 1.5px #eee,
-      -3px 0 1.5px #eee,
-      2px 3px 1.5px #eee, 
-      -2px -3px 1.5px #eee, 
-      -2px 3px 1.5px #eee, 
-      2px -3px 1.5px #eee,
-      3px 2px 1.5px #eee, 
-      -3px -2px 1.5px #eee, 
-      -3px 2px 1.5px #eee, 
-      3px -2px 1.5px #eee;
+      3px 3px 1.5px #ddd, 
+      -3px -3px 1.5px #ddd, 
+      -3px 3px 1.5px #ddd, 
+      3px -3px 1.5px #ddd,
+      0 3px 1.5px #ddd,
+      0 -3px 1.5px #ddd,
+      3px 0 1.5px #ddd,
+      -3px 0 1.5px #ddd,
+      2px 3px 1.5px #ddd, 
+      -2px -3px 1.5px #ddd, 
+      -2px 3px 1.5px #ddd, 
+      2px -3px 1.5px #ddd,
+      3px 2px 1.5px #ddd, 
+      -3px -2px 1.5px #ddd, 
+      -3px 2px 1.5px #ddd, 
+      3px -2px 1.5px #ddd;
   }
   .cardExpansion.common.stroke {
     text-shadow: 
-      1.75px 1.75px 1.5px #eee, 
-      -1.75px -1.75px 1.5px #eee, 
-      -1.75px 1.75px 1.5px #eee, 
-      1.75px -1.75px 1.5px #eee,
-      0 1.75px 1.5px #eee,
-      0 -1.75px 1.5px #eee,
-      1.75px 0 1.5px #eee,
-      -1.75px 0 1.5px #eee,
-      1px 1.75px 1.5px #eee, 
-      -1px -1.75px 1.5px #eee, 
-      -1px 1.75px 1.5px #eee, 
-      1px -1.75px 1.5px #eee,
-      1.75px 1px 1.5px #eee, 
-      -1.75px -1px 1.5px #eee, 
-      -1.75px 1px 1.5px #eee, 
-      1.75px -1px 1.5px #eee;
+      1.75px 1.75px 1.5px #ddd, 
+      -1.75px -1.75px 1.5px #ddd, 
+      -1.75px 1.75px 1.5px #ddd, 
+      1.75px -1.75px 1.5px #ddd,
+      0 1.75px 1.5px #ddd,
+      0 -1.75px 1.5px #ddd,
+      1.75px 0 1.5px #ddd,
+      -1.75px 0 1.5px #ddd,
+      1px 1.75px 1.5px #ddd, 
+      -1px -1.75px 1.5px #ddd, 
+      -1px 1.75px 1.5px #ddd, 
+      1px -1.75px 1.5px #ddd,
+      1.75px 1px 1.5px #ddd, 
+      -1.75px -1px 1.5px #ddd, 
+      -1.75px 1px 1.5px #ddd, 
+      1.75px -1px 1.5px #ddd;
   }
   .cardExpansion.common:before {
     background-color: #222;
@@ -1045,7 +1046,7 @@
     position: absolute;
     right: calc(100% - 8px);
     z-index: 1;
-    color: #eee;
+    color: #ddd;
     font-size: 28px;
     white-space: nowrap;
     width: 50px;
@@ -1069,14 +1070,14 @@
     left: 0;
     color:#222;
     text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd,
+      -2px -2px 0 #ddd,
+      -2px 2px 0 #ddd,
+      2px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
     font-family: "Mana";
   }
   .textLoyalty:before {
@@ -1139,7 +1140,7 @@
   }
   .levelSpread {
     flex: 0 0 75px;
-    color: #eee;
+    color: #ddd;
     position: relative;
     text-align: center;
     align-self: center;
@@ -1148,7 +1149,7 @@
   }
   .levelSpread:before {
     content: "Level";
-    color: #eee;
+    color: #ddd;
     position: absolute;
     top: -30px;
     right: 50%;
@@ -1166,14 +1167,14 @@
     z-index: -1;
     font-size: 90px;
     text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd,
+      -2px -2px 0 #ddd,
+      -2px 2px 0 #ddd,
+      2px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
   }
   .levelCost {
     flex: 0 0 75px;
@@ -1186,7 +1187,7 @@
   .levelCost:before {
     white-space: nowrap;
     font-size: 20px;
-    color: #eee;
+    color: #ddd;
     position: absolute;
     top: 30px;
     right: 50%;
@@ -1209,14 +1210,14 @@
     z-index: -1;
     font-size: 94px;
     text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd,
+      -2px -2px 0 #ddd,
+      -2px 2px 0 #ddd,
+      2px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
   }
   .levelText {
     flex: 1 1 auto;
@@ -1226,7 +1227,7 @@
     flex: 0 0 50px;
     font-size: 45px;
     letter-spacing: 1px;
-    color: #eee;
+    color: #ddd;
     align-self: center;
   }
   .smol {
@@ -1260,7 +1261,7 @@
     right: 23px;
     font-size: 45px;
     letter-spacing: 1px;
-    color: #eee;
+    color: #ddd;
   }
   .cardDefense {
     right: 40px;
@@ -1277,14 +1278,14 @@
     z-index: -1;
     color: #000;
     text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd,
+      -2px -2px 0 #ddd,
+      -2px 2px 0 #ddd,
+      2px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
   }
   .cardLoyalty {
     z-index: 1;
@@ -1303,21 +1304,21 @@
     z-index: -1;
     color: #000;
     text-shadow:
-      2px 2px 0 #eee,
-      -2px -2px 0 #eee,
-      -2px 2px 0 #eee,
-      2px -2px 0 #eee,
-      0 2px 0 #eee,
-      0 -2px 0 #eee,
-      2px 0 0 #eee,
-      -2px 0 0 #eee;
+      2px 2px 0 #ddd,
+      -2px -2px 0 #ddd,
+      -2px 2px 0 #ddd,
+      2px -2px 0 #ddd,
+      0 2px 0 #ddd,
+      0 -2px 0 #ddd,
+      2px 0 0 #ddd,
+      -2px 0 0 #ddd;
   }
   .cardCopyright {
     position: absolute;
     bottom: 18px;
     left: 24px;
     font-size: 25px;
-    color: #eee;
+    color: #ddd;
   }
   .cardCopyright span {
     font-size: 45px;
@@ -1331,7 +1332,7 @@
     left: 50%;
     transform: translate(-50%, 0);
     font-size: 27px;
-    color: #eee;
+    color: #ddd;
   }
   .cardDisclaimer{
     position: absolute;
@@ -1340,6 +1341,6 @@
     right: 0;
     text-align: center;
     font-size: 16px;
-    color: #eee;
+    color: #ddd;
   }
 </style>

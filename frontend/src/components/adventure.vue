@@ -393,7 +393,7 @@
     left: 10px;
     font-size: 30px;
     line-height: 40px;
-    color: #eee;
+    color: #ddd;
     font-family: "Magic";
     letter-spacing: 0.07em;
   }
@@ -408,7 +408,7 @@
     top: 57px;
     left: 10px;
     font-size: 26px;
-    color: #eee;
+    color: #ddd;
   }
   .adventureText {
     position: absolute;

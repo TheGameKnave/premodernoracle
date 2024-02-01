@@ -441,21 +441,21 @@
   }
   .splitCardTombstone:before {
     text-shadow: 
-      2px 2px 0 #eee, 
-      2px -1px 0 #eee;
+      2px 2px 0 #ddd, 
+      2px -1px 0 #ddd;
   }
   .splitCardTombstoneShadow {
     text-shadow: 
-      -2px 2px 0 #eee, 
-      0 2px 0 #eee,
-      0 -1.5px 0 #eee,
-      1px -1.5px 0 #eee,
-      1px -1.5px 0 #eee,
-      -2px 0 0 #eee,
-      -1px 1px 0 #eee, 
-      -1px -1px 0 #eee,
-      -2px 1px 0 #eee, 
-      -2px -1px 0 #eee;
+      -2px 2px 0 #ddd, 
+      0 2px 0 #ddd,
+      0 -1.5px 0 #ddd,
+      1px -1.5px 0 #ddd,
+      1px -1.5px 0 #ddd,
+      -2px 0 0 #ddd,
+      -1px 1px 0 #ddd, 
+      -1px -1px 0 #ddd,
+      -2px 1px 0 #ddd, 
+      -2px -1px 0 #ddd;
   }
   .splitCardTombstoneShadow {
     position: absolute;
@@ -468,7 +468,7 @@
     top: 3px;
     left: 36px;
     font-size: 42px;
-    color: #eee;
+    color: #ddd;
     font-family: "Magic";
     letter-spacing: 0.07em;
   }
@@ -495,7 +495,7 @@
     top: 327px;
     left: 30px;
     font-size: 34px;
-    color: #eee;
+    color: #ddd;
   }
   .splitCardExpansionWrapper {
     position: absolute;
@@ -547,7 +547,7 @@
     bottom: 16px;
     left: 16px;
     font-size: 21px;
-    color: #eee;
+    color: #ddd;
   }
   .splitCardCopyright span {
     font-size: 42px;
@@ -561,7 +561,7 @@
     left: 50%;
     transform: translate(-50%, 0);
     font-size: 26px;
-    color: #eee;
+    color: #ddd;
   }
   .splitCardDisclaimer{
     position: absolute;
@@ -570,6 +570,6 @@
     right: 0;
     text-align: center;
     font-size: 14px;
-    color: #eee;
+    color: #ddd;
   }
 </style>
