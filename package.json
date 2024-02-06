@@ -22,7 +22,7 @@
     "start": "yarn --cwd backend start"
   },
   "engines": {
-    "node": ">=8.11.3",
+    "node": "=15.8.0",
     "yarn": ">=1.0.0"
   },
   "devDependencies": {
