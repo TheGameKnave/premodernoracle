@@ -23,7 +23,7 @@
   },
   "engines": {
     "node": "=15.8.0",
-    "yarn": ">=1.0.0"
+    "yarn": "=1.22.21"
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "3.1.x",
