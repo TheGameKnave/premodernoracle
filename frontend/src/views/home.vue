@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <form>
       <textarea
         v-model="cardNames"
@@ -41,6 +41,21 @@
         </template>
       </div>
     </template>
+    <footer>
+      <div class="wrapper">
+        <div class="float-left">
+          <p>Made by <a href="http://gameknave.com">GameKnave Design</a></p>
+        </div>
+        <div class="float-right" style="text-align: right;">
+          <p>
+              All set images, artwork, card templates, and game text © <a href="http://magicthegathering.com">Wizards of the Coast</a><br>
+              <a href="https://keyrune.andrewgioia.com/">The Keyrune font</a> is licensed under the the <a href="http://scripts.sil.org/OFL">SIL OFL 1.1</a><br>
+              <a href="https://github.com/TheGameKnave/premodernoracle">PremodernOracle CSS, LESS, Sass, and other project files</a> are licensed under the <a href="https://opensource.org/licenses/GPL-3.0">GPL 3.0 License</a><br>
+          </p>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -178,4 +193,15 @@ button,
   display: flex;
   flex-wrap: wrap;
 }
+  footer .wrapper {
+    max-width: 1080px;
+    width: 80%;
+    margin: 0 auto;
+  }
+  footer .float-right {
+    float: right;
+  }
+  footer .float-left {
+    float: left;
+  }
 </style>
