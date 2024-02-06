@@ -310,8 +310,9 @@
         }
         let ftxt = flavorText || '';
         if(ftxt) {
-          ftxt = ftxt.replace(/\n/g, '<br>');
-          textBox = (textBox + (((this.face !== undefined || this.card.layout === 'adventure') ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + '<div class="flavorText"><p><i>' + ftxt + '</i></p></div>');
+          let ftxtArr = ftxt.split('\n');
+          ftxtArr = ftxtArr.map(ft => `<p ${ft.indexOf('—') === 0 ? 'class=flavorAttribution' : ''}><i>${ft}</i></p>`);
+          textBox = (textBox + (((this.face !== undefined || this.card.layout === 'adventure') ? this.card.card_faces[0].oracle_text : this.card.oracle_text) ? '<hr>' : '') + '<div class="flavorText">' + ftxtArr.join('') + '</div>');
         }
         textBox = textBox
           .replace(/\b\*/g, "<i>")       // Closing asterisk
@@ -634,9 +635,9 @@
   .dfcBack { top: 6px }
   .cardTitle {
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 44px;
-    font-size: 39px;
+    font-size: 41px;
     line-height: 44px;
     letter-spacing: 0.039em;
     color: #ddd;
@@ -818,7 +819,7 @@
   .cardExpansion.ss-wth { font-size: 1.4em; }
   .cardExpansion.ss-tmp { font-size: 1.1em; }
   .cardExpansion.ss-sth { font-size: 1em; }
-  .cardExpansion.ss-exo { font-size: 1.8em; }
+  .cardExpansion.ss-exo { font-size: 1.9em; }
   .cardExpansion.ss-usg { font-size: 1.4em; }
   .cardExpansion.ss-ulg { font-size: 1.5em; }
   .cardExpansion.ss-6ed { font-size: 1em; }
@@ -830,8 +831,8 @@
   .cardExpansion.ss-pls { font-size: 1.4em; }
   .cardExpansion.ss-7ed { font-size: 1em; }
   .cardExpansion.ss-apc { font-size: 1.1em; transform: translate(50%, -53%) !important; }
-  .cardExpansion.ss-ody { font-size: 1.1em; transform: translate(50%, -55%) !important; }
-  .cardExpansion.ss-tor { font-size: 1.15em; transform: translate(50%, -55%) !important; }
+  .cardExpansion.ss-ody { font-size: 1.05em; transform: translate(50%, -53%) !important; }
+  .cardExpansion.ss-tor { font-size: 1.1em; transform: translate(50%, -53%) !important; }
   .cardExpansion.ss-jud { font-size: 1.3em; transform: translate(50%, -57%) !important; }
   .cardExpansion.ss-ons { font-size: 1.3em; transform: translate(50%, -55%) !important; }
   .cardExpansion.ss-lgn { font-size: 2em; }
@@ -1006,7 +1007,7 @@
     background-color: #222;
   }
   .cardExpansion.uncommon:before {
-    background-image: radial-gradient(#ddd 0%, #666 100%);
+    background-image: radial-gradient(#ddd 0%, #999 40%, #666 80%);
   }
   .cardExpansion.rare:before {
     background-image: radial-gradient(#eda 0%, #984 100%);
@@ -1255,10 +1256,13 @@
   .flavorText {
     font-size: .95em;
   }
+  .flavorAttribution {
+    text-align: right;
+  }
   .cardPowerToughness, .cardDefense {
     position: absolute;
-    bottom: 9px;
-    right: 23px;
+    bottom: 12px;
+    right: 25px;
     font-size: 45px;
     letter-spacing: 1px;
     color: #ddd;
@@ -1342,5 +1346,9 @@
     text-align: center;
     font-size: 16px;
     color: #ddd;
+  }
+  .cardCopyright, .cardDisclaimer {
+    /* display: none; */
+    display: block;
   }
 </style>

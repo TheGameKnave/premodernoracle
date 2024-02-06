@@ -119,7 +119,7 @@ export default {
   font-family: "Magic";
   font-style: normal;
   font-weight: 100;
-  src: url("~@/assets/fonts/Goudy Medieval Alternate.ttf");
+  src: url("~@/assets/fonts/Goudy Medieval Alternate Light.ttf");
 }
 /* magic text */
 @font-face {
