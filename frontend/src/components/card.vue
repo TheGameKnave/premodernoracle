@@ -515,15 +515,41 @@
   .manaEnergy { font-family: 'Mana';}
   .manaColorless { font-family: 'Mana'; font-size: .78em; padding-left: .05em; }
   .cardBorder {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     width: 744px;
     height: 1038px;
     overflow: hidden;
     margin: 10px;
-    border-radius: 20px;
-    background-color: #222;
+    background-color: #111;
     zoom: 0.5;
+  }
+  .cardBorder.white-border {
+    background-color: #fff;
+    border: 1px solid #111;
+  }
+  .cardBorder.rounded {
+    border-radius: 20px;
+  }
+  .cardBorder.mpc {
+    width: 816px;
+    height: 1110px;
+    margin: 15px 0;
+  }
+  .cardBorder.mpc:after {
+    border: 2px dashed #444;
+  }
+  .cardBorder:after {
+    content: "";
+    background: transparent;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 0;
   }
   .originalCard {
     position: absolute;
@@ -534,9 +560,9 @@
   }
   .card {
     position: relative;
+    z-index: 9;
     display: inline-block;
     background-color: #222;
-    margin: 38px 36px;
     overflow: hidden;
     width: 672px;
     height: 962px;
@@ -1348,7 +1374,7 @@
     color: #ddd;
   }
   .cardCopyright, .cardDisclaimer {
-    /* display: none; */
+    display: none;
     display: block;
   }
 </style>
