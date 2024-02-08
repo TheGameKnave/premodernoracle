@@ -1,1 +1,69 @@
-<p>split-card works!</p>
+
+<div [class]="'splitCard face' + face">
+  <img
+    [src]="'/assets/images/card_templates/' + splitCardTemplate(card,face) + '.jpg'"
+    class="splitCardTemplate"
+    alt="Card Template"
+  >
+  <img
+    *ngIf="splitColorID(card,face).length === 2 && !splitCardTemplate(card,face).includes('msplit')"
+    [src]="'/assets/images/card_templates/' + splitCardTemplate2(card,face) + '.jpg'"
+    class="splitCardTemplate2"
+    alt="Card Template"
+  >
+  <div
+    class="splitCardTombstoneWrapper"
+    *ngIf="tombstoneFrame(card,face)"
+  >
+    <span class="splitCardTombstone" >Q</span>
+    <span class="splitCardTombstoneShadow" >Q</span>
+  </div>
+  <div
+    #splitCardTitleElement
+    class="splitCardTitle"
+  >{{ face !== undefined ? card.card_faces[face].name : card.name }}</div>
+  <div
+    #splitCardManaCostElement
+    class="splitCardManaCost"
+    [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost)"
+  ></div>
+  <div 
+    [style]="{ backgroundImage: 'url(' + (card.image_uris.art_crop) + ')' }" 
+    [class]="'splitCardImage face' + face"
+  ></div>
+  <div
+    #splitCardTypeElement
+    class="splitCardType"
+  >
+    {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
+  </div>
+  <div class="splitCardExpansionWrapper">
+    <i [class]="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set" ></i>
+    <i
+      *ngIf="card.rarity !== 'common'" 
+      [class]="'cardExpansion fill ss ss-' + card.set"
+    ></i>
+    <i
+      #splitCardExpansionElement
+      [class]="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"
+    ></i>
+  </div>
+  <div 
+    #splitCardTextElement
+    [class]="'splitCardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
+    [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"
+  ></div>
+  <div [class]="'splitCardCopyright ' + !prod">©&nbsp;<span>∑</span></div>
+  <div
+    #splitCardArtistElement
+    class="splitCardArtist"
+  ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
+  <div [class]="'splitCardDisclaimer ' + !prod">Playtest card—NOT FOR SALE</div>
+  <ng-container *ngIf="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)">
+    <div
+      #splitCardPowerToughnessElement
+      [class]="'splitCardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
+      [innerHtml]="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : card.power) + '/' + (face !== undefined ? card.card_faces[face].toughness : card.toughness))"
+    ></div>
+  </ng-container>
+</div>

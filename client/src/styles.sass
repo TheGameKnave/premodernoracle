@@ -88,11 +88,9 @@ body
   padding: 0
 h1, h2, h3
   font-weight: 400
-  line-height: .4
   letter-spacing: 2px
+h1
   text-align: center
-  span
-    font-size: .75em
 input, select, button
   font-size: 1.1rem
 
@@ -147,9 +145,9 @@ input, select, button
 .manaSnow
   color: #fff
 .manaEnergy
-  font-family: 'Mana'
+  font-family: 'Mana' !important
 .manaColorless
-  font-family: 'Mana'
+  font-family: 'Mana' !important
   font-size: .78em
   padding-left: .05em
 .cardBorder
@@ -200,7 +198,7 @@ input, select, button
   position: relative
   z-index: 9
   display: inline-block
-  background-color: #222
+  background-color: #111
   overflow: hidden
   width: 672px
   height: 962px
@@ -236,7 +234,8 @@ input, select, button
   left: 15px
   font-size: 35px
   color: #999
-  font-family: "MagicSymbols Old"
+  *
+    font-family: "MagicSymbols Old"
 
 .cardTombstone
   color: #999
@@ -769,7 +768,7 @@ input, select, button
   display: none
 
 .cardText
-  .adventurerText
+  &.adventurerText
     left: 355px
     width: 255px
   p
@@ -1042,7 +1041,133 @@ hr:before
   font-size: 16px
   color: #ddd
 
-.cardCopyright, .cardDisclaimer
+.cardCopyright, .cardDisclaimer, .splitCardCopyright, .splitCardDisclaimer
   display: none
   &.displayAttribution
     display: block
+
+
+.splitCard
+  position: absolute
+  display: inline-block
+  background-color: #222
+  transform: rotate(-90deg)
+  margin: -109px 109px
+.splitCard.face0
+  bottom: 0
+.splitCardTemplate2
+  position: absolute
+  left: 0
+  top: 0
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
+.splitCardTitle, .splitCardType, .splitCardCopyright, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
+  text-shadow: 2px 2px 2px #000
+.splitCardManaCost, .symbolGroup
+  text-shadow: none
+  font-family: "MagicSymbols"
+  font-style: normal
+.splitCardText, .splitCardManaCost, .splitCardType, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
+  font-family: "Plantin"
+.splitCardTitle, .splitCardType, .splitCardArtist
+  white-space: nowrap
+
+.splitCardTombstoneWrapper
+  position: absolute
+  top: 6px
+  left: 12px
+  font-size: 32px
+  color: #999
+  *
+    font-family: "MagicSymbols Old"
+.splitCardTombstone
+  color: #999
+  position: relative
+  z-index: 2
+.splitCardTombstone:before, .splitCardTombstone:after, .splitCardTombstoneShadow:before, .splitCardTombstoneShadow:after
+  content: 'Q'
+  position: absolute
+  left: 0
+.splitCardTombstone:before
+  text-shadow: 2px 2px 0 #ddd, 2px -1px 0 #ddd
+.splitCardTombstoneShadow
+  text-shadow: -2px 2px 0 #ddd, 0 2px 0 #ddd, 0 -1.5px 0 #ddd, 1px -1.5px 0 #ddd, 1px -1.5px 0 #ddd, -2px 0 0 #ddd, -1px 1px 0 #ddd, -1px -1px 0 #ddd, -2px 1px 0 #ddd, -2px -1px 0 #ddd
+.splitCardTombstoneShadow
+  position: absolute
+  left: -3px
+  z-index: 1
+  color: #666
+.splitCardTitle
+  position: absolute
+  top: 3px
+  left: 36px
+  font-size: 42px
+  color: #ddd
+  font-family: "Magic"
+  letter-spacing: 0.07em
+.splitCardManaCost
+  position: absolute
+  top: 1px
+  right: 14px
+  font-size: 44px
+.splitCardImage
+  top: 58px
+  left: 38px
+  width: 383px
+  height: 257px
+  position: absolute
+  background-repeat: no-repeat
+  background-size: cover
+  background-position: center
+.splitCardImage.face0
+  background-position: left
+.splitCardImage.face1
+  background-position: right
+.splitCardType
+  position: absolute
+  top: 327px
+  left: 30px
+  font-size: 34px
+  color: #ddd
+.splitCardExpansionWrapper
+  position: absolute
+  top: 347px
+  right: 52px
+  font-size: 38px
+.splitCardText
+  position: absolute
+  top: 375px
+  left: 43px
+  font-size: 38px
+  line-height: 1.075em
+  color: #222
+  width: 375px
+  max-height: 220px
+.splitCardText p
+  margin: 0.25em 0
+.splitCardCopyright
+  position: absolute
+  bottom: 16px
+  left: 16px
+  font-size: 21px
+  color: #ddd
+.splitCardCopyright span
+  font-size: 42px
+  font-family: "MagicSymbols"
+  position: relative
+  left: -10px
+.splitCardArtist
+  position: absolute
+  bottom: 35px
+  left: 50%
+  transform: translate(-50%, 0)
+  font-size: 26px
+  color: #ddd
+.splitCardDisclaimer
+  position: absolute
+  bottom: 17px
+  left: 0
+  right: 0
+  text-align: center
+  font-size: 14px
+  color: #ddd

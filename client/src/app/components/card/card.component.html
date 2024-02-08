@@ -9,25 +9,25 @@
       *ngIf="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
     >
       <img
-        [src]="'assets/images/card_templates/' + cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face) + '.jpg'"
+        [src]="'assets/images/card_templates/' + cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.jpg'"
         class="cardTemplate"
         alt="Card Template"
       >
       <img
-        *ngIf="colorID.length === 2 && cardTemplate((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face).indexOf('m') !== 0"
-        [src]="'assets/images/card_templates/' + cardTemplate2((this.card.layout === 'adventure' ? 'adventurer' : 'card'),face) + '.jpg'"
+        *ngIf="colorID.length === 2 && cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')).indexOf('m') !== 0"
+        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.jpg'"
         class="cardTemplate2"
         alt="Card Template"
       >
       <div
         class="cardTombstoneWrapper"
-        *ngIf="tombstoneFrame() && !face"
+        *ngIf="tombstoneFrame(card,face) && !face"
       >
         <span class="cardTombstone" >Q</span>
         <span class="cardTombstoneShadow" >Q</span>
       </div>
       <span 
-        *ngIf="face === 0 && !tombstoneFrame()" 
+        *ngIf="face === 0 && !tombstoneFrame(card,face)" 
         class="dfc dfcFront">▲</span>
       <span 
         *ngIf="face === 1" 
@@ -72,13 +72,13 @@
       <div 
         #cardTextElement
         [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"
-        [innerHtml]="findSymbols(formatText(face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"
+        [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"
       ></div>
       <div [class]="'cardCopyright ' + !prod">©&nbsp;<span>∑</span></div>
       <div
         #cardArtistElement
         class="cardArtist"
-      ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
+      ><span class="magicSymbol">L</span>&nbsp;{{ face !== undefined ? card.card_faces[face].artist : card.artist }}</div>
       <div [class]="'cardDisclaimer ' + !prod">Playtest card—NOT FOR SALE</div>
       <div
         *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
@@ -93,14 +93,14 @@
       >{{ face !== undefined ? card.card_faces[face].defense : card.defense }}</div>
     </ng-container>
     <ng-container *ngIf="card.layout === 'split'">
-      <!-- <app-split-card
+      <app-split-card
         [card]="card"
         [face]="0"
       ></app-split-card>
       <app-split-card
         [card]="card"
         [face]="1"
-      ></app-split-card> -->
+      ></app-split-card>
     </ng-container>
   </div>
 </div>

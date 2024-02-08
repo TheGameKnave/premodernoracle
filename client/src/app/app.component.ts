@@ -18,7 +18,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   Array = Array;
   title = 'premodern-oracle';
   
-  cardNames: string = 'Infernal Spawn of Infernal Spawn of Evil\nPhyrexian Dreadnought';
+  cardNames: string = 'bonecrusher giant';
   cardData: any[] = [];
   missingCards: string[] = [];
 
