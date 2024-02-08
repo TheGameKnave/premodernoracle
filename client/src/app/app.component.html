@@ -13,14 +13,14 @@
     </button>
   </form>
 
-  <ng-container *ngIf="Object.keys(cardData).length">
-    <h2>Cards</h2>
+  <ng-container *ngIf="loading || Object.keys(cardData).length">
+    <h2 [ngClass]="{'loading': loading}">Cards</h2>
     <div 
-      *ngIf="cardData.length === 0" 
+      *ngIf="cardData.length === 0 && !loading" 
       class="error"
     >No cards found</div>
     <div 
-      *ngIf="missingCards.length > 0" 
+      *ngIf="missingCards.length > 0 && !loading" 
       class="error"
     >
       Missing cards: {{ missingCards.join(', ') }}

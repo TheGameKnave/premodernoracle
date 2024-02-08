@@ -9,6 +9,7 @@ import { ApiService } from './services/web-api.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('textarea') textRef: ElementRef = new ElementRef(null);
+  loading = false;
   
   ngAfterViewInit() {            
     this.textRef.nativeElement.focus();
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   // method to fetch cards based on form contents
   async fetchCards() {
+    this.loading = true;
     let cardList = this.cardNames.split(/\r?\n/)
     // remove any leading numbers and spaces, and any trailing spaces
     cardList = cardList
@@ -65,12 +67,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     })
       .then(response => response.json())
       .then((cards: any[]) => {
+        this.loading = false;
         this.cardData = cards;
         this.missingCards = Object.entries(cards)
           .filter(([key, value]) => key !== 'cardList' && !Object.keys(value).length)
           .map(([key, value]) => key)
       })
       .catch(error => {
+        this.loading = false;
         console.error('Fetch error:', error)
       })
   }
