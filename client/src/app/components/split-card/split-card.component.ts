@@ -156,7 +156,6 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
 
   adjustCardTextSize() {
     const cardTextElement = this.cardTextRef?.nativeElement || null;
-    console.log(cardTextElement);
     if(cardTextElement){
       let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
       let letterSpacing = 0;
@@ -171,7 +170,6 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
         cardTextElement.style.textAlign = 'center';
       }
       let leftoverSpace = 195 - cardTextElement.scrollHeight;
-      console.log(leftoverSpace);
       cardTextElement.style.paddingTop = `${leftoverSpace/2.5}px`;
     }
   }

@@ -45,7 +45,6 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
     let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
     let returnString = '';
-    console.log(colors, typeLine, manaCost);
     if(colors.length > 1) {
       let costArr = manaCost.split(/[{}]+/);
       costArr = costArr.filter(x => x);
@@ -79,7 +78,6 @@ export class AdventureComponent implements OnInit, AfterViewInit {
         returnString += 'c';
       }
     }
-    console.log(returnString);
     return returnString + 'adventure'
   }
 

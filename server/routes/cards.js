@@ -90,7 +90,7 @@ router.post('/cards', async function(req, res, next) {
     orderedResults[global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.data?.name || cardName] = results[cardName];
   });
   console.log('results:',orderedResults);
-  res.send(JSON.stringify({...results,...req.body}));
+  res.send(JSON.stringify({...orderedResults,...req.body}));
 });
 
 

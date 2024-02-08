@@ -1,7 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { Subscription, catchError, combineLatest, debounceTime, map, mergeAll, of, startWith, switchMap, takeUntil, tap } from 'rxjs';
-import { ApiService } from './services/web-api.service';
 
 @Component({
   selector: 'app-root',
@@ -19,12 +16,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   Array = Array;
   title = 'premodern-oracle';
   
-  cardNames: string = 'bonecrusher giant';
+  cardNames: string = '';
   cardData: any[] = [];
   missingCards: string[] = [];
 
   constructor(
-    private apiService: ApiService,
   ) {}
   ngOnInit() {
     
@@ -45,6 +41,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   // method to fetch cards based on form contents
   async fetchCards() {
     this.loading = true;
+    this.cardData = [];
     let cardList = this.cardNames.split(/\r?\n/)
     // remove any leading numbers and spaces, and any trailing spaces
     cardList = cardList
