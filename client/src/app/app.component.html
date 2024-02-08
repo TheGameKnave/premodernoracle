@@ -1,0 +1,62 @@
+<h1>Premodern card frames with Oracle text</h1>
+<div class="home">
+  <form>
+    <textarea
+      [(ngModel)]="cardNames"
+      name="cardNames"
+      #textarea
+      placeholder="Enter card names, one per line"
+    ></textarea>
+    <button 
+      type="button" 
+      (click)="fetchCards()">Submit
+    </button>
+  </form>
+
+  <ng-container *ngIf="Object.keys(cardData).length">
+    <h2>Cards</h2>
+    <div 
+      *ngIf="cardData.length === 0" 
+      class="error"
+    >No cards found</div>
+    <div 
+      *ngIf="missingCards.length > 0" 
+      class="error"
+    >
+      Missing cards: {{ missingCards.join(', ') }}
+    </div>
+    <div class="cards">
+      <ng-container *ngFor="let card of Object.values(cardData)">
+        <ng-container
+          *ngIf="card.name && !['transform','modal_dfc','flip'].includes(card.layout)" 
+        >
+          <app-card
+            [card]="card"
+          ></app-card>
+        </ng-container>
+        <ng-container *ngIf="['transform','modal_dfc','flip'].includes(card.layout)">
+          <app-card 
+            *ngFor="let face of card.card_faces; let index = index"
+            [card]="card" 
+            [face]="index"
+          ></app-card>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+  <footer>
+    <div class="wrapper">
+      <div class="float-left">
+        <p>Site by <a href="http://gameknave.com">GameKnave Design</a></p>
+      </div>
+      <div class="float-right" style="text-align: right;">
+        <p>
+            All set images, artwork, card ng-containers, and game text © <a href="http://magicthegathering.com">Wizards of the Coast</a> or credited artist<br>
+            <a href="https://keyrune.andrewgioia.com/">The Keyrune font</a> is licensed under the the <a href="http://scripts.sil.org/OFL">SIL OFL 1.1</a><br>
+            <a href="https://github.com/TheGameKnave/premodernoracle">PremodernOracle CSS, LESS, Sass, and other project files</a> are licensed under the <a href="https://opensource.org/licenses/GPL-3.0">GPL 3.0 License</a><br>
+        </p>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </footer>
+</div>

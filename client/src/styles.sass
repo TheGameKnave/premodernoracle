@@ -1,0 +1,1048 @@
+@import "https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css"
+@font-face
+  font-family: 'Keyrune'
+  src: url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.eot')
+  src: url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.woff2') format('woff2'), url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.woff') format('woff'), url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.ttf') format('truetype'), url('//cdn.jsdelivr.net/npm/keyrune@latest/fonts/keyrune.svg') format('svg')
+  font-weight: normal
+  font-style: normal
+/* Magic Title */
+@font-face
+  font-family: "Magic"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/Goudy Medieval Alternate Light.ttf")
+
+/* magic text */
+@font-face
+  font-family: "Plantin"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/PlantinMTProLight.ttf")
+
+/* magic text italic */
+@font-face
+  font-family: "Plantin"
+  font-style: italic
+  font-weight: 100
+  src: url("./assets/fonts/PlantinMTProLightIt.ttf")
+
+/* magic symbols */
+@font-face
+  font-family: "MagicSymbols"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/MagicSymbols2012 Z.ttf")
+
+/* some updated symbols */
+@font-face
+  font-family: "Mana"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/mana.ttf")
+
+/* magic symbols 04 */
+@font-face
+  font-family: "MagicSymbols Old"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/magis2004.ttf")
+*
+  font-family: 'Plantin'
+
+textarea,
+h2
+  font-family: 'Magic'
+  letter-spacing: 0.05em
+
+form
+  display: flex
+
+textarea
+  font-family: 'Magic'
+  flex-grow: 1
+  height: auto
+  max-height: 50vh
+  font-size: 18px
+
+
+.cards
+  display: flex
+  flex-wrap: wrap
+
+footer
+  *
+    font-size: .95em
+  .wrapper
+    max-width: 1080px
+    width: 80%
+    margin: 0 auto
+  .float-right
+    float: right
+
+  .float-left
+    float: left
+
+
+body
+  margin: 0
+  padding: 0
+h1, h2, h3
+  font-weight: 400
+  line-height: .4
+  letter-spacing: 2px
+  text-align: center
+  span
+    font-size: .75em
+input, select, button
+  font-size: 1.1rem
+
+.home
+  margin: 0 1rem
+
+
+.loading
+  display: block !important
+  &:after
+    display: inline-block
+    animation: dotty steps(1,end) 1s infinite
+    content: 'efsdg'
+
+@keyframes dotty
+  0%  
+    content: ''
+  25% 
+    content: '.'
+  50% 
+    content: '..'
+  75% 
+    content: '...'
+  100%
+    content: ''
+
+.magicSymbol
+  font-family: "MagicSymbols"
+
+.manaWhite
+  color: #FAF6D8
+.manaWhitePhy
+  color: #E9E3B1
+.manaBlue
+  color: #C1D7E9
+.manaBluePhy
+  color: #8EBBD1
+.manaBlack
+  color: #BAB1AB
+.manaBlackPhy
+  color: #9B8E8A
+.manaRed
+  color: #E49977
+.manaRedPhy
+  color: #DE8166
+.manaGreen
+  color: #A3C095
+.manaGreenPhy
+  color: #80B092
+.manaGeneric
+  color: #CAC5C0
+.manaSnow
+  color: #fff
+.manaEnergy
+  font-family: 'Mana'
+.manaColorless
+  font-family: 'Mana'
+  font-size: .78em
+  padding-left: .05em
+.cardBorder
+  display: flex
+  align-items: center
+  justify-content: center
+  position: relative
+  width: 744px
+  height: 1038px
+  overflow: hidden
+  margin: 10px
+  background-color: #111
+  zoom: 0.5
+
+.cardBorder.white-border
+  background-color: #fff
+  border: 1px solid #111
+
+.cardBorder.rounded
+  border-radius: 20px
+
+.cardBorder.mpc
+  width: 816px
+  height: 1110px
+  margin: 15px 0
+
+.cardBorder.mpc:after
+  border: 2px dashed #444
+
+.cardBorder:after
+  content: ""
+  background: transparent
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  position: absolute
+  z-index: 0
+
+.originalCard
+  position: absolute
+  top: -3px
+  left: -2px
+  width: 746px
+  z-index: 0
+
+.card
+  position: relative
+  z-index: 9
+  display: inline-block
+  background-color: #222
+  overflow: hidden
+  width: 672px
+  height: 962px
+
+.card.originalPresent
+  opacity: 0.75
+
+.cardTemplate2
+  position: absolute
+  left: 0
+  top: 0
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
+
+.cardTitle, .cardType, .cardCopyright, .cardArtist, .cardDisclaimer, .cardPowerToughness, .levelPT
+  text-shadow: 2px 2px 2px #000
+
+.cardManaCost, .symbolGroup
+  *
+    text-shadow: none
+    font-family: "MagicSymbols"
+    font-style: normal
+
+.cardText, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness
+  font-family: "Plantin"
+
+.cardTitle, .cardType, .cardArtist
+  white-space: nowrap
+
+.cardTombstoneWrapper
+  position: absolute
+  top: 10px
+  left: 15px
+  font-size: 35px
+  color: #999
+  font-family: "MagicSymbols Old"
+
+.cardTombstone
+  color: #999
+  position: relative
+  z-index: 2
+
+.cardTombstone:before, .cardTombstone:after, .cardTombstoneShadow:before, .cardTombstoneShadow:after
+  content: 'Q'
+  position: absolute
+  left: 0
+
+.cardTombstone:before
+  text-shadow: 2px 2px 0 #ddd, 2px -2px 0 #ddd, 1px -2px 0 #ddd
+
+.cardTombstoneShadow
+  text-shadow: -2px 2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 1px -2px 0 #ddd, 1px -1.5px 0 #ddd, -2px 0 0 #ddd, -1px 1px 0 #ddd, -1px -2px 0 #ddd, -2px 1px 0 #ddd, -2px -1.5px 0 #ddd
+
+.cardTombstoneShadow
+  position: absolute
+  left: -3px
+  z-index: 1
+  color: #666
+
+.dfc
+  color: #222
+  position: absolute
+  font-size: 35px
+  left: 5px
+  top: 2px
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 2px 1px 0 #ddd, -2px -1px 0 #ddd, -2px 1px 0 #ddd, 2px -1px 0 #ddd, 1px 2px 0 #ddd, -1px -2px 0 #ddd, -1px 2px 0 #ddd, 1px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+
+.dfcBack
+  top: 6px
+.cardTitle
+  position: absolute
+  top: 9px
+  left: 44px
+  font-size: 41px
+  line-height: 44px
+  letter-spacing: 0.039em
+  color: #ddd
+  font-family: 'Magic'
+
+.cardManaCost
+  position: absolute
+  top: 2px
+  right: 20px
+  font-size: 46px
+
+.cardImage
+  top: 61px
+  left: 48px
+  position: absolute
+  width: 575px
+  height: 465px
+  background-repeat: no-repeat
+  background-size: cover
+  background-position: center top
+
+.cardType
+  position: absolute
+  top: 537px
+  left: 42px
+  font-size: 33.5px
+  line-height: 50px
+  color: #ddd
+
+.cardExpansionWrapper
+  position: absolute
+  top: 558px
+  right: 68px
+  font-size: 40px
+
+.cardExpansion
+  position: absolute
+  right: 50%
+  top: 50%
+  transform: translate(50%, -50%) !important
+
+.stroke
+  &.ss-wth, &.ss-all, &.ss-por, &.ss-pls, &.ss-som, &.ss-rtr, &.ss-bbd, &.ss-mh2, &.ss-clb, &.ss-mom, &.ss-m10, &.ss-m11, &.ss-m12, &.ss-m13, &.ss-m14, &.ss-m15, &.ss-m19, &.ss-m20, &.ss-m21
+    &:after
+      content: ''
+      position: absolute
+      z-index: -1
+      width: 70%
+      height: 45%
+      background: #ddd
+      top: 50%
+      right: 50%
+      border-radius: 0.2em
+      transform: translate(50%, -50%)
+  &.ss-all:after
+    height: 20%
+    width: 30%
+    top: 30px
+    left: 30px
+  &.ss-som:after
+    height: 71%
+    width: 83%
+    top: 19px
+  &.ss-por:after
+    height: 19%
+    width: 76%
+    top: 28px
+  &.ss-bbd:after
+    height: 34%
+    width: 48%
+    top: 10px
+
+.fill
+  &.ss-afr, &.ss-vis, &.ss-usg, &.ss-zen, &.ss-som, &.ss-mbs, &.ss-bbd, &.ss-lci, &.ss-dmu, &.ss-mid, &.ss-m10, &.ss-m11, &.ss-m12, &.ss-m13, &.ss-m14, &.ss-m15, &.ss-m19, &.ss-m20, &.ss-m21
+    &:after
+      content: ''
+      position: absolute
+      z-index: -1
+      width: 90%
+      height: 45%
+      background: #222
+      top: 50%
+      right: 50%
+      border-radius: 0.2em
+      transform: translate(50%, -50%)
+  &.ss-afr:after
+    height: 67%
+    width: 79%
+    top: 24px
+  &.ss-dmu:after
+    height: 55%
+    width: 60%
+    top: 25px
+  &.ss-vis:after
+    height: 55%
+    width: 60%
+    top: 13px
+  &.ss-usg:after
+    height: 19%
+    width: 76%
+    top: 28px
+  &.ss-som:after
+    height: 71%
+    width: 83%
+    top: 19px
+  &.ss-bbd:after
+    height: 65%
+    width: 66%
+    top: 8px
+    left: 4px
+    transform: rotate(45deg)
+  &.ss-lci:after
+    height: 22%
+    width: 57%
+    top: 25px
+.stroke.ss-mid:after
+  content: ''
+  position: absolute
+  z-index: -1
+  width: 90%
+  height: 45%
+  background: #222
+  top: 50%
+  right: 50%
+  border-radius: 0.2em
+  transform: translate(50%, -50%)
+
+.cardExpansion
+  &.ss-lea
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-leb
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-2ed
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-arn
+    font-size: 2em
+  &.ss-atq
+    font-size: 1.25em
+  &.ss-3ed
+    font-size: 1em
+  &.ss-fbb
+    font-size: 1em
+  &.ss-leg
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-sum
+    font-size: 1em
+  &.ss-drk
+    font-size: 1.1em
+    transform: translate(50%, -60%) !important
+  &.ss-fem
+    font-size: 1.15em
+    transform: translate(50%, -55%) !important
+  &.ss-4bb
+    font-size: 1em
+  &.ss-4ed
+    font-size: 1em
+  &.ss-ice
+    font-size: 1em
+  &.ss-hml
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-all
+    font-size: 1.75em
+    transform: translate(50%, -53%) !important
+  &.ss-mir
+    font-size: 1em
+    transform: translate(50%, -55%) !important
+  &.ss-vis
+    font-size: .95em
+  &.ss-5ed
+    font-size: 1em
+  &.ss-wth
+    font-size: 1.4em
+  &.ss-tmp
+    font-size: 1.1em
+  &.ss-sth
+    font-size: 1em
+  &.ss-exo
+    font-size: 1.9em
+  &.ss-usg
+    font-size: 1.4em
+  &.ss-ulg
+    font-size: 1.5em
+  &.ss-6ed
+    font-size: 1em
+  &.ss-uds
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-mmq
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-nem
+    font-size: 1.9em
+    transform: translate(50%, -53%) !important
+  &.ss-pcy
+    font-size: 1.15em
+    transform: translate(50%, -53%) !important
+  &.ss-inv
+    font-size: 1.1em
+  &.ss-pls
+    font-size: 1.4em
+  &.ss-7ed
+    font-size: 1em
+  &.ss-apc
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-ody
+    font-size: 1.05em
+    transform: translate(50%, -53%) !important
+  &.ss-tor
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-jud
+    font-size: 1.3em
+    transform: translate(50%, -57%) !important
+  &.ss-ons
+    font-size: 1.3em
+    transform: translate(50%, -55%) !important
+  &.ss-lgn
+    font-size: 2em
+  &.ss-scg
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-8ed
+    font-size: 1em
+  &.ss-mrd
+    font-size: 1.7em
+  &.ss-dst
+    font-size: 1.08em
+    transform: translate(50%, -55%) !important
+  &.ss-5dn
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-chk
+    font-size: 1.3em
+    transform: translate(50%, -53%) !important
+  &.ss-bok
+    font-size: 1.2em
+    transform: translate(50%, -55%) !important
+  &.ss-sok
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-9ed
+    font-size: 1em
+  &.ss-rav
+    font-size: 1.05em
+    transform: translate(50%, -55%) !important
+  &.ss-gpt
+    font-size: 1.15em
+    transform: translate(50%, -55%) !important
+  &.ss-dis
+    font-size: 1.2em
+  &.ss-csp
+    font-size: 1.05em
+  &.ss-tsp
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-tsb
+    font-size: 1em
+  &.ss-plc
+    font-size: 1.3em
+    transform: translate(50%, -53%) !important
+  &.ss-fut
+    font-size: 1.3em
+    transform: translate(50%, -53%) !important
+  &.ss-10e
+    font-size: 1em
+  &.ss-lrw
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-mor
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-shm
+    font-size: 1.3em
+    transform: translate(50%, -53%) !important
+  &.ss-eve
+    font-size: 1.2em
+    transform: translate(50%, -53%) !important
+  &.ss-ala
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-con
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-arb
+    font-size: 1.1em
+  &.ss-zen
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-wwk
+    font-size: 1.1em
+  &.ss-roe
+    font-size: 1.1em
+  &.ss-som
+    font-size: 1em
+  &.ss-mbs
+    font-size: 1em
+    transform: translate(50%, -53%) !important
+  &.ss-nph
+    font-size: 1em
+  &.ss-isd
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-dka
+    font-size: 1.2em
+  &.ss-avr
+    font-size: 1.1em
+  &.ss-rtr
+    font-size: 1em
+  &.ss-gtc
+    font-size: 1.35em
+    transform: translate(50%, -53%) !important
+  &.ss-dgm
+    font-size: 1.25em
+    transform: translate(50%, -53%) !important
+  &.ss-ths
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-bng
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-jou
+    font-size: 1.1em
+  &.ss-cns
+    font-size: 1em
+  &.ss-ktk
+    font-size: 1.2em
+    transform: translate(50%, -53%) !important
+  &.ss-frf
+    font-size: 1.2em
+    transform: translate(50%, -53%) !important
+  &.ss-dtk
+    font-size: 1.15em
+    transform: translate(50%, -53%) !important
+  &.ss-ori
+    font-size: 1.2em
+  &.ss-bfz
+    font-size: 1.1em
+  &.ss-ogw
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-soi
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-emn
+    font-size: 1.4em
+    transform: translate(50%, -55%) !important
+  &.ss-cn2
+    font-size: 1em
+    transform: translate(50%, -53%) !important
+  &.ss-kld
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-aer
+    font-size: 1.1em
+    transform: translate(50%, -55%) !important
+  &.ss-akh
+    font-size: 1em
+  &.ss-hou
+    font-size: 1em
+  &.ss-xln
+    font-size: 1.1em
+  &.ss-rix
+    font-size: 1.1em
+    transform: translate(50%, -53%) !important
+  &.ss-dom
+    font-size: 1em
+    transform: translate(50%, -53%) !important
+  &.ss-bbd
+    font-size: .9em
+  &.ss-grn
+    font-size: 1.4em
+  &.ss-rna
+    font-size: 1.4em
+  &.ss-war
+    font-size: 1.05em
+    transform: translate(50%, -55%) !important
+  &.ss-mh1
+    font-size: 1.3em
+    transform: translate(50%, -53%) !important
+  &.ss-eld
+    font-size: 1em
+  &.ss-thb
+    font-size: 1em
+  &.ss-iko
+    font-size: 1.1em
+  &.ss-jmp
+    font-size: 1em
+  &.ss-znr
+    font-size: .9em
+  &.ss-cmr
+    font-size: 1em
+  &.ss-khm
+    font-size: 1em
+  &.ss-stx
+    font-size: 1.2em
+  &.ss-h1r
+    font-size: 1em
+  &.ss-mh2
+    font-size: 1.35em
+    transform: translate(50%, -53%) !important
+  &.ss-afr
+    font-size: 1.2em
+  &.ss-mid
+    font-size: 1.2em
+  &.ss-vow
+    font-size: 1.3em
+  &.ss-dbl
+    font-size: 1em
+  &.ss-neo
+    font-size: 1.6em
+    transform: translate(50%, -53%) !important
+  &.ss-snc
+    font-size: 1.4em
+  &.ss-clb
+    font-size: 1em
+  &.ss-dmu
+    font-size: 1em
+  &.ss-j22
+    font-size: 1.25em
+  &.ss-one
+    font-size: .9em
+  &.ss-mom
+    font-size: 1.2em
+  &.ss-mat
+    font-size: 1em
+  &.ss-ltr
+    font-size: 1.3em
+  &.ss-woe
+    font-size: 1.6em
+    transform: translate(50%, -53%) !important
+  &.ss-lci
+    font-size: 1.3em
+  &.ss-clu
+    font-size: 1em
+  &.ss-mkm
+    font-size: 1em
+  &.ss-otj
+    font-size: 1em
+  &.ss-m10, &.ss-m11, &.ss-m12, &.ss-m13, &.ss-m14, &.ss-m15
+    font-size: 1.5em
+  &.ss-m19, &.ss-m20, &.ss-m21
+    font-size: 1.6em
+  &:before
+    background-size: cover
+    -webkit-background-clip: text
+    background-clip: text
+    -webkit-text-fill-color: transparent
+    paint-order: stroke fill
+
+.cardExpansion.fill, .cardTombstone:after, .cardTombstoneShadow:after
+  text-shadow: 1px 1px 0 #222, -1px -1px 0 #222, -1px 1px 0 #222, 1px -1px 0 #222, 1px 0.75px 0 #222, -1px -0.75px 0 #222, -1px 0.75px 0 #222, 1px -0.75px 0 #222, 0.75px 1px 0 #222, -0.75px -1px 0 #222, -0.75px 1px 0 #222, 0.75px -1px 0 #222, 0 1px 0 #222, 0 -1px 0 #222, 1px 0 0 #222, -1px 0 0 #222
+
+.cardExpansion.stroke
+  text-shadow: 3px 3px 1.5px #ddd, -3px -3px 1.5px #ddd, -3px 3px 1.5px #ddd, 3px -3px 1.5px #ddd, 0 3px 1.5px #ddd, 0 -3px 1.5px #ddd, 3px 0 1.5px #ddd, -3px 0 1.5px #ddd, 2px 3px 1.5px #ddd, -2px -3px 1.5px #ddd, -2px 3px 1.5px #ddd, 2px -3px 1.5px #ddd, 3px 2px 1.5px #ddd, -3px -2px 1.5px #ddd, -3px 2px 1.5px #ddd, 3px -2px 1.5px #ddd
+
+.cardExpansion.common.stroke
+  text-shadow: 1.75px 1.75px 1.5px #ddd, -1.75px -1.75px 1.5px #ddd, -1.75px 1.75px 1.5px #ddd, 1.75px -1.75px 1.5px #ddd, 0 1.75px 1.5px #ddd, 0 -1.75px 1.5px #ddd, 1.75px 0 1.5px #ddd, -1.75px 0 1.5px #ddd, 1px 1.75px 1.5px #ddd, -1px -1.75px 1.5px #ddd, -1px 1.75px 1.5px #ddd, 1px -1.75px 1.5px #ddd, 1.75px 1px 1.5px #ddd, -1.75px -1px 1.5px #ddd, -1.75px 1px 1.5px #ddd, 1.75px -1px 1.5px #ddd
+
+.cardExpansion.common:before
+  background-color: #222
+
+.cardExpansion.uncommon:before
+  background-image: radial-gradient(#ddd 0%, #999 40%, #666 80%)
+
+.cardExpansion.rare:before
+  background-image: radial-gradient(#eda 0%, #984 100%)
+
+.cardExpansion.mythic:before
+  background-image: radial-gradient(#e90 0%, #b32 100%)
+
+.cardText
+  position: absolute
+  top: 592px
+  left: 60px
+  font-size: 40px
+  line-height: 1.075em
+  color: #000
+  width: 555px
+  max-height: 270px
+  /* overflow-x: scroll */
+
+.reminderText
+  font-size: .95em
+
+.reminderTextLong:not(.basicLands)
+  display: none
+
+.cardText
+  .adventurerText
+    left: 355px
+    width: 255px
+  p
+    margin: 0.25em 0
+
+.cardText.planeswalkerText p.loyaltyAbility
+  position: relative
+  padding-left: 25px
+
+.textLoyalty, .textLoyaltyUp, .textLoyaltyDown
+  position: absolute
+  right: calc(100% - 8px)
+  z-index: 1
+  color: #ddd
+  font-size: 28px
+  white-space: nowrap
+  width: 50px
+  text-align: center
+
+.textLoyaltyBig
+  width: 65px
+
+.textLoyalty:after, .textLoyaltyUp:after, .textLoyaltyDown:after
+  color: #000
+  content: ":"
+  position: absolute
+  right: -10px
+  top: -3px
+
+.textLoyalty:before, .textLoyaltyUp:before, .textLoyaltyDown:before
+  content: ""
+  position: absolute
+  z-index: -1
+  font-size: 1.8em
+  left: 0
+  color:#222
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  font-family: "Mana"
+
+.textLoyalty:before
+  content: ""
+  top: -4px
+
+.textLoyaltyUp:before
+  content: ""
+  top: -5px
+
+.textLoyaltyDown:before
+  content: ""
+  top: -4px
+
+.textLoyaltyBig:before
+  transform: scaleX(1.3)
+  left: 10px
+
+.sagaChapter
+  display: flex
+  margin: 0.3em 0 0 -60px
+
+.chapterNumbers
+  flex: 0 0 80px
+  margin: -5px 0 0px
+
+.chapterNumber
+  text-align: center
+  position: relative
+  font-size: 25px
+  line-height: 46px
+  color: #eda
+  z-index: 2
+  margin-bottom: -10px
+  &:after
+    content: "⬢"
+    position: absolute
+    left: 50%
+    top: 50%
+    font-size: 65px
+    color: #222
+    z-index: -1
+    transform: translate(-50%, -50%) scaleX(1.2)
+    text-shadow: 1px 1px 0 #eda, -1px 1px 0 #eda,1px -1px 0 #eda,-1px -1px 0 #eda
+
+.levelAbility
+  display: flex
+  min-height: 90px
+  margin-left: -45px
+
+.levelAbility > *
+  align-self: center
+
+.levelReminder
+  font-size: 29px
+  line-height: 35px
+  flex: auto
+  margin-left: 45px
+
+.levelSpread
+  flex: 0 0 75px
+  color: #ddd
+  position: relative
+  text-align: center
+  align-self: center
+  font-size: 40px
+  z-index: 99
+
+.levelSpread:before
+  content: "Level"
+  color: #ddd
+  position: absolute
+  top: -30px
+  right: 50%
+  transform: translate(50%, 0)
+  z-index: 99
+  font-size: 20px
+
+.levelSpread:after
+  content: "\2617"
+  position: absolute
+  top: -15px
+  transform: rotate(90deg)
+  color: #222
+  left: -20px
+  z-index: -1
+  font-size: 90px
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+
+.levelCost
+  flex: 0 0 75px
+  position: relative
+  text-align: center
+  align-self: flex-start
+  font-size: 24px
+  z-index: 99
+
+.levelCost:before
+  white-space: nowrap
+  font-size: 20px
+  color: #ddd
+  position: absolute
+  top: 30px
+  right: 50%
+  transform: translate(50%, 0)
+  z-index: 99
+
+.levelCost.level2:before
+  content: "Level 2"
+
+.levelCost.level3:before
+  content: "Level 3"
+
+.levelCost:after
+  content: "\2617"
+  position: absolute
+  top: 15px
+  transform: rotate(90deg)
+  color: #222
+  left: -24px
+  z-index: -1
+  font-size: 94px
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+
+.levelText
+  flex: 1 1 auto
+  padding: 10px 10px 10px 20px
+
+.levelPT
+  flex: 0 0 50px
+  font-size: 45px
+  letter-spacing: 1px
+  color: #ddd
+  align-self: center
+
+.smol
+  font-size: .7em
+  position: relative
+  top: -8px
+
+hr
+  border: 0
+  margin-block-end: 0
+  margin-block-start: 0
+  padding: .3em 0
+  position: relative
+  overflow: hidden
+  min-height: .3rem
+
+hr:before
+  content: ""
+  width: 100%
+  position: absolute
+  border: 0
+  height: 2px
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0))
+
+.flavorText
+  font-size: .95em
+
+.flavorAttribution
+  text-align: right
+
+.cardPowerToughness, .cardDefense
+  position: absolute
+  bottom: 12px
+  right: 25px
+  font-size: 45px
+  letter-spacing: 1px
+  color: #ddd
+
+.cardDefense
+  right: 40px
+  bottom: 30px
+  z-index: 2
+
+.cardDefense:after
+  content: "✦"
+  position: absolute
+  top: 50%
+  right: 50%
+  transform: translate(50%, -50%) rotate(-135deg)
+  font-size: 125px
+  z-index: -1
+  color: #000
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+
+.cardLoyalty
+  z-index: 1
+  right: 20px
+  bottom: 20px
+  width: 100px
+  text-align: center
+
+.cardLoyalty:after
+  content: ""
+  font-family: "Mana"
+  position: absolute
+  bottom: -15px
+  right: 0
+  font-size: 100px
+  z-index: -1
+  color: #000
+  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+
+.cardCopyright
+  position: absolute
+  bottom: 18px
+  left: 24px
+  font-size: 25px
+  color: #ddd
+
+.cardCopyright span
+  font-size: 45px
+  font-family: "MagicSymbols"
+  position: relative
+  left: -10px
+
+.cardArtist
+  position: absolute
+  bottom: 36px
+  left: 50%
+  transform: translate(-50%, 0)
+  font-size: 27px
+  color: #ddd
+
+.cardDisclaimer
+  position: absolute
+  bottom: 19px
+  left: 0
+  right: 0
+  text-align: center
+  font-size: 16px
+  color: #ddd
+
+.cardCopyright, .cardDisclaimer
+  display: none
+  &.displayAttribution
+    display: block

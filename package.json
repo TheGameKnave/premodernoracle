@@ -1,111 +1,45 @@
 {
-  "name": "vue-monolith-example",
-  "version": "0.0.0",
+  "name": "premodernoracle",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "backend",
-    "frontend"
-  ],
-  "cacheDirectories": [
-    "node_modules",
-    "backend/node_modules",
-    "frontend/node_modules",
-    "frontend/dist"
-  ],
-  "scripts": {
-    "predev": "yarn install",
-    "dev:backend": "yarn --cwd backend dev",
-    "dev:frontend": "yarn --cwd frontend dev",
-    "dev": "run-p dev:*",
-    "build": "yarn --cwd frontend build",
-    "heroku-postbuild": "yarn build",
-    "start": "yarn --cwd backend start"
-  },
+  "engineStrict": true,
   "engines": {
-    "node": "=15.8.0",
-    "yarn": "=1.22.21"
+    "node": "18.12.1"
   },
-  "devDependencies": {
-    "@vue/cli-plugin-eslint": "3.1.x",
-    "@vue/eslint-config-prettier": "4.0.x",
-    "@vue/eslint-config-standard": "4.0.x",
-    "cross-env": "5.2.x",
-    "imagemin-lint-staged": "0.3.x",
-    "lint-staged": "8.0.x",
-    "markdownlint-cli": "0.13.x",
-    "npm-run-all": "4.1.x",
-    "yorkie": "2.0.x"
+  "scripts": {
+    "client": "cd client && npm run start -- --configuration development",
+    "client-prod": "NODE_ENV=production && cd client && npm run start -- --configuration production",
+    "server": "node-env-run server --exec nodemon | pino-colada",
+    "server-prod": "node-env-run server --exec nodemon",
+    "heroku-postbuild": "cd client && npm install && npm run build -- --configuration ${NODE_ENV}",
+    "dev": "run-p client server",
+    "prod": "run-p client-prod server-prod",
+    "start": "cd server && node index.js"
   },
   "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
   ],
-  "eslintConfig": {
-    "root": true,
-    "parserOptions": {
-      "sourceType": "script"
-    },
-    "extends": [
-      "plugin:vue/recommended",
-      "standard",
-      "prettier",
-      "prettier/standard"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "frontend/src/**/*"
-        ],
-        "parserOptions": {
-          "parser": "babel-eslint",
-          "sourceType": "module"
-        },
-        "env": {
-          "browser": true
-        }
-      }
-    ]
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "compression": "^1.7.4",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-pino-logger": "^4.0.0",
+    "express-rate-limit": "^6.7.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.1.2",
+    "sqlstring": "^2.3.3",
+    "string-similarity": "^4.0.4",
+    "uuid": "^9.0.0"
   },
-  "eslintIgnore": [
-    "node_modules/",
-    "dist/"
-  ],
-  "lint-staged": {
-    "*.json": [
-      "yarn lint:prettier",
-      "git add"
-    ],
-    "*.js": [
-      "yarn lint:eslint",
-      "yarn lint:prettier",
-      "git add"
-    ],
-    "*.vue": [
-      "yarn lint:eslint",
-      "yarn lint:prettier",
-      "git add"
-    ],
-    "*.md": [
-      "markdownlint",
-      "yarn lint:prettier",
-      "git add"
-    ],
-    "*.{png,jpeg,jpg,gif,svg}": [
-      "imagemin-lint-staged",
-      "git add"
-    ]
-  },
-  "prettier": {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "bracketSpacing": true,
-    "jsxBracketSameLine": false,
-    "arrowParens": "avoid",
-    "proseWrap": "never"
+  "devDependencies": {
+    "node-env-run": "^4.0.2",
+    "nodemon": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "pino-colada": "^2.2.2",
+    "ts-node": "^10.9.1"
   }
 }
