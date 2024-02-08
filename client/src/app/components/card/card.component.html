@@ -14,7 +14,7 @@
         alt="Card Template"
       >
       <img
-        *ngIf="colorID.length === 2 && cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')).indexOf('m') !== 0"
+        *ngIf="colorID(card,face).length === 2 && cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')).indexOf('m') !== 0"
         [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.jpg'"
         class="cardTemplate2"
         alt="Card Template"
