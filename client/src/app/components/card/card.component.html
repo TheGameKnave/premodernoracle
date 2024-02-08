@@ -73,12 +73,12 @@
         [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"
         [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"
       ></div>
-      <div [class]="'cardCopyright ' + !prod">©&nbsp;<span>∑</span></div>
+      <div [class]="'cardCopyright ' + (prod ? 'displayAttribution' : '')">©&nbsp;<span>∑</span></div>
       <div
         #cardArtistElement
         class="cardArtist"
       ><span class="magicSymbol">L</span>&nbsp;{{ face !== undefined ? card.card_faces[face].artist : card.artist }}</div>
-      <div [class]="'cardDisclaimer ' + !prod">Playtest card—NOT FOR SALE</div>
+      <div [class]="'cardDisclaimer ' + (prod ? 'displayAttribution' : '')">Playtest card—NOT FOR SALE</div>
       <div
         *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
         #cardPowerToughnessElement
