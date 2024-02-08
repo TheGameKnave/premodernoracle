@@ -64,11 +64,10 @@
           [class]="'cardExpansion ' + card.rarity + ' ss ss-' + card.set"
         ></i>
       </div>
-      <!-- <app-adventure
+      <app-adventure
         *ngIf="card.layout === 'adventure'"
         [card]="card"
-        [face]="1"
-      ></app-adventure> -->
+      ></app-adventure>
       <div 
         #cardTextElement
         [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { wubrg } from 'src/app/constants';
 import { HelpersService } from 'src/app/services/helpers.service';
 import { environment } from 'src/environments/environment';
 
@@ -32,9 +33,6 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
   }
 
   prod = environment.production;
-
-  splitCardTemplate = this.helpers.splitCardTemplate.bind(this.helpers);
-  splitCardTemplate2 = this.helpers.splitCardTemplate2.bind(this.helpers);
   cardType = this.helpers.cardType.bind(this.helpers);
   splitColorID = this.helpers.splitColorID.bind(this.helpers);
   tombstoneFrame = this.helpers.tombstoneFrame.bind(this.helpers);
@@ -55,6 +53,65 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
     this.adjustCardTypeSize();
     this.adjustCardTextSize();
     this.adjustArtistSize();
+  }
+
+  splitCardTemplate(card: any, face: number | undefined) {
+    let colors: string = face !== undefined ? this.helpers.getColorsFromCost(card.card_faces[face].mana_cost) : card.colors;
+    let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
+    let returnString = '';
+    if(colors.length > 1) {
+      let costArr = manaCost.split(/[{}]+/);
+      costArr = costArr.filter(x => x);
+      let hybridArr: string[] = [];
+      costArr.forEach((cost,i) => {
+        if(costArr[i].includes('/')) {
+          hybridArr.push(costArr.splice(i, 1)[0]);
+        }
+      });
+      // if hybridArr is not empty and all of its elemets are identical
+      // AND if W, U, B, R, G are not in the costArr
+      if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
+        returnString += hybridArr[0][0].toLowerCase();
+      }else{
+        returnString += 'm';
+      }
+    } else if(colors.length === 1) {
+      returnString += colors[0].toLowerCase();
+    } else if(colors.length === 0) {
+      if(typeLine.includes('Land')){
+        if(this.splitColorID(card,face).length > 2) {
+          returnString += 'ml';
+        }else if(this.splitColorID(card,face).length === 0) {
+          returnString += 'cl';
+        }else{
+          returnString += this.splitColorID(card,face)[0].toLowerCase() + 'l';
+        }
+      }else if(typeLine.includes('Artifact')) { 
+        returnString += 'a';
+      }else{
+        returnString += 'c';
+      }
+    }
+    return returnString + 'split'
+  }
+  splitCardTemplate2(card: any, face: number | undefined) {
+    let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
+    let costArr = manaCost.split(/[{}]+/);
+    costArr = costArr.filter(x => x);
+    let hybridArr: string[] = [];
+    costArr.forEach((cost,i) => {
+      if(costArr[i].includes('/')) {
+        hybridArr.push(costArr.splice(i, 1)[0]);
+      }
+    });
+    let returnString = '';
+    if(this.splitColorID(card,face)[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.splitColorID(card,face)[1]).toLowerCase();
+    if(typeLine.includes('Land')){
+      returnString += 'l';
+    }
+    return returnString + 'split'
   }
 
   adjustCardTitleSize() {

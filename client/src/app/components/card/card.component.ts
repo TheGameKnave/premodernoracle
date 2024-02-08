@@ -31,8 +31,6 @@ export class CardComponent implements OnInit, AfterViewInit {
     if(content) this.cardTextRef = content;
   }
   prod = environment.production;
-  cardTemplate = this.helpers.cardTemplate.bind(this.helpers);
-  cardTemplate2 = this.helpers.cardTemplate2.bind(this.helpers);
   cardType = this.helpers.cardType.bind(this.helpers);
   colorID = this.helpers.colorID.bind(this.helpers);
   tombstoneFrame = this.helpers.tombstoneFrame.bind(this.helpers);
@@ -55,6 +53,79 @@ export class CardComponent implements OnInit, AfterViewInit {
     this.adjustCardTypeSize();
     this.adjustCardTextSize();
     this.adjustArtistSize();
+  }
+
+
+  cardTemplate(card: any, face: number | undefined, base: string = 'card') {
+    let returnString = '';
+    let colors = this.colorID(card,face);
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost);
+    let costArr = manaCost.split(/[{}]+/);
+    costArr = costArr.filter(x => x);
+    let hybridArr: string[] = [];
+    costArr.forEach((cost,i) => {
+      if(costArr[i].includes('/')) {
+        hybridArr.push(costArr.splice(i, 1)[0]);
+      }
+    });
+    switch (this.cardType(card,face)) {
+      case 'Land':
+        if(colors.length > 2) {
+          returnString += 'ml';
+        }else if(colors.length === 0) {
+          returnString += 'cl';
+        }else{
+          returnString += colors[0].toLowerCase() + 'l';
+        }
+        break;
+      case 'Artifact':
+        if(colors.length > 2) {
+          returnString += 'ma';
+        }else if(colors.length === 0) {
+          returnString += 'a';
+        }else{
+          returnString += colors[0].toLowerCase() + 'a';
+        }
+        break;
+    
+      default:
+        if(colors.length > 1) {
+          // if hybridArr is not empty and all of its elemets are identical
+          // AND if W, U, B, R, G are not in the costArr
+          if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
+            returnString += hybridArr[0][0].toLowerCase();
+          }else{
+            returnString += 'm';
+          }
+        } else if(colors.length === 1) {
+          returnString += colors[0].toLowerCase();
+        } else if(colors.length === 0) {
+          returnString += 'c';
+        }
+        break;
+    }
+    return returnString + base
+  }
+  cardTemplate2(card: any,face: number | undefined, base: string = 'card') {
+    let typeLine: string = face !== undefined ? card.card_faces[face].type_line : (card.layout === 'adventure' ? card.card_faces[0].type_line : card.type_line);
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost);
+    let costArr = manaCost.split(/[{}]+/);
+    costArr = costArr.filter(x => x);
+    let hybridArr: string[] = [];
+    costArr.forEach((cost,i) => {
+      if(costArr[i].includes('/')) {
+        hybridArr.push(costArr.splice(i, 1)[0]);
+      }
+    });
+    let returnString = '';
+    if(this.colorID(card,face)[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID(card,face)[1]).toLowerCase();
+    if(this.cardType(card,face) === 'Land'){
+      returnString += 'l';
+    }
+    if(this.cardType(card,face) === 'Artifact'){
+      returnString += 'a';
+    }
+    return returnString + base
   }
 
   adjustCardTitleSize() {

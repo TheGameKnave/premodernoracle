@@ -1,1 +1,32 @@
-<p>adventure works!</p>
+<div class="adventure">
+  <img
+    [src]="'/assets/images/card_templates/' + cardTemplate(card,face) + '.jpg'"
+    class="adventureTemplate"
+    alt="Card Template"
+  >
+  <img
+    *ngIf="colorID(card,face).length === 2 && !cardTemplate(card,face).includes('msplit')"
+    [src]="'/assets/images/card_templates/' + cardTemplate2(card,face) + '.jpg'"
+    class="adventureTemplate2"
+    alt="Card Template"
+  >
+  <div
+    #adventureTitleElement
+    class="adventureTitle"
+  >{{ face !== undefined ? card.card_faces[face].name : card.name }}</div>
+  <div
+    class="adventureManaCost"
+    [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost)"
+  ></div>
+  <div
+    #adventureTypeElement
+    class="adventureType"
+  >
+    {{ face !== undefined ? card.card_faces[face].type_line : card.type_line }}
+  </div>
+  <div 
+    #adventureTextElement
+    [class]="'adventureText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
+    [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"
+  ></div>
+</div>
