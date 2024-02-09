@@ -2,17 +2,18 @@
 <div class="home">
   <form>
     <textarea
-      [(ngModel)]="cardNames"
+      [formControl]="cardField"
       name="cardNames"
       #textarea
       placeholder="Enter card names, one per line"
     ></textarea>
     <button 
-      type="button" 
+      type="button"
+      [disabled]="cardsTooMany"
       (click)="fetchCards()">Submit
     </button>
   </form>
-
+  <div *ngIf="cardsTooMany" class="error">Max 100 cards at a time, please.</div>
   <ng-container *ngIf="loading || Object.keys(cardData).length">
     <h2 [ngClass]="{'loading': loading}">Cards</h2>
     <div 
