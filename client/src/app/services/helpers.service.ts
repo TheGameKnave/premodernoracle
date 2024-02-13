@@ -179,7 +179,7 @@ export class HelpersService {
     let costArr: string[] = costGroup.split(/[{}]+/);
     costArr = costArr.filter(x => x);
     costArr.forEach(cost => {
-      costString += '<span class="symbol">';
+      costString += `<span class="symbol${cost.includes('/') ? ' hybrid' : ''}">`;
       if(!isNaN(Number(cost)) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
       else costString += symbols[cost] || cost;
       costString += '</span>';

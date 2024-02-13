@@ -176,7 +176,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
       let letterSpacing = 0;
 
-      while (cardTextElement.scrollHeight > 275 && fontSize > 18) {
+      while (cardTextElement.scrollHeight > 275 && fontSize > 16) {
         if(fontSize > 18) fontSize -= 0.25;
         else letterSpacing -= 0.25;
         cardTextElement.style.fontSize = `${fontSize}px`;
@@ -186,7 +186,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       if(cardTextElement.scrollHeight < 70) {
         cardTextElement.style.textAlign = 'center';
       }
-      let leftoverSpace = 285 - cardTextElement.scrollHeight;
+      let leftoverSpace = 275 - cardTextElement.scrollHeight;
       cardTextElement.style.paddingTop = `${leftoverSpace/2.5}px`;
     }
   }
