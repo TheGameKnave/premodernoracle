@@ -3,6 +3,8 @@
   <form>
     <textarea
       [formControl]="cardField"
+      (keydown.control.enter)="fetchCards()"
+      (keydown.meta.enter)="fetchCards()"
       name="cardNames"
       #textarea
       placeholder="Enter card names, one per line"
