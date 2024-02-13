@@ -1,7 +1,14 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
+export interface CardFormattingOptions {
+  mpcBleed?: boolean;
+  borderColor?: string|number;
+  roundedCorners?: boolean;
+  highRes?: boolean;
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,12 +23,21 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'premodern-oracle';
   
   cardField: UntypedFormControl = new UntypedFormControl();
+  cardFormatting: UntypedFormGroup = new UntypedFormGroup({
+    'mpcBleed': new UntypedFormControl(true),
+    'borderColor': new UntypedFormControl('111'),
+    'roundedCorners': new UntypedFormControl(false),
+    'highRes': new UntypedFormControl(false),
+  });
+  cardFormattingOptions: CardFormattingOptions = {}
   cardFieldSub: Subscription | undefined;
+  cardFormattingSub: Subscription | undefined;
   cardList: string[] = [];
   cardData: any[] = [];
   missingCards: string[] = [];
 
   constructor(
+    private cookieService: CookieService,
   ) {}
 
   ngOnInit() {
@@ -39,6 +55,25 @@ export class AppComponent implements OnInit, AfterViewInit {
           && card !== 'Deck' && card !== 'Deck:'
       );
       this.cardsTooMany = this.cardList.length > 100;
+    });
+
+    Object.keys(this.cardFormatting.controls).forEach(cookieName => {
+      const cookieValue = this.cookieService.get(cookieName);
+      if (cookieValue) {
+        let formValue;
+        if(cookieValue === 'false') formValue = false;
+        else if(cookieValue === 'true') formValue = true;
+        else formValue = cookieValue;
+        this.cardFormatting.get(cookieName)?.setValue(formValue);
+      }
+    });
+
+    this.cardFormattingOptions = this.cardFormatting.value;
+    this.cardFormattingSub = this.cardFormatting.valueChanges.subscribe((value) => {
+      Object.keys(value).forEach((key) => {
+        this.cookieService.set(key, value[key], 365, '/');
+      });
+      this.cardFormattingOptions = value;
     });
   }
 

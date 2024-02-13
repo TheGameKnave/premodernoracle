@@ -64,10 +64,22 @@ textarea
   max-height: 50vh
   font-size: 18px
 
+.headerContainer
+  display: flex
+  h3
+    flex: 1
+  form
+    margin: .5rem 0
+    flex-wrap: wrap
+    justify-content: flex-end
+    > *
+      margin: .5rem 0 .5rem 1.5rem
+      white-space: nowrap
 
 .cards
   display: flex
   flex-wrap: wrap
+
 
 footer
   *
@@ -164,20 +176,20 @@ input, select, button
   background-color: #111
   zoom: 0.5
 
-.cardBorder.white-border
-  background-color: #fff
-  border: 1px solid #111
-
 .cardBorder.rounded
   border-radius: 20px
+  box-shadow: 2px 2px 0 #444, -1px -1px 0 #444, 2px -1px 0 #444, -1px 2px 0 #444, 8px 8px 5px #0006
 
 .cardBorder.mpc
   width: 816px
   height: 1110px
   margin: 15px 0
 
-.cardBorder.mpc:after
+.cardBorder:not(.rounded)
   border: 2px dashed #444
+
+.cardBorder.high-res
+  zoom: 1
 
 .cardBorder:after
   content: ""

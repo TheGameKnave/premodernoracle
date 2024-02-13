@@ -1,4 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { CardFormattingOptions } from 'src/app/app.component';
 import { lands, symbols, tombstoneList, wubrg } from 'src/app/constants';
 import { HelpersService } from 'src/app/services/helpers.service';
 import { environment } from 'src/environments/environment';
@@ -9,6 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CardComponent implements OnInit, AfterViewInit {
   @Input() card: any = {};
+  @Input() cardFormattingOptions: CardFormattingOptions = {};
   @Input() face?: number;
   private cardTitleRef!: ElementRef;
   @ViewChild('cardTitleElement') set cardTitleElement (content: ElementRef) {

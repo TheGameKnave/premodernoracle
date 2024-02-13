@@ -17,7 +17,22 @@
   </form>
   <div *ngIf="cardsTooMany" class="error">Max 100 cards at a time, please.</div>
   <ng-container *ngIf="loading || Object.keys(cardData).length">
-    <h2 [ngClass]="{'loading': loading}">Cards</h2>
+    <div class="headerContainer">
+      <h3 [ngClass]="{'loading': loading}">Cards</h3>
+      <form *ngIf="!loading" [formGroup]="cardFormatting">
+        <span><input type="checkbox" formControlName="mpcBleed" /> MPC Bleed</span>
+        <span><input type="checkbox" formControlName="roundedCorners" /> Rounded Corners</span>
+        <span><input type="checkbox" formControlName="highRes" /> High Res</span>
+        <span>
+          <select formControlName="borderColor">
+            <option selected value="111">Black</option>
+            <option value="fff">White</option>
+            <option value="a84">Gold</option>
+            <option value="999">Silver</option>
+          </select> Border Color
+        </span>
+      </form>
+    </div>
     <div 
       *ngIf="cardData.length === 0 && !loading" 
       class="error"
@@ -35,12 +50,14 @@
         >
           <app-card
             [card]="card"
+            [cardFormattingOptions]="cardFormattingOptions"
           ></app-card>
         </ng-container>
         <ng-container *ngIf="['transform','modal_dfc','flip'].includes(card.layout)">
           <app-card 
             *ngFor="let face of card.card_faces; let index = index"
-            [card]="card" 
+            [card]="card"
+            [cardFormattingOptions]="cardFormattingOptions"
             [face]="index"
           ></app-card>
         </ng-container>

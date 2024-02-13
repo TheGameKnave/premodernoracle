@@ -1,4 +1,12 @@
-<div class="cardBorder">
+<div
+  class="cardBorder"
+  [style]="{ backgroundColor: '#' + cardFormattingOptions.borderColor }"
+  [ngClass]="{
+    'rounded': cardFormattingOptions.roundedCorners,
+    'high-res': cardFormattingOptions.highRes,
+    'mpc': cardFormattingOptions.mpcBleed
+  }"
+>
   <img
     *ngIf="originalCard"
     [src]="face !== undefined ? card.card_faces[face].image_uris.large : card.image_uris.large"
