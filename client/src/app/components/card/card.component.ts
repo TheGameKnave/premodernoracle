@@ -46,7 +46,6 @@ export class CardComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(environment)
   }
 
   ngAfterViewInit(): void {

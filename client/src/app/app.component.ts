@@ -11,10 +11,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   loading = false;
   cardsTooMany = false;
   
-  ngAfterViewInit() {            
-    this.textRef.nativeElement.focus();
-    this.adjustTextboxSize()
-  }
   Object = Object;
   Array = Array;
   title = 'premodern-oracle';
@@ -27,6 +23,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor(
   ) {}
+
   ngOnInit() {
     this.cardFieldSub = this.cardField.valueChanges.subscribe((value: string) => {
       this.cardList = value.split(/\r?\n/)
@@ -42,7 +39,12 @@ export class AppComponent implements OnInit, AfterViewInit {
           && card !== 'Deck' && card !== 'Deck:'
       );
       this.cardsTooMany = this.cardList.length > 100;
-    })
+    });
+  }
+
+  ngAfterViewInit() {            
+    this.textRef.nativeElement.focus();
+    this.adjustTextboxSize()
   }
 
   adjustTextboxSize() {
@@ -57,6 +59,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       textarea.style.height = textarea.scrollHeight + 'px';
     }
   }
+
+
+
   // method to fetch cards based on form contents
   async fetchCards() {
     this.loading = true;
