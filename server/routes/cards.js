@@ -35,6 +35,8 @@ router.post('/cards', async function(req, res, next) {
       path: pageUrl.pathname + pageUrl.search, // Use the path and query from the URL
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': 'premodern-oracle/1.0',
+        'Accept': '*/*',
       },
       method: 'GET', // Use GET method
     };
