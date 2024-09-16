@@ -76,7 +76,28 @@ router.post('/cards', async function(req, res, next) {
       const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
       console.log('fetchedData',initialPageUrl,fetchedData);
       console.log(cardData)
-      let firstPrinting = findFirstPrinting(cardName,cardData)
+      let firstPrinting = findFirstPrinting(cardName,cardData);
+      if(firstPrinting?.card_faces?.length > 1){
+        firstPrinting.arts = [];
+        for(let i = 0; i < firstPrinting.card_faces.length; i++){
+          firstPrinting.arts[i] = [];
+          for(let j = 0; j < cardData.length; j++){
+            firstPrinting.arts[i].push({
+              art_crop: cardData[j].card_faces[i].image_uris.art_crop,
+              artist: cardData[j].card_faces[i].artist,
+            });
+          }
+        }
+      }else{
+        firstPrinting.arts = [
+          cardData.map(card => {
+            return {
+              art_crop: card.image_uris.art_crop,
+              artist: card.artist,
+            }
+          })
+        ];
+      }
       if(firstPrinting){
         global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] = {
           time: new Date(),
