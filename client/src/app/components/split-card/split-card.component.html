@@ -27,10 +27,31 @@
     class="splitCardManaCost"
     [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost)"
   ></div>
-  <div 
-    [style]="{ backgroundImage: 'url(' + (card.image_uris.art_crop) + ')' }" 
-    [class]="'splitCardImage face' + face"
-  ></div>
+  <div class="splitCardImageWrapper">
+    <div 
+      [style]="{ backgroundImage: 'url(' + cardImage + ')' }" 
+      [class]="'splitCardImage face' + face"
+    >
+      <div
+        *ngIf="card.arts[face || 0].length > 1"
+        class="cardImageCountWrapper"
+      >
+        <div
+          class="cardImageCount"
+        >
+          {{ (imageIndex || 0) + 1 }} / {{ card.arts[face || 0].length }}
+        </div>
+        <div
+          class="advanceImage"
+          (click)="advanceImage()"
+        ></div>
+        <div
+          class="reduceImage"
+          (click)="advanceImage(-1)"
+        ></div>
+      </div>
+    </div>
+  </div>
   <div
     #splitCardTypeElement
     class="splitCardType"
@@ -57,7 +78,7 @@
   <div
     #splitCardArtistElement
     class="splitCardArtist"
-  ><span class="magicSymbol">L</span>&nbsp;{{ this.face !== undefined ? card.card_faces[this.face].artist : card.artist }}</div>
+  ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
   <div [class]="'splitCardDisclaimer ' + (prod ? 'displayAttribution' : '')">Playtest card—NOT FOR SALE</div>
   <ng-container *ngIf="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)">
     <div

@@ -1,4 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { findIndex } from 'rxjs';
 import { CardFormattingOptions } from 'src/app/app.component';
 import { lands, symbols, tombstoneList, wubrg } from 'src/app/constants';
 import { HelpersService } from 'src/app/services/helpers.service';
@@ -33,6 +35,9 @@ export class CardComponent implements OnInit, AfterViewInit {
     if(content) this.cardTextRef = content;
   }
   prod = environment.production;
+  imageIndex: number | null = null;
+  cardImage: string = '';
+  imageArtist: string = '';
   cardType = this.helpers.cardType.bind(this.helpers);
   colorID = this.helpers.colorID.bind(this.helpers);
   tombstoneFrame = this.helpers.tombstoneFrame.bind(this.helpers);
@@ -45,9 +50,13 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private helpers: HelpersService,
+    private cookieService: CookieService,
   ) { }
 
   ngOnInit(): void {
+    this.cardImage = this.helpers.determineCardImage(this.card, this.face, this.imageIndex);
+    this.imageIndex = this.card.arts[this.face || 0].findIndex((x: any) => x.art_crop === this.cardImage);
+    this.imageArtist = this.helpers.determineImageArtist(this.card, this.face, this.imageIndex, this.cardImage);
   }
 
   ngAfterViewInit(): void {
@@ -189,6 +198,18 @@ export class CardComponent implements OnInit, AfterViewInit {
       let leftoverSpace = 275 - cardTextElement.scrollHeight;
       cardTextElement.style.paddingTop = `${leftoverSpace/2.5}px`;
     }
+  }
+  advanceImage(direction: number = 1) {
+    if(this.card.arts[this.face || 0].length === 1) return;
+    // find the index of the current image url from within card.arts[i].art_crop
+    this.imageIndex = (this.imageIndex || 0) < this.card.arts?.[this.face || 0].length - direction ? (this.imageIndex || 0) + direction : 0;
+    // if imageIndex is out of bounds, set it to the last image in the array or the first image in the array
+    if(this.imageIndex >= this.card.arts?.[this.face || 0].length) this.imageIndex = 0;
+    if(this.imageIndex < 0) this.imageIndex = this.card.arts?.[this.face || 0].length - 1;
+    this.cardImage = this.helpers.determineCardImage(this.card, this.face, this.imageIndex, true);
+    this.imageArtist = this.helpers.determineImageArtist(this.card, this.face, this.imageIndex, this.cardImage);
+    this.adjustArtistSize();
+    this.cookieService.set(this.card.card_faces?.[this.face || 0].name || this.card.name, this.cardImage, 365, '/');
   }
 
 }

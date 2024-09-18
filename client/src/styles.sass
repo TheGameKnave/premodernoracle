@@ -313,7 +313,49 @@ input, select, button
   height: 465px
   background-repeat: no-repeat
   background-size: cover
-  background-position: center top
+  background-position: center center
+.cardImageCountWrapper
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  opacity: 0
+  &:hover
+    opacity: 1
+    cursor: pointer
+  .cardImageCount
+    position: absolute
+    bottom: 0
+    right: 0
+    left: 0
+    text-align: center
+    font-size: 60px
+    color: white
+    text-shadow: 2px 2px 2px #000
+  .advanceImage, .reduceImage
+    position: absolute
+    bottom: 0
+    right: 0
+    left: 0
+    top: 0
+    &:after
+      position: absolute
+      top: 50%
+      transform: translateY(-50%)
+      font-size: 100px
+      color: white
+      text-shadow: 2px 2px 2px #000
+      width: 100%
+      text-align: center
+  .advanceImage
+    &:after
+      content: '>'
+    left: 50%
+  .reduceImage
+    &:after
+      content: '<'
+    right: 50%
 
 .cardType
   position: absolute
@@ -1130,12 +1172,15 @@ hr:before
   top: 1px
   right: 14px
   font-size: 44px
-.splitCardImage
+.splitCardImageWrapper
   top: 58px
   left: 38px
   width: 383px
   height: 257px
   position: absolute
+  overflow: hidden
+.splitCardImage
+  height: 270px
   background-repeat: no-repeat
   background-size: cover
   background-position: center

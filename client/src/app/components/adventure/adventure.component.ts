@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { wubrg } from 'src/app/constants';
 import { HelpersService } from 'src/app/services/helpers.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-adventure',

@@ -7,12 +7,12 @@ function findFirstPrinting(cardName,cardData){
   });
   if (possibilities.length > 1) {
     let narrowedPossibilities = possibilities.filter(card => card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "") === cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""));
-    console.log('narrowedPossibilities',narrowedPossibilities.map(card => card.name));
+    // console.log('narrowedPossibilities',narrowedPossibilities.map(card => card.name));
     if(narrowedPossibilities.length >= 1){
-      console.log('Found one', narrowedPossibilities[0].name);
+      // console.log('Found one', narrowedPossibilities[0].name);
       return narrowedPossibilities[0];
     }
-      console.log('Found more than one', possibilities[0].name);
+      // console.log('Found more than one', possibilities[0].name);
   }
   return possibilities[0];
 }

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { lands, symbols, tombstoneList, wubrg } from "../constants";
+import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { lands, symbols, tombstoneList, wubrg } from "../constants";
 export class HelpersService {
 
   constructor(
+    private cookieService: CookieService,
   ) {
     if(!environment.production){
       (window as any).helpersService = this;
@@ -79,6 +81,37 @@ export class HelpersService {
     // test oracletext for dredge
 
     return (tombstoneList.includes(card.name) && (card.layout !== 'split' || (face === 1 && card.card_faces[1].oracle_text.includes('Aftermath')))) || dredge.test(face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text)
+  }
+
+  determineCardImage(card: any, face: number | undefined, imageIndex: number | null, selection: boolean = false) {
+    let cardImage = '';
+    let savedImage = this.cookieService.get(card.card_faces?.[face || 0]?.name || card.name);
+    if(!selection && savedImage && savedImage !== 'null') {
+      cardImage = savedImage;
+    }else{
+      if(imageIndex === null) {
+        cardImage = (face !== undefined && card.card_faces[face].image_uris ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop)
+      }else{
+        cardImage = card.arts[face || 0][imageIndex]?.art_crop;
+      }
+    }
+    return cardImage
+  }
+
+  determineImageArtist(card: any, face: number | undefined, imageIndex: number | null, cardImage: string) {
+    let imageArtist = '';
+    let savedImage = this.cookieService.get(card.card_faces?.[face || 0]?.name || card.name);
+    let currentIndex = card.arts[face || 0].findIndex((x: any) => x.art_crop === cardImage);
+    if(currentIndex !== -1 && savedImage && savedImage !== 'null') {
+      imageArtist = card.arts[face || 0][currentIndex].artist;
+    }else{
+      if(imageIndex === null) {
+        imageArtist = (face !== undefined && card.card_faces[face].image_uris ? card.card_faces[face].artist : card.artist)
+      }else{
+        imageArtist = card.arts[face || 0][imageIndex]?.artist;
+      }
+    }
+    return imageArtist;
   }
   
   formatText(card: any, face: number | undefined, text: string, flavorText: string) {

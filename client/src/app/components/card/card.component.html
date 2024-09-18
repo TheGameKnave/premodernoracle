@@ -52,9 +52,29 @@
         [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost))"
       ></div>
       <div 
-        [style]="{ backgroundImage: 'url(' + (face !== undefined && card.card_faces[face].image_uris ? card.card_faces[face].image_uris.art_crop : card.image_uris.art_crop) + ')' }" 
+        [style]="{ backgroundImage: 'url(' + cardImage + ')' }" 
         class="cardImage"
-      ></div>
+        [ngClass]="{clickable: card.arts[face || 0].length > 1}"
+      >
+        <div
+          *ngIf="card.arts[face || 0].length > 1"
+          class="cardImageCountWrapper"
+        >
+          <div
+            class="cardImageCount"
+          >
+            {{ (imageIndex || 0) + 1 }} / {{ card.arts[face || 0].length }}
+          </div>
+          <div
+            class="advanceImage"
+            (click)="advanceImage()"
+          ></div>
+          <div
+            class="reduceImage"
+            (click)="advanceImage(-1)"
+          ></div>
+        </div>
+      </div>
       <div
         #cardTypeElement
         class="cardType"
@@ -85,7 +105,7 @@
       <div
         #cardArtistElement
         class="cardArtist"
-      ><span class="magicSymbol">L</span>&nbsp;{{ face !== undefined ? card.card_faces[face].artist : card.artist }}</div>
+      ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
       <div [class]="'cardDisclaimer ' + (prod ? 'displayAttribution' : '')">Playtest card—NOT FOR SALE</div>
       <div
         *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
