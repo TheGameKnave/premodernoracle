@@ -20,8 +20,8 @@
     <div class="headerContainer">
       <h3 [ngClass]="{'loading': loading}">Cards</h3>
       <form *ngIf="!loading" [formGroup]="cardFormatting">
-        <span><input type="checkbox" formControlName="mpcBleed" /> MPC Bleed</span>
-        <span><input type="checkbox" formControlName="roundedCorners" /> Rounded Corners</span>
+        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="mpcBleed" /> MPC Bleed</span>
+        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="roundedCorners" /> Rounded Corners</span>
         <span><input type="checkbox" formControlName="highRes" /> High Res</span>
         <span>
           <select formControlName="borderColor">
@@ -29,7 +29,8 @@
             <option value="fff">White</option>
             <option value="a84">Gold</option>
             <option value="999">Silver</option>
-          </select> Border Color
+            <option value="none">None</option>
+          </select> Border
         </span>
       </form>
     </div>

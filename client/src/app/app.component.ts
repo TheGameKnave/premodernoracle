@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   
   cardField: UntypedFormControl = new UntypedFormControl();
   cardFormatting: UntypedFormGroup = new UntypedFormGroup({
-    'mpcBleed': new UntypedFormControl(true),
+    'mpcBleed': new UntypedFormControl(false),
     'borderColor': new UntypedFormControl('111'),
     'roundedCorners': new UntypedFormControl(false),
     'highRes': new UntypedFormControl(false),

@@ -2,9 +2,10 @@
   class="cardBorder"
   [style]="{ backgroundColor: '#' + cardFormattingOptions.borderColor }"
   [ngClass]="{
-    'rounded': cardFormattingOptions.roundedCorners,
+    'rounded': cardFormattingOptions.borderColor !== 'none' && cardFormattingOptions.roundedCorners,
+    'noborder': cardFormattingOptions.borderColor === 'none',
     'high-res': cardFormattingOptions.highRes,
-    'mpc': cardFormattingOptions.mpcBleed
+    'mpc': cardFormattingOptions.borderColor !== 'none' && cardFormattingOptions.mpcBleed
   }"
 >
   <img
