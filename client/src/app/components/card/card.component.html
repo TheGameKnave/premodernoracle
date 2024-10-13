@@ -102,7 +102,6 @@
         [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"
         [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"
       ></div>
-      <div [class]="'cardCopyright ' + (prod ? 'displayAttribution' : '')">©&nbsp;<span>∑</span></div>
       <div
         #cardArtistElement
         class="cardArtist"

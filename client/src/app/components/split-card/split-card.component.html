@@ -74,7 +74,6 @@
     [class]="'splitCardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText' : '')"
     [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text, face !== undefined ? card.card_faces[face].flavor_text : card.flavor_text))"
   ></div>
-  <div [class]="'splitCardCopyright ' + (prod ? 'displayAttribution' : '')">©&nbsp;<span>∑</span></div>
   <div
     #splitCardArtistElement
     class="splitCardArtist"

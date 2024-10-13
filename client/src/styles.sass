@@ -17,14 +17,13 @@
   font-family: "Plantin"
   font-style: normal
   font-weight: 100
-  src: url("./assets/fonts/PlantinMTProLight.ttf")
-
+  src: url("./assets/fonts/plantinmtprolight-webfont.woff2") format("woff2"), url("./assets/fonts/plantinmtprolight-webfont.woff") format("woff")
 /* magic text italic */
 @font-face
   font-family: "Plantin"
   font-style: italic
   font-weight: 100
-  src: url("./assets/fonts/PlantinMTProLightIt.ttf")
+  src: url("./assets/fonts/plantinmtprolightit-webfont.woff2") format("woff2"), url("./assets/fonts/plantinmtprolightit-webfont.woff") format('woff')
 
 /* magic symbols */
 @font-face
@@ -169,8 +168,8 @@ input, select, button
   align-items: center
   justify-content: center
   position: relative
-  width: 744px
-  height: 1038px
+  width: 740px
+  height: 1034px
   overflow: hidden
   margin: 0
   background-color: #111
@@ -189,12 +188,13 @@ input, select, button
   margin: 0
 
 .cardBorder.mpc
-  width: 816px
-  height: 1110px
-  margin: 15px 0
+  width: 812px
+  height: 1106px
 
+.cardBorder
+  border: 2px solid #80808000
 .cardBorder:not(.rounded)
-  border: 2px dashed #444
+  border: 2px dashed #80808040
 
 .cardBorder.high-res
   zoom: 1
@@ -235,7 +235,7 @@ input, select, button
   -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
 
-.cardTitle, .cardType, .cardCopyright, .cardArtist, .cardDisclaimer, .cardPowerToughness, .levelPT
+.cardTitle, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness, .levelPT
   text-shadow: 2px 2px 2px #000
 
 .cardManaCost, .symbolGroup
@@ -276,10 +276,10 @@ input, select, button
   left: 0
 
 .cardTombstone:before
-  text-shadow: 2px 2px 0 #ddd, 2px -2px 0 #ddd, 1px -2px 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 1px -2px 0 #f8f8f8
 
 .cardTombstoneShadow
-  text-shadow: -2px 2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 1px -2px 0 #ddd, 1px -1.5px 0 #ddd, -2px 0 0 #ddd, -1px 1px 0 #ddd, -1px -2px 0 #ddd, -2px 1px 0 #ddd, -2px -1.5px 0 #ddd
+  text-shadow: -2px 2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 1px -2px 0 #f8f8f8, 1px -1.5px 0 #f8f8f8, -2px 0 0 #f8f8f8, -1px 1px 0 #f8f8f8, -1px -2px 0 #f8f8f8, -2px 1px 0 #f8f8f8, -2px -1.5px 0 #f8f8f8
 
 .cardTombstoneShadow
   position: absolute
@@ -293,7 +293,7 @@ input, select, button
   font-size: 35px
   left: 5px
   top: 2px
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 2px 1px 0 #ddd, -2px -1px 0 #ddd, -2px 1px 0 #ddd, 2px -1px 0 #ddd, 1px 2px 0 #ddd, -1px -2px 0 #ddd, -1px 2px 0 #ddd, 1px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 2px 1px 0 #f8f8f8, -2px -1px 0 #f8f8f8, -2px 1px 0 #f8f8f8, 2px -1px 0 #f8f8f8, 1px 2px 0 #f8f8f8, -1px -2px 0 #f8f8f8, -1px 2px 0 #f8f8f8, 1px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
 .dfcBack
   top: 6px
@@ -304,7 +304,7 @@ input, select, button
   font-size: 41px
   line-height: 44px
   letter-spacing: 0.039em
-  color: #ddd
+  color: #f8f8f8
   font-family: 'Magic'
 
 .cardManaCost
@@ -370,8 +370,9 @@ input, select, button
   top: 537px
   left: 42px
   font-size: 33.5px
-  line-height: 50px
-  color: #ddd
+  letter-spacing: 0.35px
+  line-height: 45px
+  color: #f8f8f8
 
 .cardExpansionWrapper
   position: absolute
@@ -393,7 +394,7 @@ input, select, button
       z-index: -1
       width: 70%
       height: 45%
-      background: #ddd
+      background: #f8f8f8
       top: 50%
       right: 50%
       border-radius: 0.2em
@@ -803,16 +804,16 @@ input, select, button
   text-shadow: 1px 1px 0 #222, -1px -1px 0 #222, -1px 1px 0 #222, 1px -1px 0 #222, 1px 0.75px 0 #222, -1px -0.75px 0 #222, -1px 0.75px 0 #222, 1px -0.75px 0 #222, 0.75px 1px 0 #222, -0.75px -1px 0 #222, -0.75px 1px 0 #222, 0.75px -1px 0 #222, 0 1px 0 #222, 0 -1px 0 #222, 1px 0 0 #222, -1px 0 0 #222
 
 .cardExpansion.stroke
-  text-shadow: 3px 3px 1.5px #ddd, -3px -3px 1.5px #ddd, -3px 3px 1.5px #ddd, 3px -3px 1.5px #ddd, 0 3px 1.5px #ddd, 0 -3px 1.5px #ddd, 3px 0 1.5px #ddd, -3px 0 1.5px #ddd, 2px 3px 1.5px #ddd, -2px -3px 1.5px #ddd, -2px 3px 1.5px #ddd, 2px -3px 1.5px #ddd, 3px 2px 1.5px #ddd, -3px -2px 1.5px #ddd, -3px 2px 1.5px #ddd, 3px -2px 1.5px #ddd
+  text-shadow: 3px 3px 1.5px #f8f8f8, -3px -3px 1.5px #f8f8f8, -3px 3px 1.5px #f8f8f8, 3px -3px 1.5px #f8f8f8, 0 3px 1.5px #f8f8f8, 0 -3px 1.5px #f8f8f8, 3px 0 1.5px #f8f8f8, -3px 0 1.5px #f8f8f8, 2px 3px 1.5px #f8f8f8, -2px -3px 1.5px #f8f8f8, -2px 3px 1.5px #f8f8f8, 2px -3px 1.5px #f8f8f8, 3px 2px 1.5px #f8f8f8, -3px -2px 1.5px #f8f8f8, -3px 2px 1.5px #f8f8f8, 3px -2px 1.5px #f8f8f8
 
 .cardExpansion.common.stroke
-  text-shadow: 1.75px 1.75px 1.5px #ddd, -1.75px -1.75px 1.5px #ddd, -1.75px 1.75px 1.5px #ddd, 1.75px -1.75px 1.5px #ddd, 0 1.75px 1.5px #ddd, 0 -1.75px 1.5px #ddd, 1.75px 0 1.5px #ddd, -1.75px 0 1.5px #ddd, 1px 1.75px 1.5px #ddd, -1px -1.75px 1.5px #ddd, -1px 1.75px 1.5px #ddd, 1px -1.75px 1.5px #ddd, 1.75px 1px 1.5px #ddd, -1.75px -1px 1.5px #ddd, -1.75px 1px 1.5px #ddd, 1.75px -1px 1.5px #ddd
+  text-shadow: 1.75px 1.75px 1.5px #f8f8f8, -1.75px -1.75px 1.5px #f8f8f8, -1.75px 1.75px 1.5px #f8f8f8, 1.75px -1.75px 1.5px #f8f8f8, 0 1.75px 1.5px #f8f8f8, 0 -1.75px 1.5px #f8f8f8, 1.75px 0 1.5px #f8f8f8, -1.75px 0 1.5px #f8f8f8, 1px 1.75px 1.5px #f8f8f8, -1px -1.75px 1.5px #f8f8f8, -1px 1.75px 1.5px #f8f8f8, 1px -1.75px 1.5px #f8f8f8, 1.75px 1px 1.5px #f8f8f8, -1.75px -1px 1.5px #f8f8f8, -1.75px 1px 1.5px #f8f8f8, 1.75px -1px 1.5px #f8f8f8
 
 .cardExpansion.common:before
   background-color: #222
 
 .cardExpansion.uncommon:before
-  background-image: radial-gradient(#ddd 0%, #999 40%, #666 80%)
+  background-image: radial-gradient(#f8f8f8 0%, #999 40%, #666 80%)
 
 .cardExpansion.rare:before
   background-image: radial-gradient(#eda 0%, #984 100%)
@@ -842,7 +843,8 @@ input, select, button
     left: 355px
     width: 255px
   p
-    margin: 0.25em 0
+    margin: 0.4em 0
+    line-height: 35px
 
 .cardText.planeswalkerText p.loyaltyAbility
   position: relative
@@ -852,7 +854,7 @@ input, select, button
   position: absolute
   right: calc(100% - 8px)
   z-index: 1
-  color: #ddd
+  color: #f8f8f8
   font-size: 28px
   white-space: nowrap
   width: 50px
@@ -875,7 +877,7 @@ input, select, button
   font-size: 1.8em
   left: 0
   color:#222
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
   font-family: "Mana"
 
 .textLoyalty:before
@@ -937,7 +939,7 @@ input, select, button
 
 .levelSpread
   flex: 0 0 75px
-  color: #ddd
+  color: #f8f8f8
   position: relative
   text-align: center
   align-self: center
@@ -946,7 +948,7 @@ input, select, button
 
 .levelSpread:before
   content: "Level"
-  color: #ddd
+  color: #f8f8f8
   position: absolute
   top: -30px
   right: 50%
@@ -963,7 +965,7 @@ input, select, button
   left: -20px
   z-index: -1
   font-size: 90px
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
 .levelCost
   flex: 0 0 75px
@@ -976,7 +978,7 @@ input, select, button
 .levelCost:before
   white-space: nowrap
   font-size: 20px
-  color: #ddd
+  color: #f8f8f8
   position: absolute
   top: 30px
   right: 50%
@@ -998,7 +1000,7 @@ input, select, button
   left: -24px
   z-index: -1
   font-size: 94px
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
 .levelText
   flex: 1 1 auto
@@ -1008,7 +1010,7 @@ input, select, button
   flex: 0 0 50px
   font-size: 45px
   letter-spacing: 1px
-  color: #ddd
+  color: #f8f8f8
   align-self: center
 
 .smol
@@ -1045,7 +1047,7 @@ hr:before
   right: 25px
   font-size: 45px
   letter-spacing: 1px
-  color: #ddd
+  color: #f8f8f8
 
 .cardDefense
   right: 40px
@@ -1061,7 +1063,7 @@ hr:before
   font-size: 125px
   z-index: -1
   color: #000
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
 .cardLoyalty
   z-index: 1
@@ -1079,20 +1081,7 @@ hr:before
   font-size: 100px
   z-index: -1
   color: #000
-  text-shadow: 2px 2px 0 #ddd, -2px -2px 0 #ddd, -2px 2px 0 #ddd, 2px -2px 0 #ddd, 0 2px 0 #ddd, 0 -2px 0 #ddd, 2px 0 0 #ddd, -2px 0 0 #ddd
-
-.cardCopyright
-  position: absolute
-  bottom: 18px
-  left: 24px
-  font-size: 25px
-  color: #ddd
-
-.cardCopyright span
-  font-size: 45px
-  font-family: "MagicSymbols"
-  position: relative
-  left: -10px
+  text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
 .cardArtist
   position: absolute
@@ -1100,7 +1089,7 @@ hr:before
   left: 50%
   transform: translate(-50%, 0)
   font-size: 27px
-  color: #ddd
+  color: #f8f8f8
 
 .cardDisclaimer
   position: absolute
@@ -1109,9 +1098,9 @@ hr:before
   right: 0
   text-align: center
   font-size: 16px
-  color: #ddd
+  color: #f8f8f8
 
-.cardCopyright, .cardDisclaimer, .splitCardCopyright, .splitCardDisclaimer
+.cardDisclaimer, .splitCardDisclaimer
   display: none
   &.displayAttribution
     display: block
@@ -1131,7 +1120,7 @@ hr:before
   top: 0
   -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
-.splitCardTitle, .splitCardType, .splitCardCopyright, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
+.splitCardTitle, .splitCardType, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
   text-shadow: 2px 2px 2px #000
 .splitCardManaCost, .symbolGroup
   text-shadow: none
@@ -1159,9 +1148,9 @@ hr:before
   position: absolute
   left: 0
 .splitCardTombstone:before
-  text-shadow: 2px 2px 0 #ddd, 2px -1px 0 #ddd
+  text-shadow: 2px 2px 0 #f8f8f8, 2px -1px 0 #f8f8f8
 .splitCardTombstoneShadow
-  text-shadow: -2px 2px 0 #ddd, 0 2px 0 #ddd, 0 -1.5px 0 #ddd, 1px -1.5px 0 #ddd, 1px -1.5px 0 #ddd, -2px 0 0 #ddd, -1px 1px 0 #ddd, -1px -1px 0 #ddd, -2px 1px 0 #ddd, -2px -1px 0 #ddd
+  text-shadow: -2px 2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -1.5px 0 #f8f8f8, 1px -1.5px 0 #f8f8f8, 1px -1.5px 0 #f8f8f8, -2px 0 0 #f8f8f8, -1px 1px 0 #f8f8f8, -1px -1px 0 #f8f8f8, -2px 1px 0 #f8f8f8, -2px -1px 0 #f8f8f8
 .splitCardTombstoneShadow
   position: absolute
   left: -3px
@@ -1172,7 +1161,7 @@ hr:before
   top: 3px
   left: 36px
   font-size: 42px
-  color: #ddd
+  color: #f8f8f8
   font-family: "Magic"
   letter-spacing: 0.07em
 .splitCardManaCost
@@ -1199,9 +1188,10 @@ hr:before
 .splitCardType
   position: absolute
   top: 327px
-  left: 30px
+  left: 32px
   font-size: 34px
-  color: #ddd
+  line-height: 37px
+  color: #f8f8f8
 .splitCardExpansionWrapper
   position: absolute
   top: 347px
@@ -1218,24 +1208,13 @@ hr:before
   max-height: 220px
 .splitCardText p
   margin: 0.25em 0
-.splitCardCopyright
-  position: absolute
-  bottom: 16px
-  left: 16px
-  font-size: 21px
-  color: #ddd
-.splitCardCopyright span
-  font-size: 42px
-  font-family: "MagicSymbols"
-  position: relative
-  left: -10px
 .splitCardArtist
   position: absolute
   bottom: 35px
   left: 50%
   transform: translate(-50%, 0)
   font-size: 26px
-  color: #ddd
+  color: #f8f8f8
 .splitCardDisclaimer
   position: absolute
   bottom: 17px
@@ -1243,7 +1222,7 @@ hr:before
   right: 0
   text-align: center
   font-size: 14px
-  color: #ddd
+  color: #f8f8f8
 
 .adventure
   position: absolute
@@ -1279,7 +1258,7 @@ hr:before
   left: 10px
   font-size: 30px
   line-height: 40px
-  color: #ddd
+  color: #f8f8f8
   font-family: "Magic"
   letter-spacing: 0.07em
 .adventureManaCost
@@ -1292,7 +1271,7 @@ hr:before
   top: 57px
   left: 10px
   font-size: 26px
-  color: #ddd
+  color: #f8f8f8
 .adventureText
   position: absolute
   top: 100px
