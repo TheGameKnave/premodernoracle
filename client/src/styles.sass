@@ -235,7 +235,7 @@ input, select, button
   -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
 
-.cardTitle, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness, .levelPT
+.cardTitle, .cardType, .cardArtist, .cardPowerToughness, .levelPT
   text-shadow: 2px 2px 2px #000
 
 .cardManaCost, .symbolGroup
@@ -250,7 +250,7 @@ input, select, button
     position: relative
     top: -0.05em
 
-.cardText, .cardType, .cardArtist, .cardDisclaimer, .cardPowerToughness
+.cardText, .cardType, .cardArtist, .cardPowerToughness
   font-family: "Plantin"
 
 .cardTitle, .cardType, .cardArtist
@@ -299,7 +299,7 @@ input, select, button
   top: 6px
 .cardTitle
   position: absolute
-  top: 9px
+  top: 6px
   left: 44px
   font-size: 41px
   line-height: 44px
@@ -1091,20 +1091,6 @@ hr:before
   font-size: 27px
   color: #f8f8f8
 
-.cardDisclaimer
-  position: absolute
-  bottom: 19px
-  left: 0
-  right: 0
-  text-align: center
-  font-size: 16px
-  color: #f8f8f8
-
-.cardDisclaimer, .splitCardDisclaimer
-  display: none
-  &.displayAttribution
-    display: block
-
 
 .splitCard
   position: absolute
@@ -1120,13 +1106,13 @@ hr:before
   top: 0
   -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
-.splitCardTitle, .splitCardType, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
+.splitCardTitle, .splitCardType, .splitCardArtist, .splitCardPowerToughness
   text-shadow: 2px 2px 2px #000
 .splitCardManaCost, .symbolGroup
   text-shadow: none
   font-family: "MagicSymbols"
   font-style: normal
-.splitCardText, .splitCardManaCost, .splitCardType, .splitCardArtist, .splitCardDisclaimer, .splitCardPowerToughness
+.splitCardText, .splitCardManaCost, .splitCardType, .splitCardArtist, .splitCardPowerToughness
   font-family: "Plantin"
 .splitCardTitle, .splitCardType, .splitCardArtist
   white-space: nowrap
@@ -1214,14 +1200,6 @@ hr:before
   left: 50%
   transform: translate(-50%, 0)
   font-size: 26px
-  color: #f8f8f8
-.splitCardDisclaimer
-  position: absolute
-  bottom: 17px
-  left: 0
-  right: 0
-  text-align: center
-  font-size: 14px
   color: #f8f8f8
 
 .adventure

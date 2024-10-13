@@ -106,7 +106,6 @@
         #cardArtistElement
         class="cardArtist"
       ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
-      <div [class]="'cardDisclaimer ' + (prod ? 'displayAttribution' : '')">Playtest card—NOT FOR SALE</div>
       <div
         *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
         #cardPowerToughnessElement

@@ -78,7 +78,6 @@
     #splitCardArtistElement
     class="splitCardArtist"
   ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
-  <div [class]="'splitCardDisclaimer ' + (prod ? 'displayAttribution' : '')">Playtest card—NOT FOR SALE</div>
   <ng-container *ngIf="face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.loyalty || card.power || card.toughness)">
     <div
       #splitCardPowerToughnessElement
