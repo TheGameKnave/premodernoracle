@@ -1,4 +1,140 @@
 {
+  "tortured existence g": {
+    "data": {
+      "object": "card",
+      "id": "1754b92b-d6f9-4503-af01-dee03f72a048",
+      "oracle_id": "fa9dfcf7-069c-4441-9ea0-133de47ecada",
+      "multiverse_ids": [
+          5195
+      ],
+      "mtgo_id": 10329,
+      "mtgo_foil_id": 10330,
+      "tcgplayer_id": 5434,
+      "cardmarket_id": 9109,
+      "name": "Continual Rebirth",
+      "lang": "en",
+      "released_at": "1998-03-02",
+      "uri": "https://api.scryfall.com/cards/1754b92b-d6f9-4503-af01-dee03f72a048",
+      "scryfall_uri": "https://scryfall.com/card/sth/74/tortured-existence?utm_source=api",
+      "layout": "normal",
+      "highres_image": true,
+      "image_status": "highres_scan",
+      "image_uris": {
+          "small": "https://cards.scryfall.io/small/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.jpg?1562595922",
+          "normal": "https://cards.scryfall.io/normal/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.jpg?1562595922",
+          "large": "https://cards.scryfall.io/large/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.jpg?1562595922",
+          "png": "https://cards.scryfall.io/png/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.png?1562595922",
+          "art_crop": "https://cards.scryfall.io/art_crop/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.jpg?1562595922",
+          "border_crop": "https://cards.scryfall.io/border_crop/front/1/7/1754b92b-d6f9-4503-af01-dee03f72a048.jpg?1562595922"
+      },
+      "mana_cost": "{G}",
+      "cmc": 1,
+      "type_line": "Enchantment",
+      "oracle_text": "{G}, Discard a creature card: Return target creature card from your graveyard to your hand.",
+      "colors": [
+          "G"
+      ],
+      "color_identity": [
+          "G"
+      ],
+      "keywords": [],
+      "legalities": {
+          "standard": "not_legal",
+          "future": "not_legal",
+          "historic": "not_legal",
+          "timeless": "not_legal",
+          "gladiator": "not_legal",
+          "pioneer": "not_legal",
+          "explorer": "not_legal",
+          "modern": "not_legal",
+          "legacy": "legal",
+          "pauper": "legal",
+          "vintage": "legal",
+          "penny": "not_legal",
+          "commander": "legal",
+          "oathbreaker": "legal",
+          "standardbrawl": "not_legal",
+          "brawl": "not_legal",
+          "alchemy": "not_legal",
+          "paupercommander": "legal",
+          "duel": "legal",
+          "oldschool": "not_legal",
+          "premodern": "legal",
+          "predh": "legal"
+      },
+      "games": [
+          "paper",
+          "mtgo"
+      ],
+      "reserved": false,
+      "foil": false,
+      "nonfoil": true,
+      "finishes": [
+          "nonfoil"
+      ],
+      "oversized": false,
+      "promo": false,
+      "reprint": false,
+      "variation": false,
+      "set_id": "5c83396a-d386-4367-926b-571a75b086a3",
+      "set": "sth",
+      "set_name": "Stronghold",
+      "set_type": "expansion",
+      "set_uri": "https://api.scryfall.com/sets/5c83396a-d386-4367-926b-571a75b086a3",
+      "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Asth&unique=prints",
+      "scryfall_set_uri": "https://scryfall.com/sets/sth?utm_source=api",
+      "rulings_uri": "https://api.scryfall.com/cards/1754b92b-d6f9-4503-af01-dee03f72a048/rulings",
+      "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3Afa9dfcf7-069c-4441-9ea0-133de47ecada&unique=prints",
+      "collector_number": "74",
+      "digital": false,
+      "rarity": "rare",
+      "flavor_text": "\"Life rises out of death, death rises out of life; in being opposite they yearn to each other, they give birth to each other and are forever reborn.\"\n—Ursula K. Le Guin",
+      "card_back_id": "0aeebaf5-8c7d-4636-9e82-8c27447861f7",
+      "artist": "Maggie Sharar",
+      "artist_ids": [
+          "2179f8c5-d9a1-4e1e-b2f5-c6a7c990914a"
+      ],
+      "illustration_id": "87c44515-3680-4619-822e-73b4c8922ddf",
+      "border_color": "black",
+      "frame": "1997",
+      "full_art": false,
+      "textless": false,
+      "booster": true,
+      "story_spotlight": false,
+      "edhrec_rank": 2082,
+      "prices": {
+          "usd": "4.41",
+          "usd_foil": null,
+          "usd_etched": null,
+          "eur": "4.34",
+          "eur_foil": null,
+          "tix": "0.99"
+      },
+      "related_uris": {
+          "gatherer": "https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=5195&printed=false",
+          "tcgplayer_infinite_articles": "https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&trafcat=infinite&u=https%3A%2F%2Finfinite.tcgplayer.com%2Fsearch%3FcontentMode%3Darticle%26game%3Dmagic%26partner%3Dscryfall%26q%3DTortured%2BExistence",
+          "tcgplayer_infinite_decks": "https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&trafcat=infinite&u=https%3A%2F%2Finfinite.tcgplayer.com%2Fsearch%3FcontentMode%3Ddeck%26game%3Dmagic%26partner%3Dscryfall%26q%3DTortured%2BExistence",
+          "edhrec": "https://edhrec.com/route/?cc=Tortured+Existence"
+      },
+      "purchase_uris": {
+          "tcgplayer": "https://tcgplayer.pxf.io/c/4931599/1830156/21018?subId1=api&u=https%3A%2F%2Fwww.tcgplayer.com%2Fproduct%2F5434%3Fpage%3D1",
+          "cardmarket": "https://www.cardmarket.com/en/Magic/Products/Singles/Stronghold/Tortured-Existence?referrer=scryfall&utm_campaign=card_prices&utm_medium=text&utm_source=scryfall",
+          "cardhoarder": "https://www.cardhoarder.com/cards/10329?affiliate_id=scryfall&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall"
+      },
+      "arts": [
+          [
+              {
+                  "art_crop": "https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/444912499_845917650901567_9004871818524089277_n.jpg?stp=cp6_dst-jpg&_nc_cat=100&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=oAp04GulKu8Q7kNvgHzE20p&_nc_zt=23&_nc_ht=scontent-sjc3-1.xx&_nc_gid=A7pilgqik9WHTrfXxUgz_MN&oh=00_AYC4pHOBhGTzHoH9U2AjSPGpa3AcO6eu4veg8dtSqicZYg&oe=6718D672",
+                  "artist": "Maggie Sharar"
+              },
+              {
+                  "art_crop": "https://cards.scryfall.io/art_crop/front/1/e/1efe6c2f-eb19-4a34-925a-3b90d2dbe680.jpg?1599764573",
+                  "artist": "Keith Parkinson"
+              }
+          ]
+      ]
+    }
+  },
   "batterskull (alpha text)": {
     "data": {
       "object": "card",
@@ -17,6 +153,42 @@
       "layout": "normal",
       "highres_image": true,
       "image_status": "highres_scan",
+      "arts": [
+        [
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/c/d/cd114ec3-d286-4c70-a122-3043bc53cc88.jpg?1562881615",
+                "artist": "Mark Zug"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/6/7/674a54bc-d283-4852-9b3a-71587874e628.jpg?1561929919",
+                "artist": "Igor Kieryluk"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/1/7/17aac3c1-bdcf-45bd-ab92-f019e7b2ad2f.jpg?1562543145",
+                "artist": "Igor Kieryluk"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/b/7/b7f16fdf-a3f5-462d-a64a-789d893b6ef5.jpg?1599708720",
+                "artist": "Mark Zug"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/2/a/2abc5ac8-b944-4b71-b022-c78183eb92c3.jpg?1599711245",
+                "artist": "rk post"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/3/a/3a69db33-bc86-4c47-86d3-d3a63b1b22d9.jpg?1630634509",
+                "artist": "rk post"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/f/3/f37c9abd-3d79-4c2e-8d8f-c3157a2a9db6.jpg?1643940523",
+                "artist": "Mark Zug"
+            },
+            {
+                "art_crop": "https://cards.scryfall.io/art_crop/front/f/5/f5358745-44d8-4452-9cee-06ec6006214b.jpg?1689411360",
+                "artist": "Mark Zug"
+            }
+        ]
+    ],
       "image_uris": {
         "small": "https://cards.scryfall.io/small/front/c/d/cd114ec3-d286-4c70-a122-3043bc53cc88.jpg?1562881615",
         "normal": "https://cards.scryfall.io/normal/front/c/d/cd114ec3-d286-4c70-a122-3043bc53cc88.jpg?1562881615",
