@@ -174,7 +174,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
         cardTextElement.style.fontSize = `${fontSize}px`;
         cardTextElement.style.letterSpacing = `${letterSpacing}px`;
       }
-      if(cardTextElement.scrollHeight < 80) {
+      if(cardTextElement.scrollHeight < 100) {
         cardTextElement.style.textAlign = 'center';
       }
       let leftoverSpace = 195 - cardTextElement.scrollHeight;

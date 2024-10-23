@@ -192,7 +192,7 @@ export class CardComponent implements OnInit, AfterViewInit {
         if(letterSpacing) cardTextElement.style.letterSpacing = `${letterSpacing}px`;
       }
       
-      if(cardTextElement.scrollHeight < 70) {
+      if(cardTextElement.scrollHeight < 90) {
         cardTextElement.style.textAlign = 'center';
       }
       let leftoverSpace = 275 - cardTextElement.scrollHeight;

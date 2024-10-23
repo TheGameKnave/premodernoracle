@@ -141,7 +141,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
         adventureTextElement.style.fontSize = `${fontSize}px`;
         adventureTextElement.style.letterSpacing = `${letterSpacing}px`;
       }
-      if(adventureTextElement.clientHeight < 60) {
+      if(adventureTextElement.clientHeight < 80) {
         adventureTextElement.style.textAlign = 'center';
       }
       let leftoverSpace = 95 - adventureTextElement.clientHeight;
