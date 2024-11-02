@@ -105,6 +105,8 @@ export class CardComponent implements OnInit, AfterViewInit {
           // AND if W, U, B, R, G are not in the costArr
           if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
             returnString += hybridArr[0][0].toLowerCase();
+          }else if(colors.length === 2 && !card.card_faces?.[face || 0]?.mana_cost && !card.mana_cost){
+            returnString += colors[0].toLowerCase();
           }else{
             returnString += 'm';
           }
@@ -160,7 +162,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       const cardExpansionElement = this.cardExpansionRef.nativeElement || null;
       let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
 
-      while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 570) {
+      while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 565) {
         fontSize -= 0.25;
         cardTypeElement.style.fontSize = `${fontSize}px`;
       }
