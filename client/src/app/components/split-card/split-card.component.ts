@@ -129,8 +129,8 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
 
       //count the number of mana symbols in mana_cost
       const countInstancesOfCharacter = (inputString: string, character: string) => inputString.split(character).length - 1;
-      let manaCount = countInstancesOfCharacter(this.card.card_faces ? this.card.card_faces[0].mana_cost : this.card.mana_cost || '', '{');
-      while (cardTitleElement.clientWidth + (manaCount * 40) > 600) {
+      let manaCount = countInstancesOfCharacter(this.card.card_faces ? this.card.card_faces[this.face || 0].mana_cost : this.card.mana_cost || '', '{');
+      while (cardTitleElement.clientWidth + (manaCount * 40) > 400) {
         fontSize -= 0.25;
         cardTitleElement.style.fontSize = `${fontSize}px`;
       }
@@ -143,7 +143,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
       const cardExpansionElement = this.cardExpansionRef?.nativeElement || null;
       let fontSize = parseInt(window.getComputedStyle(cardTypeElement).fontSize);
 
-      while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 580) {
+      while (cardTypeElement.clientWidth + (cardExpansionElement ? cardExpansionElement.clientWidth : 0) > 380) {
         fontSize -= 0.25;
         cardTypeElement.style.fontSize = `${fontSize}px`;
       }
