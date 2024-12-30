@@ -28,6 +28,12 @@
         class="cardTemplate2"
         alt="Card Template"
       >
+      <img
+        *ngIf="card.type_line.includes('Enchantment')"
+        src="assets/images/card_templates/constellation.png"
+        class="cardTemplate3"
+        alt="Card Template"
+      >
       <div
         class="cardTombstoneWrapper"
         *ngIf="tombstoneFrame(card,face) && !face"
