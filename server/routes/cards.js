@@ -73,6 +73,7 @@ router.post('/cards', async function(req, res, next) {
     cardData = [];
     if (!global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] || (new Date().getTime() - (global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
       const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=name%3D${encodeURIComponent(`${cardName}`)}`;
+      console.log('initialPageUrl', initialPageUrl);
       const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
       // console.log('fetchedData',initialPageUrl,fetchedData);
       // console.log(cardData)

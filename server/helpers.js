@@ -2,7 +2,7 @@ const https = require('https');
 
 function findFirstPrinting(cardName,cardData){
   let possibilities = cardData.filter(card => {
-    console.log(card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""),cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""))
+    console.log('firstPrinting: ',card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""),cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""))
     return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false;
   });
   if (possibilities.length > 1) {
@@ -37,7 +37,7 @@ async function fetchExpansionSets() {
         resolve(sealedProductSets);
       });
     }).on('error', (error) => {
-      console.log(error);
+      console.log('error', error);
       reject(error);
     });
   });
