@@ -1,4 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { tick } from '@angular/core/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { findIndex } from 'rxjs';
 import { CardFormattingOptions } from 'src/app/app.component';
@@ -170,15 +171,19 @@ export class CardComponent implements OnInit, AfterViewInit {
   }
 
   adjustArtistSize() {
-    const cardArtistElement = this.cardArtistRef?.nativeElement || null;
-    if(cardArtistElement){
-      let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
-
-      while (cardArtistElement.clientWidth > 380) {
-        fontSize -= 0.25;
+    // wait for the redraw to get the new imageArtist
+    setTimeout(() => {
+      const cardArtistElement = this.cardArtistRef?.nativeElement || null;
+      let fontSize = 27; // big so it can be reduced. this might be smarter-assigned to a const
+      if(cardArtistElement) {  
+        while (cardArtistElement.clientWidth > 380) {
+          fontSize -= 0.25;
+          console.log(fontSize)
+          cardArtistElement.style.fontSize = `${fontSize}px`;
+        }
         cardArtistElement.style.fontSize = `${fontSize}px`;
       }
-    }
+    }, 0);
   }
 
   adjustCardTextSize() {

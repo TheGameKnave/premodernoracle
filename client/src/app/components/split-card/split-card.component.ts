@@ -151,15 +151,19 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
   }
 
   adjustArtistSize() {
-    const cardArtistElement = this.cardArtistRef?.nativeElement || null;
-    if(cardArtistElement){
-      let fontSize = parseInt(window.getComputedStyle(cardArtistElement).fontSize);
-
-      while (cardArtistElement.clientWidth > 580) {
-        fontSize -= 0.25;
+    // wait for the redraw to get the new imageArtist
+    setTimeout(() => {
+      const cardArtistElement = this.cardArtistRef?.nativeElement || null;
+      let fontSize = 26; // big so it can be reduced. this might be smarter-assigned to a const
+      if(cardArtistElement) {  
+        while (cardArtistElement.clientWidth > 380) {
+          fontSize -= 0.25;
+          console.log(fontSize)
+          cardArtistElement.style.fontSize = `${fontSize}px`;
+        }
         cardArtistElement.style.fontSize = `${fontSize}px`;
       }
-    }
+    }, 0);
   }
 
   adjustCardTextSize() {
