@@ -34,6 +34,12 @@
         class="cardTemplate3"
         alt="Card Template"
       >
+      <img
+        *ngIf="face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text).includes('Miracle {')"
+        src="assets/images/card_templates/miracle.png"
+        class="cardTemplate3"
+        alt="Card Template"
+      >
       <div
         class="cardTombstoneWrapper"
         *ngIf="tombstoneFrame(card,face) && !face"
