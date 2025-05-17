@@ -42,7 +42,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   }
 
   cardTemplate(card: any, face: number | undefined) {
-    let colors: string = face !== undefined ? this.helpers.getColorsFromCost(card.card_faces[face].mana_cost) : card.colors;
+    let colors: string = this.helpers.getColorsFromCost(card.card_faces[face || 1].mana_cost).join('');
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
     let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
     let returnString = '';

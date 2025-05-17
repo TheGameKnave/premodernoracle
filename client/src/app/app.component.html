@@ -54,7 +54,9 @@
             [cardFormattingOptions]="cardFormattingOptions"
           ></app-card>
         </ng-container>
-        <ng-container *ngIf="['transform','modal_dfc','flip'].includes(card.layout)">
+        <ng-container
+          *ngIf="['transform','modal_dfc','flip'].includes(card.layout)"
+        >
           <app-card 
             *ngFor="let face of card.card_faces; let index = index"
             [card]="card"

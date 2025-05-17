@@ -28,8 +28,8 @@ export class HelpersService {
     let colorID: string[] = [];
     switch (this.cardType(card,face)) {
       case 'Land':
-        colorID = (face !== undefined ? card.card_faces[face].color_identity : card.color_identity) || [];
-        let text = face !== undefined ? card.card_faces[face].oracle_text : card.oracle_text;
+        colorID = [...(face !== undefined ? card.card_faces[face].color_identity : card.color_identity) || []];
+        let text = (face !== undefined || !card.oracle_text) ? card.card_faces[face || 0].oracle_text : card.oracle_text;
         if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
         if(text.includes('{W}')) colorID.push('W');
         if(text.includes('{U}')) colorID.push('U');
