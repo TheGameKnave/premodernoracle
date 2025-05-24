@@ -254,19 +254,45 @@ input, select, button
 .cardTitle, .cardType, .cardArtist, .cardPowerToughness, .levelPT
   text-shadow: 2px 2px 2px #000
 
-.cardManaCost, .symbolGroup
+.cardManaCost, .manaSymbolGroup
   *
     text-shadow: none
     font-family: "MagicSymbols"
     font-style: normal
-.symbolGroup
-  .symbol.hybrid
+.manaSymbolGroup
+  .symbol.hybridCost
     font-size: 0.8em
     padding: 0 0.05em
     position: relative
     top: -0.05em
-  .symbol.twobrid
+  .symbol.twobridCost
     font-family: "TwobridMana"
+.loyaltySymbolGroup
+  .loyaltyCost, .loyaltyCostUp, .loyaltyCostDown
+    z-index: 4
+    position: relative
+    display: inline-flex
+    width: 4rem
+    justify-content: center
+    font-size: .9em
+    &:before
+      content: ""
+      position: absolute
+      z-index: -1
+      font-size: 2em
+      color: #f8f8f8
+      text-shadow: 2px 2px 0 #222, -2px -2px 0 #222, -2px 2px 0 #222, 2px -2px 0 #222, 0 2px 0 #222, 0 -2px 0 #222, 2px 0 0 #222, -2px 0 0 #222
+      font-family: "Mana"
+  .loyaltyCost:before
+    content: ""
+    top: -0.1rem
+    font-size: 1.8em
+  .loyaltyCostUp:before
+    content: ""
+    top: -0.15rem
+  .loyaltyCostDown:before
+    content: ""
+    top: 0.05rem
 
 .cardText, .cardType, .cardArtist, .cardPowerToughness
   font-family: "Plantin"
@@ -1199,7 +1225,7 @@ hr:before
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
 .splitCardTitle, .splitCardType, .splitCardArtist, .splitCardPowerToughness
   text-shadow: 2px 2px 2px #000
-.splitCardManaCost, .symbolGroup
+.splitCardManaCost, .manaSymbolGroup
   text-shadow: none
   font-family: "MagicSymbols"
   font-style: normal
@@ -1301,7 +1327,7 @@ hr:before
   width: 280px
   height: 305px
 .adventureTemplate
-  box-shadow: 2px 2px 0 #222, -2px -2px 0 #222, 2px -2px 0 #222, -2px 2px 0 #222, 8px 8px 5px #0006
+  box-shadow: 2px 2px 0 #222, -2px -2px 0 #222, 2px -2px 0 #222, -2px 2px 0 #222, 10px 10px 10px 5px #0006
 .adventureTemplate, .adventureTemplate2
   width: 100%
   height: 100%
@@ -1313,7 +1339,7 @@ hr:before
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
 .adventureTitle, .adventureType, .adventureCopyright, .adventureArtist, .adventureDisclaimer, .adventurePowerToughness
   text-shadow: 2px 2px 2px #000
-.adventureManaCost, .symbolGroup
+.adventureManaCost, .manaSymbolGroup
   text-shadow: none
   font-family: "MagicSymbols"
   font-style: normal

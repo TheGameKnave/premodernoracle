@@ -45,7 +45,7 @@ export class HelpersService {
     
       case 'Artifact':
       default:
-        colorID = this.getColorsFromCost((face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost))
+        colorID = this.getColorsFromCost((card.card_faces?.[face || 0]?.mana_cost || card.mana_cost))
         if(colorID.length === 0) colorID = (face !== undefined ? card.card_faces[face].colors : card.colors) || [];
         if(card.layout === 'flip' && face) colorID = this.getColorsFromCost(card.card_faces[0].mana_cost);
         break;
@@ -161,6 +161,7 @@ export class HelpersService {
 
       .replace(/"\b/g, "\u201c")     // Opening doubles
       .replace(/"{/g, "\u201c{")     // Opening doubles
+      .replace(/"\[/g, "\u201c[")     // Opening doubles
       .replace(/>"/g, ">\u201c")      // Opening doubles
       .replace(/^"/g, "\u201c")      // Opening doubles
       .replace(/--/g,  "\u2014")     // em-dashes;
@@ -209,48 +210,65 @@ export class HelpersService {
   formatPT(string: string) {
     return string.replace(/\*/g,'<span class="smol">★</span>')
   }
-  parseSymbols(costGroup: string) {
-    let costString = '<span class="symbolGroup">';
-    let costArr: string[] = costGroup.split(/[{}]+/);
+  parseSymbols(costGroup: string, typeOfCost = 'manaCost') {
+    let costString = '';
+    let costArr: string[] = costGroup.split(/[{}\[\]]+/);
     costArr = costArr.filter(x => x);
-    costArr.forEach(cost => {
-      let typeofCost = '';
-      if (/[A-Za-z0-9]+\/[A-Za-z0-9]+\/P/.test(cost)) typeofCost = '';
-      else if(/\/p|2\/|C\//.test(cost)) typeofCost = ' twobrid';
-      else if(cost.includes('/')) typeofCost = ' hybrid';
-      costString += `<span class="symbol${typeofCost ? typeofCost : ''}">`;
-      if(!isNaN(Number(cost)) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
-      else costString += symbols[cost] || cost;
-      costString += '</span>';
-    });
+    if(typeOfCost === 'manaCost') {
+      costString = '<span class="manaSymbolGroup">';
+      costArr.forEach(cost => {
+        if (/[A-Za-z0-9]+\/[A-Za-z0-9]+\/P/.test(cost)) typeOfCost = '';
+        else if(/\/p|2\/|C\//.test(cost)) typeOfCost = ' twobridCost';
+        else if(cost.includes('/')) typeOfCost = ' hybridCost';
+        costString += `<span class="symbol${typeOfCost ? typeOfCost : ''}">`;
+        if(!isNaN(Number(cost)) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
+        else costString += symbols[cost] || cost;
+        costString += '</span>';
+      });
+    }else if(typeOfCost === 'loyalty') {
+      costString = '<span class="loyaltySymbolGroup">';
+      costArr.forEach(cost => {
+        let costDir = '';
+        if(cost.includes('−')) costDir = 'Down';
+        else if(cost.includes('+')) costDir = 'Up';
+        costString += `<span class="loyaltyCost${costDir}">${cost}</span>`;
+      });
+    }else{
+      costString = `<span class="costSymbolGroup">${costArr.join(', ')}</span>`;
+    }
     return costString + '</span>';
   }
   findSymbols(string: string) {
     let symbolBuffer = '';
     let readingGroup = false;
-    let readingSymbol = false;
+    let readingSymbol:string = '';
     let spacesCount = 0;
     let composedString = '';
 
     for(let i = 0; i < string.length; i++) {
       if(!readingGroup) {
-        if(string[i] === '{') {
+        if(['{','['].includes(string[i])) {
           readingGroup = true;
-          readingSymbol = true;
+          readingSymbol = string[i];
         }else{
           composedString += string[i];
         }
       }
       if(readingGroup) {
         if(!readingSymbol) {
-          if(string[i] === '{') {
-            readingSymbol = true;
+          if(['{','['].includes(string[i])) {
+            readingSymbol = string[i];
             spacesCount = 0;
           }else if(string[i] === ' ') {
             spacesCount++;
           }else{
             readingGroup = false;
-            composedString += this.parseSymbols(symbolBuffer);
+            let formattedString = '';
+            if(symbolBuffer.includes(' ')) formattedString = symbolBuffer;
+            else if(symbolBuffer.includes('{')) formattedString = this.parseSymbols(symbolBuffer);
+            else if(symbolBuffer.includes('[')) formattedString = this.parseSymbols(symbolBuffer, 'loyalty');
+            else formattedString = symbolBuffer;
+            composedString += formattedString;
             symbolBuffer = '';
             for(let j = 0; j < spacesCount; j++) composedString += ' ';
             spacesCount = 0;
@@ -259,7 +277,7 @@ export class HelpersService {
         }
         if(readingSymbol) {
           symbolBuffer += string[i];
-          if(string[i] === '}') readingSymbol = false;
+          if(['}',']'].includes(string[i])) readingSymbol = '';
         }
       }
     }

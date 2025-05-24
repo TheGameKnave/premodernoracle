@@ -212,7 +212,6 @@ export class CardComponent implements OnInit, AfterViewInit {
       if(cardArtistElement) {  
         while (cardArtistElement.clientWidth > 380) {
           fontSize -= 0.25;
-          console.log(fontSize)
           cardArtistElement.style.fontSize = `${fontSize}px`;
         }
         cardArtistElement.style.fontSize = `${fontSize}px`;
