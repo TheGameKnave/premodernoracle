@@ -1,13 +1,13 @@
 
 <div [class]="'splitCard face' + face">
   <img
-    [src]="'/assets/images/card_templates/' + splitCardTemplate(card,face) + '.jpg'"
+    [src]="'/assets/images/card_templates/' + splitCardTemplate(card,face) + '.png'"
     class="splitCardTemplate"
     alt="Card Template"
   >
   <img
     *ngIf="splitColorID(card,face).length === 2 && !splitCardTemplate(card,face).includes('msplit')"
-    [src]="'/assets/images/card_templates/' + splitCardTemplate2(card,face) + '.jpg'"
+    [src]="'/assets/images/card_templates/' + splitCardTemplate2(card,face) + '.png'"
     class="splitCardTemplate2"
     alt="Card Template"
   >

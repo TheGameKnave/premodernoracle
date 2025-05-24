@@ -19,8 +19,8 @@ export class HelpersService {
 
   cardType(card: any, face: number | undefined) {
     let cardType = 'nonland';
-    if(face !== undefined ? card.card_faces[face].type_line.includes('Land') : card.type_line.includes('Land')) cardType = 'Land';
     if(face !== undefined ? card.card_faces[face].type_line.includes('Artifact') : card.type_line.includes('Artifact')) cardType = 'Artifact';
+    if(face !== undefined ? card.card_faces[face].type_line.includes('Land') : card.type_line.includes('Land')) cardType = 'Land';
     return cardType
   }
 
@@ -28,14 +28,14 @@ export class HelpersService {
     let colorID: string[] = [];
     switch (this.cardType(card,face)) {
       case 'Land':
-        colorID = [...(face !== undefined ? card.card_faces[face].color_identity : card.color_identity) || []];
-        let text = (face !== undefined || !card.oracle_text) ? card.card_faces[face || 0].oracle_text : card.oracle_text;
+        colorID = [];
+        let text: string = (face !== undefined || !card.oracle_text) ? card.card_faces[face || 0].oracle_text : card.oracle_text;
         if(text.toLowerCase().includes('add one mana of any color')) colorID = ['W', 'U', 'B', 'R', 'G'];
-        if(text.includes('{W}')) colorID.push('W');
-        if(text.includes('{U}')) colorID.push('U');
-        if(text.includes('{B}')) colorID.push('B');
-        if(text.includes('{R}')) colorID.push('R');
-        if(text.includes('{G}')) colorID.push('G');
+        if(/add \{W\}|, \{W\}|or \{W\}/i.test(text)) colorID.push('W');
+        if(/add \{U\}|, \{U\}|or \{U\}/i.test(text)) colorID.push('U');
+        if(/add \{B\}|, \{B\}|or \{B\}/i.test(text)) colorID.push('B');
+        if(/add \{R\}|, \{R\}|or \{R\}/i.test(text)) colorID.push('R');
+        if(/add \{G\}|, \{G\}|or \{G\}/i.test(text)) colorID.push('G');
         if(text.includes('Plains')) colorID.push('W');
         if(text.includes('Island')) colorID.push('U');
         if(text.includes('Swamp')) colorID.push('B');
@@ -45,7 +45,9 @@ export class HelpersService {
     
       case 'Artifact':
       default:
-        colorID = (face !== undefined ? card.card_faces[face].colors : card.colors) || card.colors || [];
+        colorID = this.getColorsFromCost((face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost))
+        if(colorID.length === 0) colorID = (face !== undefined ? card.card_faces[face].colors : card.colors) || [];
+        if(card.layout === 'flip' && face) colorID = this.getColorsFromCost(card.card_faces[0].mana_cost);
         break;
     }
     // dedup colorID
@@ -67,7 +69,7 @@ export class HelpersService {
   }
 
   getColorsFromCost(cost: string){
-    let costArr = cost.split(/[{}/]+/);
+    let costArr = cost ? cost.split(/[{}/]+/) : [];
     costArr = costArr.filter(x => x);
     costArr = costArr.filter(x => wubrg.includes(x));
     // dedup costArr
@@ -212,7 +214,11 @@ export class HelpersService {
     let costArr: string[] = costGroup.split(/[{}]+/);
     costArr = costArr.filter(x => x);
     costArr.forEach(cost => {
-      costString += `<span class="symbol${cost.includes('/') ? ' hybrid' : ''}">`;
+      let typeofCost = '';
+      if (/[A-Za-z0-9]+\/[A-Za-z0-9]+\/P/.test(cost)) typeofCost = '';
+      else if(/\/p|2\/|C\//.test(cost)) typeofCost = ' twobrid';
+      else if(cost.includes('/')) typeofCost = ' hybrid';
+      costString += `<span class="symbol${typeofCost ? typeofCost : ''}">`;
       if(!isNaN(Number(cost)) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
       else costString += symbols[cost] || cost;
       costString += '</span>';

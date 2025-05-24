@@ -15,6 +15,8 @@ export const symbols: SymbolType = {
   'B': '<span class="manaBlack">o</span>B',
   'R': '<span class="manaRed">o</span>R',
   'G': '<span class="manaGreen">o</span>G',
+
+  //Hybrid
   'W/U': '<span class="manaWhite">O</span><span class="manaBlue">/</span>Pi',
   'U/W': '<span class="manaBlue">O</span><span class="manaWhite">/</span>Ip',
   'W/B': '<span class="manaWhite">O</span><span class="manaBlack">/</span>Ps',
@@ -35,11 +37,57 @@ export const symbols: SymbolType = {
   'B/G': '<span class="manaBlack">O</span><span class="manaGreen">/</span>Sf',
   'G/R': '<span class="manaGreen">O</span><span class="manaRed">/</span>Fm',
   'R/G': '<span class="manaRed">O</span><span class="manaGreen">/</span>Mf',
+
+  // Phyrexian Hybrid
+  'W/U/P': '<span class="manaWhite">O</span><span class="manaBlue">/</span>Z',
+  'U/W/P': '<span class="manaBlue">O</span><span class="manaWhite">/</span>Z',
+  'W/B/P': '<span class="manaWhite">O</span><span class="manaBlack">/</span>Z',
+  'B/W/P': '<span class="manaBlack">O</span><span class="manaWhite">/</span>Z',
+  'U/B/P': '<span class="manaBlue">O</span><span class="manaBlack">/</span>Z',
+  'B/U/P': '<span class="manaBlack">O</span><span class="manaBlue">/</span>Z',
+  'R/W/P': '<span class="manaRed">O</span><span class="manaWhite">/</span>Z',
+  'W/R/P': '<span class="manaWhite">O</span><span class="manaRed">/</span>Z',
+  'R/U/P': '<span class="manaRed">O</span><span class="manaBlue">/</span>Z',
+  'U/R/P': '<span class="manaBlue">O</span><span class="manaRed">/</span>Z',
+  'R/B/P': '<span class="manaRed">O</span><span class="manaBlack">/</span>Z',
+  'B/R/P': '<span class="manaBlack">O</span><span class="manaRed">/</span>Z',
+  'U/G/P': '<span class="manaBlue">O</span><span class="manaGreen">/</span>Z',
+  'G/U/P': '<span class="manaGreen">O</span><span class="manaBlue">/</span>Z',
+  'G/W/P': '<span class="manaGreen">O</span><span class="manaWhite">/</span>Z',
+  'W/G/P': '<span class="manaWhite">O</span><span class="manaGreen">/</span>Z',
+  'G/B/P': '<span class="manaGreen">O</span><span class="manaBlack">/</span>Z',
+  'B/G/P': '<span class="manaBlack">O</span><span class="manaGreen">/</span>Z',
+  'G/R/P': '<span class="manaGreen">O</span><span class="manaRed">/</span>Z',
+  'R/G/P': '<span class="manaRed">O</span><span class="manaGreen">/</span>Z',
+
+  // Two-brid
+  '2/W': '<span class="manaGeneric">O</span><span class="manaWhite">/</span>WR',
+  '2/U': '<span class="manaGeneric">O</span><span class="manaBlue">/</span>WS',
+  '2/B': '<span class="manaGeneric">O</span><span class="manaBlack">/</span>WT',
+  '2/R': '<span class="manaGeneric">O</span><span class="manaRed">/</span>WU',
+  '2/G': '<span class="manaGeneric">O</span><span class="manaGreen">/</span>WV',
+
+  // Colorless-brid
+  'C/W': '<span class="manaGeneric">O</span><span class="manaWhite">/</span>[R',
+  'C/U': '<span class="manaGeneric">O</span><span class="manaBlue">/</span>[S',
+  'C/B': '<span class="manaGeneric">O</span><span class="manaBlack">/</span>[T',
+  'C/R': '<span class="manaGeneric">O</span><span class="manaRed">/</span>[U',
+  'C/G': '<span class="manaGeneric">O</span><span class="manaGreen">/</span>[V',
+
+  // No clue
+  'W/p': '<span class="manaGeneric">O</span><span class="manaWhite">/</span>Ls',
+  'U/p': '<span class="manaGeneric">O</span><span class="manaBlue">/</span>Ms',
+  'B/p': '<span class="manaGeneric">O</span><span class="manaBlack">/</span>Ns',
+  'R/p': '<span class="manaGeneric">O</span><span class="manaRed">/</span>Os',
+  'G/p': '<span class="manaGeneric">O</span><span class="manaGreen">/</span>Ps',
+
+  // Phyrexian Mana
   'W/P': '<span class="manaWhitePhy">O</span>Z',
   'U/P': '<span class="manaBluePhy">O</span>Z',
   'B/P': '<span class="manaBlackPhy">O</span>Z',
   'R/P': '<span class="manaRedPhy">O</span>Z',
   'G/P': '<span class="manaGreenPhy">O</span>Z',
+
   '10': '<span class="manaGeneric">o</span>º',
   '11': '<span class="manaGeneric">o</span>»',
   '12': '<span class="manaGeneric">o</span>¼',

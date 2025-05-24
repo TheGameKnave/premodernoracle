@@ -18,14 +18,26 @@
       *ngIf="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
     >
       <img
-        [src]="'assets/images/card_templates/' + cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.jpg'"
+        [src]="'assets/images/card_templates/' + cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.png'"
         class="cardTemplate"
         alt="Card Template"
       >
       <img
-        *ngIf="colorID(card,face).length === 2 && cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')).indexOf('m') !== 0"
-        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.jpg'"
+        *ngIf="colorID(card,face).length === 2"
+        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.png'"
         class="cardTemplate2"
+        alt="Card Template"
+      >
+      <img
+        *ngIf="card.type_line.includes('Legendary') || card.type_line.includes('World ')"
+        [src]="'assets/images/card_templates/' + cardTemplate(card,face,'legendary') + '.png'"
+        class="cardTemplateLegendary1"
+        alt="Card Template"
+      >
+      <img
+        *ngIf="(card.type_line.includes('Legendary') || card.type_line.includes('World ')) && colorID(card,face).length === 2"
+        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,'legendary') + '.png'"
+        class="cardTemplateLegendary2"
         alt="Card Template"
       >
       <img
@@ -35,7 +47,7 @@
         alt="Card Template"
       >
       <img
-        *ngIf="face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text).includes('Miracle {')"
+        *ngIf="(face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text)).includes('Miracle {')"
         src="assets/images/card_templates/miracle.png"
         class="cardTemplate3"
         alt="Card Template"
@@ -68,25 +80,24 @@
         [style]="{ backgroundImage: 'url(' + cardImage + ')' }" 
         class="cardImage"
         [ngClass]="{clickable: card.arts[face || 0].length > 1}"
+      ></div>
+      <div
+        *ngIf="card.arts[face || 0].length > 1"
+        class="cardImageCountWrapper"
       >
         <div
-          *ngIf="card.arts[face || 0].length > 1"
-          class="cardImageCountWrapper"
+          class="cardImageCount"
         >
-          <div
-            class="cardImageCount"
-          >
-            {{ (imageIndex || 0) + 1 }} / {{ card.arts[face || 0].length }}
-          </div>
-          <div
-            class="advanceImage"
-            (click)="advanceImage()"
-          ></div>
-          <div
-            class="reduceImage"
-            (click)="advanceImage(-1)"
-          ></div>
+          {{ (imageIndex || 0) + 1 }} / {{ card.arts[face || 0].length }}
         </div>
+        <div
+          class="advanceImage"
+          (click)="advanceImage()"
+        ></div>
+        <div
+          class="reduceImage"
+          (click)="advanceImage(-1)"
+        ></div>
       </div>
       <div
         #cardTypeElement

@@ -1,12 +1,12 @@
 <div class="adventure">
   <img
-    [src]="'/assets/images/card_templates/' + cardTemplate(card,face) + '.jpg'"
+    [src]="'/assets/images/card_templates/' + cardTemplate(card,face) + '.png'"
     class="adventureTemplate"
     alt="Card Template"
   >
   <img
     *ngIf="colorID(card,face).length === 2 && !cardTemplate(card,face).includes('msplit')"
-    [src]="'/assets/images/card_templates/' + cardTemplate2(card,face) + '.jpg'"
+    [src]="'/assets/images/card_templates/' + cardTemplate2(card,face) + '.png'"
     class="adventureTemplate2"
     alt="Card Template"
   >

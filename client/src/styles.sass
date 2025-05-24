@@ -39,6 +39,13 @@
   font-weight: 100
   src: url("./assets/fonts/mana.ttf")
 
+/* for twobrid */
+@font-face
+  font-family: "TwobridMana"
+  font-style: normal
+  font-weight: 100
+  src: url("./assets/fonts/NDPMTG.ttf")
+
 /* magic symbols 04 */
 @font-face
   font-family: "MagicSymbols Old"
@@ -221,20 +228,28 @@ input, select, button
   z-index: 9
   display: inline-block
   background-color: #111
-  overflow: hidden
   width: 672px
   height: 962px
 
 .card.originalPresent
   opacity: 0.75
 
+.cardTemplate, .cardTemplate2, .cardTemplate3
+  width: 42rem
 .cardTemplate2, .cardTemplate3
   position: absolute
   left: 0
   top: 0
-.cardTemplate2
+.cardTemplateLegendary1, .cardTemplateLegendary2
+  position: absolute
+  left: 50%
+  top: -31px
+  margin-left: -52.7%
+  width: 105%
+.cardTemplate2, .cardTemplateLegendary2
   -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
+
 
 .cardTitle, .cardType, .cardArtist, .cardPowerToughness, .levelPT
   text-shadow: 2px 2px 2px #000
@@ -250,6 +265,8 @@ input, select, button
     padding: 0 0.05em
     position: relative
     top: -0.05em
+  .symbol.twobrid
+    font-family: "TwobridMana"
 
 .cardText, .cardType, .cardArtist, .cardPowerToughness
   font-family: "Plantin"
@@ -291,13 +308,13 @@ input, select, button
 .dfc
   color: #222
   position: absolute
-  font-size: 35px
-  left: 5px
-  top: 2px
+  font-size: 28px
+  left: 10px
+  top: 8px
   text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 2px 1px 0 #f8f8f8, -2px -1px 0 #f8f8f8, -2px 1px 0 #f8f8f8, 2px -1px 0 #f8f8f8, 1px 2px 0 #f8f8f8, -1px -2px 0 #f8f8f8, -1px 2px 0 #f8f8f8, 1px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
-
 .dfcBack
-  top: 6px
+  top: 12px
+
 .cardTitle
   position: absolute
   top: 9px
@@ -318,6 +335,7 @@ input, select, button
   top: 61px
   left: 48px
   position: absolute
+  z-index: -1
   width: 575px
   height: 465px
   background-repeat: no-repeat
@@ -325,10 +343,10 @@ input, select, button
   background-position: center center
 .cardImageCountWrapper
   position: absolute
-  top: 0
-  bottom: 0
-  left: 0
-  right: 0
+  top: 5%
+  bottom: 50%
+  left: 5%
+  right: 5%
   opacity: 0
   &:hover
     opacity: 1
@@ -1130,7 +1148,7 @@ hr:before
   position: absolute
   top: 50%
   right: 50%
-  transform: translate(60%, -60%) rotate(-135deg)
+  transform: translate(53%, -53%) rotate(-135deg)
   font-size: 125px
   z-index: -1
   color: #000
@@ -1171,6 +1189,8 @@ hr:before
   margin: -109px 109px
 .splitCard.face0
   bottom: 0
+.splitCardTemplate, .splitCardTemplate2
+  width: 460px
 .splitCardTemplate2
   position: absolute
   left: 0
@@ -1257,12 +1277,12 @@ hr:before
 .splitCardText
   position: absolute
   top: 375px
-  left: 43px
+  left: 50px
   font-size: 38px
   line-height: 1.075em
   color: #222
-  width: 375px
-  max-height: 220px
+  width: 360px
+  max-height: 215px
 .splitCardText p
   margin: 0.25em 0
 .splitCardArtist
@@ -1295,7 +1315,7 @@ hr:before
   text-shadow: 2px 2px 2px #000
 .adventureManaCost, .symbolGroup
   text-shadow: none
-  font-family: "Magic Symbols"
+  font-family: "MagicSymbols"
   font-style: normal
 .adventureText, .adventureManaCost, .adventureType
   font-family: "Plantin"

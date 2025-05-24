@@ -42,7 +42,7 @@ export class AdventureComponent implements OnInit, AfterViewInit {
   }
 
   cardTemplate(card: any, face: number | undefined) {
-    let colors: string = this.helpers.getColorsFromCost(card.card_faces[face || 1].mana_cost).join('');
+    let colors: string[] = this.helpers.getColorsFromCost(card.card_faces[face || 1].mana_cost);
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
     let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
     let returnString = '';
@@ -61,25 +61,26 @@ export class AdventureComponent implements OnInit, AfterViewInit {
         returnString += hybridArr[0][0].toLowerCase();
       }else{
         returnString += 'm';
+        if(colors.length === 2 && (!hybridArr.length || colors.some(val => wubrg.includes(val)))) {
+          returnString += colors[0].toLowerCase();
+        }
       }
     } else if(colors.length === 1) {
       returnString += colors[0].toLowerCase();
     } else if(colors.length === 0) {
       if(typeLine.includes('Land')){
         if(this.helpers.colorID(card,face).length > 2) {
-          returnString += 'ml';
+          returnString += 'lm';
         }else if(this.helpers.colorID(card,face).length === 0) {
-          returnString += 'cl';
+          returnString += 'lc';
         }else{
           returnString += this.helpers.colorID(card,face)[0].toLowerCase() + 'l';
         }
-      }else if(typeLine.includes('Artifact')) { 
-        returnString += 'a';
       }else{
         returnString += 'c';
       }
     }
-    return returnString + 'adventure'
+    return 'adventure' + '_' + returnString
   }
 
   cardTemplate2(card: any, face: number | undefined) {
@@ -95,10 +96,8 @@ export class AdventureComponent implements OnInit, AfterViewInit {
     });
     let returnString = '';
     if(this.helpers.colorID(card,face)[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.helpers.colorID(card,face)[1]).toLowerCase();
-    if(typeLine.includes('Land')){
-      returnString += 'l';
-    }
-    return returnString + 'adventure'
+
+    return 'adventure' + '_' + returnString
   }
 
 

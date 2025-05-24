@@ -64,7 +64,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
   }
 
   splitCardTemplate(card: any, face: number | undefined) {
-    let colors: string = face !== undefined ? this.helpers.getColorsFromCost(card.card_faces[face].mana_cost) : card.colors;
+    let colors: string[] = face !== undefined ? this.helpers.getColorsFromCost(card.card_faces[face].mana_cost) : card.colors;
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
     let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : card.mana_cost;
     let returnString = '';
@@ -83,15 +83,18 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
         returnString += hybridArr[0][0].toLowerCase();
       }else{
         returnString += 'm';
+        if(colors.length === 2 && (!hybridArr.length || colors.some(val => wubrg.includes(val)))) {
+          returnString += colors[0].toLowerCase();
+        }
       }
     } else if(colors.length === 1) {
       returnString += colors[0].toLowerCase();
     } else if(colors.length === 0) {
       if(typeLine.includes('Land')){
         if(this.splitColorID(card,face).length > 2) {
-          returnString += 'ml';
+          returnString += 'lm';
         }else if(this.splitColorID(card,face).length === 0) {
-          returnString += 'cl';
+          returnString += 'lc';
         }else{
           returnString += this.splitColorID(card,face)[0].toLowerCase() + 'l';
         }
@@ -101,7 +104,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
         returnString += 'c';
       }
     }
-    return returnString + 'split'
+    return 'split' + '_' + returnString
   }
   splitCardTemplate2(card: any, face: number | undefined) {
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : card.type_line;
@@ -119,7 +122,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
     if(typeLine.includes('Land')){
       returnString += 'l';
     }
-    return returnString + 'split'
+    return 'split' + '_' + returnString
   }
 
   adjustCardTitleSize() {
@@ -172,7 +175,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
       let fontSize = parseInt(window.getComputedStyle(cardTextElement).fontSize);
       let letterSpacing = 0;
 
-      while (cardTextElement.scrollHeight > 220 && fontSize > 14) {
+      while (cardTextElement.scrollHeight > 215 && fontSize > 14) {
         if(fontSize > 14) fontSize -= 0.25;
         else letterSpacing -= 0.25;
         cardTextElement.style.fontSize = `${fontSize}px`;

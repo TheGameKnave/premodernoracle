@@ -19,6 +19,10 @@ export class CardComponent implements OnInit, AfterViewInit {
   @ViewChild('cardTitleElement') set cardTitleElement (content: ElementRef) {
     if(content) this.cardTitleRef = content;
   }
+  private cardManaCostRef!: ElementRef;
+  @ViewChild('cardManaCostElement') set cardManaCostElement (content: ElementRef) {
+    if(content) this.cardManaCostRef = content;
+  }
   private cardTypeRef!: ElementRef;
   @ViewChild('cardTypeElement') set cardTypeElement (content: ElementRef) {
     if(content) this.cardTypeRef = content;
@@ -83,25 +87,35 @@ export class CardComponent implements OnInit, AfterViewInit {
     switch (this.cardType(card,face)) {
       case 'Land':
         if(colors.length > 2) {
-          returnString += 'ml';
+          returnString += 'lm';
         }else if(colors.length === 0) {
-          returnString += 'cl';
+          returnString += 'lc';
         }else{
-          returnString += colors[0].toLowerCase() + 'l';
+          returnString += 'l' + colors[0].toLowerCase();
         }
         break;
       case 'Artifact':
         if(colors.length > 2) {
-          returnString += 'ma';
+          returnString += 'am';
         }else if(colors.length === 0) {
           returnString += 'a';
         }else{
-          returnString += colors[0].toLowerCase() + 'a';
+          returnString += 'a' + colors[0].toLowerCase();
         }
         break;
     
       default:
-        if(colors.length > 1) {
+        // if card text or the current face's text includes 'Devoid'
+        let devoid = (card.oracle_text?.includes('Devoid') || card.card_faces?.[face || 0]?.oracle_text?.includes('Devoid'));
+        if(devoid){
+          if(colors.length > 2) {
+            returnString += 'cm';
+          }else if(colors.length > 0) {
+            returnString += 'c' + colors[0].toLowerCase();
+          }else if(colors.length === 0) {
+            returnString += 'c';
+          }
+        }else if(colors.length > 1) {
           // if hybridArr is not empty and all of its elemets are identical
           // AND if W, U, B, R, G are not in the costArr
           if(hybridArr.length > 0 && hybridArr.every(x => x === hybridArr[0]) && !wubrg.some(x => costArr.includes(x))) {
@@ -110,6 +124,9 @@ export class CardComponent implements OnInit, AfterViewInit {
             returnString += colors[0].toLowerCase();
           }else{
             returnString += 'm';
+            if(colors.length === 2 && (!hybridArr.length || colors.some(val => wubrg.includes(val)))) {
+              returnString += colors[0].toLowerCase();
+            }
           }
         } else if(colors.length === 1) {
           returnString += colors[0].toLowerCase();
@@ -118,7 +135,7 @@ export class CardComponent implements OnInit, AfterViewInit {
         }
         break;
     }
-    return returnString + base
+    return base + '_' + returnString
   }
   cardTemplate2(card: any,face: number | undefined, base: string = 'card') {
     let typeLine: string = face !== undefined ? card.card_faces[face].type_line : (card.layout === 'adventure' ? card.card_faces[0].type_line : card.type_line);
@@ -132,29 +149,43 @@ export class CardComponent implements OnInit, AfterViewInit {
       }
     });
     let returnString = '';
-    if(this.colorID(card,face)[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.colorID(card,face)[1]).toLowerCase();
-    if(this.cardType(card,face) === 'Land'){
+    // if card text or the current face's text includes 'Devoid'
+    let devoid = (card.oracle_text?.includes('Devoid') || card.card_faces?.[face || 0]?.oracle_text?.includes('Devoid'));
+    if(devoid){
+      let colors = this.colorID(card,face);
+      if(colors.length > 2) {
+        returnString += 'cm';
+      }else if(colors.length > 0) {
+        returnString += 'c' + colors[1].toLowerCase();
+      }else if(colors.length === 0) {
+        returnString += 'c';
+      }
+    }else if(this.cardType(card,face) === 'Land'){
       returnString += 'l';
-    }
-    if(this.cardType(card,face) === 'Artifact'){
+    }else if(this.cardType(card,face) === 'Artifact'){
       returnString += 'a';
+    }else if(this.colorID(card,face)[1]){
+      if((!hybridArr.length || costArr.some(val => wubrg.includes(val))) && (card.mana_cost || card.card_faces?.[face || 0]?.mana_cost) && this.cardType(card,face) !== 'Artifact' && this.cardType(card,face) !== 'Land'){
+        returnString += 'm'
+      }
+      returnString += (hybridArr[0] ? hybridArr[0][2] : this.colorID(card,face)[1]).toLowerCase();
     }
-    return returnString + base
+    return base + '_' + returnString
   }
 
   adjustCardTitleSize() {
     const cardTitleElement = this.cardTitleRef?.nativeElement || null;
-    if(cardTitleElement){
-      let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
-
-      //count the number of mana symbols in mana_cost
-      const countInstancesOfCharacter = (inputString: string, character: string) => inputString.split(character).length - 1;
-      let manaCount = countInstancesOfCharacter(this.card.card_faces ? this.card.card_faces[0].mana_cost : this.card.mana_cost || '', '{');
-      while (cardTitleElement.clientWidth + (manaCount * 40) > 600) {
-        fontSize -= 0.25;
-        cardTitleElement.style.fontSize = `${fontSize}px`;
+    const cardManaCostElement = this.cardManaCostRef?.nativeElement || null;
+    setTimeout(() => {
+      if(cardTitleElement){
+        let fontSize = parseInt(window.getComputedStyle(cardTitleElement).fontSize);
+        //count the number of mana symbols in mana_cost
+        while (cardTitleElement.clientWidth + cardManaCostElement?.clientWidth + 15 > 600) {
+          fontSize -= 0.25;
+          cardTitleElement.style.fontSize = `${fontSize}px`;
+        }
       }
-    }
+    }, 500);
   }
   
   adjustCardTypeSize() {
