@@ -160,15 +160,18 @@ export class CardComponent implements OnInit, AfterViewInit {
       }else if(colors.length === 0) {
         returnString += 'c';
       }
-    }else if(this.cardType(card,face) === 'Land'){
-      returnString += 'l';
-    }else if(this.cardType(card,face) === 'Artifact'){
-      returnString += 'a';
-    }else if(this.colorID(card,face)[1]){
-      if((!hybridArr.length || costArr.some(val => wubrg.includes(val))) && (card.mana_cost || card.card_faces?.[face || 0]?.mana_cost) && this.cardType(card,face) !== 'Artifact' && this.cardType(card,face) !== 'Land'){
-        returnString += 'm'
+    }else{
+      if(this.cardType(card,face) === 'Land'){
+        returnString += 'l';
+      }else if(this.cardType(card,face) === 'Artifact'){
+        returnString += 'a';
       }
-      returnString += (hybridArr[0] ? hybridArr[0][2] : this.colorID(card,face)[1]).toLowerCase();
+      if(this.colorID(card,face)[1]){
+        if((!hybridArr.length || costArr.some(val => wubrg.includes(val))) && (card.mana_cost || card.card_faces?.[face || 0]?.mana_cost) && this.cardType(card,face) !== 'Artifact' && this.cardType(card,face) !== 'Land'){
+          returnString += 'm'
+        }
+        returnString += (hybridArr[0] ? hybridArr[0][2] : this.colorID(card,face)[1]).toLowerCase();
+      }
     }
     return base + '_' + returnString
   }
