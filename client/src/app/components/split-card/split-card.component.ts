@@ -118,7 +118,12 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
       }
     });
     let returnString = '';
-    if(this.splitColorID(card,face)[1]) returnString = (hybridArr[0] ? hybridArr[0][2] : this.splitColorID(card,face)[1]).toLowerCase();
+    if(this.splitColorID(card,face)[1]){
+      if((!hybridArr.length || costArr.some(val => wubrg.includes(val))) && (card.mana_cost || card.card_faces?.[face || 0]?.mana_cost) && this.cardType(card,face) !== 'Artifact' && this.cardType(card,face) !== 'Land'){
+        returnString += 'm'
+      }
+      returnString += (hybridArr[0] ? hybridArr[0][2] : this.splitColorID(card,face)[1]).toLowerCase();
+    }
     if(typeLine.includes('Land')){
       returnString += 'l';
     }
