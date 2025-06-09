@@ -220,6 +220,7 @@ export class HelpersService {
         if (/[A-Za-z0-9]+\/[A-Za-z0-9]+\/P/.test(cost)) typeOfCost = '';
         else if(/\/p|2\/|C\//.test(cost)) typeOfCost = ' twobridCost';
         else if(cost.includes('/')) typeOfCost = ' hybridCost';
+        else if(cost.includes('P')) typeOfCost = ' pawCost';
         costString += `<span class="symbol${typeOfCost ? typeOfCost : ''}">`;
         if(!isNaN(Number(cost)) && Number(cost) < 10) costString += '<span class="manaGeneric">o</span>' + cost;
         else costString += symbols[cost] || cost;
