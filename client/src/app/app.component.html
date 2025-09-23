@@ -20,17 +20,18 @@
     <div class="headerContainer">
       <h3 [ngClass]="{'loading': loading}">Cards</h3>
       <form *ngIf="!loading" [formGroup]="cardFormatting">
-        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="mpcBleed" /> MPC Bleed</span>
-        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="roundedCorners" /> Rounded Corners</span>
-        <span><input type="checkbox" formControlName="highRes" /> High Res</span>
+        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="mpcBleed" id="mpcBleed" /> <label for="mpcBleed">MPC Bleed</label></span>
+        <span *ngIf="cardFormatting.get('borderColor')?.value !== 'none'"><input type="checkbox" formControlName="roundedCorners" id="roundedCorners" /> <label for="roundedCorners">Rounded Corners</label></span>
+        <span><input type="checkbox" formControlName="highRes" id="highRes" /> <label for="highRes">High Res</label></span>
+        <span><input type="checkbox" formControlName="modernFlourish" id="modernFlourish" /> <label for="modernFlourish">Modern Flourish</label></span>
         <span>
-          <select formControlName="borderColor">
+          <select formControlName="borderColor" id="borderColor">
             <option selected value="111">Black</option>
             <option value="fff">White</option>
             <option value="a84">Gold</option>
             <option value="999">Silver</option>
             <option value="none">None</option>
-          </select> Border
+          </select> <label for="borderColor">Border</label>
         </span>
       </form>
     </div>

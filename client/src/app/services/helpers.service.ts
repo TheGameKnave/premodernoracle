@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { lands, symbols, tombstoneList, wubrg } from "../constants";
-import { CookieService } from "ngx-cookie-service";
+import { LocalStorageService } from "ngx-webstorage";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { CookieService } from "ngx-cookie-service";
 export class HelpersService {
 
   constructor(
-    private cookieService: CookieService,
+    private localStorageService: LocalStorageService,
   ) {
     if(!environment.production){
       (window as any).helpersService = this;
@@ -87,7 +87,7 @@ export class HelpersService {
 
   determineCardImage(card: any, face: number | undefined, imageIndex: number | null, selection: boolean = false) {
     let cardImage = '';
-    let savedImage = this.cookieService.get(card.card_faces?.[face || 0]?.name || card.name);
+    let savedImage = this.localStorageService.retrieve(card.card_faces?.[face || 0]?.name || card.name);
     if(!selection && savedImage && savedImage !== 'null') {
       cardImage = savedImage;
     }else{
@@ -102,7 +102,7 @@ export class HelpersService {
 
   determineImageArtist(card: any, face: number | undefined, imageIndex: number | null, cardImage: string) {
     let imageArtist = '';
-    let savedImage = this.cookieService.get(card.card_faces?.[face || 0]?.name || card.name);
+    let savedImage = this.localStorageService.retrieve(card.card_faces?.[face || 0]?.name || card.name);
     let currentIndex = card.arts[face || 0].findIndex((x: any) => x.art_crop === cardImage);
     if(currentIndex !== -1 && savedImage && savedImage !== 'null') {
       imageArtist = card.arts[face || 0][currentIndex].artist;
@@ -120,8 +120,10 @@ export class HelpersService {
     let textBox = text;
     textBox = '<p>' + textBox
       .replace(/\n/g, '</p><p>')
-      .replace(/\(/g,'@@@<i class="reminderText">(')
-      .replace(/\)/g,')</i>@@@') + '</p>';
+      .replace(/(\s*)\(/g,'@@@<i class="reminderText">$1(')
+      .replace(/\)/g,')</i>@@@')
+      .replace(/(permanent|artifact|creature|enchantment|planeswalker|land|battle|token) of their choice\./gm, '$1.')
+      + '</p>';
     let reminderArr = textBox.split('@@@');
     reminderArr.forEach((reminder,i) => {
       if(reminder.includes('reminderText') && ((text ? text.length : 0) + (flavorText ? flavorText.length : 0)) > 220) {
@@ -140,6 +142,7 @@ export class HelpersService {
       ftxtArr = ftxtArr.map(ft => `<p ${ft.indexOf('—') === 0 ? 'class=flavorAttribution' : ''}><i>${ft}</i></p>`);
       textBox = (textBox + (((face !== undefined || card.layout === 'adventure') ? card.card_faces[0].oracle_text : card.oracle_text) ? '<hr>' : '') + '<div class="flavorText">' + ftxtArr.join('') + '</div>');
     }
+    console.log('textBox', textBox);
     textBox = textBox
       .replace(/\b\*/g, "<i>")       // Closing asterisk
       .replace(/\*\b/g, "</i>")      // Opening asterisk
@@ -168,6 +171,7 @@ export class HelpersService {
       .replace(/dd {/g,  "dd&nbsp;{")// add mana nobreak;
       .replace(/=“/g, '="')           // fix closing double quotes
       .replace(/”>/g, '">')          // fix closing double quotes
+    console.log('textBox', textBox);
     if(face !== undefined ? card.card_faces[face].type_line.includes('Saga') : card.type_line.includes('Saga')){
       let textArr = textBox.split('<p>');
       textArr = textArr.filter(x => x);

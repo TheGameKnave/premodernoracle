@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { LocalStorageService } from 'ngx-webstorage';
 import { wubrg } from 'src/app/constants';
 import { HelpersService } from 'src/app/services/helpers.service';
 import { environment } from 'src/environments/environment';
@@ -47,7 +47,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private helpers: HelpersService,
-    private cookieService: CookieService,
+    private localStorageService: LocalStorageService,
   ) { }
 
   ngOnInit(): void {
@@ -202,7 +202,7 @@ export class SplitCardComponent implements OnInit, AfterViewInit {
     this.cardImage = this.helpers.determineCardImage(this.card, this.face, this.imageIndex, true);
     this.imageArtist = this.helpers.determineImageArtist(this.card, this.face, this.imageIndex, this.cardImage);
     this.adjustArtistSize();
-    this.cookieService.set(this.card.card_faces?.[this.face || 0].name || this.card.name, this.cardImage, 365, '/');
+    this.localStorageService.store(this.card.card_faces?.[this.face || 0].name || this.card.name, this.cardImage);
   }
   
 }

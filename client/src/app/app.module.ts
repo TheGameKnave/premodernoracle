@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { CardComponent } from './components/card/card.component';
 import { SplitCardComponent } from './components/split-card/split-card.component';
 import { AdventureComponent } from './components/adventure/adventure.component';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [
@@ -20,8 +21,10 @@ import { AdventureComponent } from './components/adventure/adventure.component';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    NgxWebstorageModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

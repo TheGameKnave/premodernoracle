@@ -471,7 +471,7 @@ input, select, button
     top: 10px
 
 .fill
-  &.ss-afr, &.ss-vis, &.ss-usg, &.ss-zen, &.ss-som, &.ss-mbs, &.ss-bbd, &.ss-lci, &.ss-dmu, &.ss-mid, &.ss-m10, &.ss-m11, &.ss-m12, &.ss-m13, &.ss-m14, &.ss-m15, &.ss-m19, &.ss-m20, &.ss-m21
+  &.ss-csp, &.ss-xln, &.ss-war, &.ss-m3c, &.ss-afr, &.ss-vis, &.ss-usg, &.ss-zen, &.ss-som, &.ss-mbs, &.ss-bbd, &.ss-lci, &.ss-dmu, &.ss-mid, &.ss-m10, &.ss-m11, &.ss-m12, &.ss-m13, &.ss-m14, &.ss-m15, &.ss-m19, &.ss-m20, &.ss-m21, &.ss-dft, &.ss-j25
     &:after
       content: ''
       position: absolute
@@ -483,6 +483,13 @@ input, select, button
       right: 50%
       border-radius: 0.2em
       transform: translate(50%, -50%)
+  &.ss-csp:after
+    height: 40%
+    top: 20%
+    right: 45%
+    border-radius: 3rem
+  &.ss-xln:after
+    width: 45%
   &.ss-afr:after
     height: 67%
     width: 79%
@@ -513,6 +520,21 @@ input, select, button
     height: 22%
     width: 57%
     top: 25px
+  &.ss-dft:after
+    height: 50%
+    width: 78%
+    border-radius: 0.4rem
+    left: 7px
+    transform: rotate(10deg)
+    top: 11px
+  &.ss-j25:after
+    height: 50%
+    width: 85%
+  &.ss-m3c:after
+    top: 45%
+  &.ss-war:after
+    top: 60%
+    height: 30%
 .stroke.ss-mid:after
   content: ''
   position: absolute
@@ -655,7 +677,7 @@ input, select, button
   &.ss-dis
     font-size: 1.2em
   &.ss-csp
-    font-size: 1.05em
+    font-size: 0.95em
   &.ss-tsp
     font-size: 1.1em
     transform: translate(50%, -55%) !important
@@ -841,7 +863,7 @@ input, select, button
   &.ss-mkm
     font-size: 1em
   &.ss-otj
-    font-size: 1em
+    font-size: 1.3em
   &.ss-blb
     font-size: 1.1em
   &.ss-dsk
@@ -928,10 +950,10 @@ input, select, button
   text-shadow: 1px 1px 0 #222, -1px -1px 0 #222, -1px 1px 0 #222, 1px -1px 0 #222, 1px 0.75px 0 #222, -1px -0.75px 0 #222, -1px 0.75px 0 #222, 1px -0.75px 0 #222, 0.75px 1px 0 #222, -0.75px -1px 0 #222, -0.75px 1px 0 #222, 0.75px -1px 0 #222, 0 1px 0 #222, 0 -1px 0 #222, 1px 0 0 #222, -1px 0 0 #222
 
 .cardExpansion.stroke
-  text-shadow: 3px 3px 1.5px #f8f8f8, -3px -3px 1.5px #f8f8f8, -3px 3px 1.5px #f8f8f8, 3px -3px 1.5px #f8f8f8, 0 3px 1.5px #f8f8f8, 0 -3px 1.5px #f8f8f8, 3px 0 1.5px #f8f8f8, -3px 0 1.5px #f8f8f8, 2px 3px 1.5px #f8f8f8, -2px -3px 1.5px #f8f8f8, -2px 3px 1.5px #f8f8f8, 2px -3px 1.5px #f8f8f8, 3px 2px 1.5px #f8f8f8, -3px -2px 1.5px #f8f8f8, -3px 2px 1.5px #f8f8f8, 3px -2px 1.5px #f8f8f8
+  text-shadow: 3px 3px 3px #f8f8f8, -3px -3px 3px #f8f8f8, -3px 3px 3px #f8f8f8, 3px -3px 3px #f8f8f8, 0 3px 3px #f8f8f8, 0 -3px 3px #f8f8f8, 3px 0 3px #f8f8f8, -3px 0 3px #f8f8f8, 2px 3px 3px #f8f8f8, -2px -3px 3px #f8f8f8, -2px 3px 3px #f8f8f8, 2px -3px 3px #f8f8f8, 3px 2px 3px #f8f8f8, -3px -2px 3px #f8f8f8, -3px 2px 3px #f8f8f8, 3px -2px 3px #f8f8f8
 
 .cardExpansion.common.stroke
-  text-shadow: 1.75px 1.75px 1.5px #f8f8f8, -1.75px -1.75px 1.5px #f8f8f8, -1.75px 1.75px 1.5px #f8f8f8, 1.75px -1.75px 1.5px #f8f8f8, 0 1.75px 1.5px #f8f8f8, 0 -1.75px 1.5px #f8f8f8, 1.75px 0 1.5px #f8f8f8, -1.75px 0 1.5px #f8f8f8, 1px 1.75px 1.5px #f8f8f8, -1px -1.75px 1.5px #f8f8f8, -1px 1.75px 1.5px #f8f8f8, 1px -1.75px 1.5px #f8f8f8, 1.75px 1px 1.5px #f8f8f8, -1.75px -1px 1.5px #f8f8f8, -1.75px 1px 1.5px #f8f8f8, 1.75px -1px 1.5px #f8f8f8
+  text-shadow: 1.75px 1.75px 3px #f8f8f8, -1.75px -1.75px 3px #f8f8f8, -1.75px 1.75px 3px #f8f8f8, 1.75px -1.75px 3px #f8f8f8, 0 1.75px 3px #f8f8f8, 0 -1.75px 3px #f8f8f8, 1.75px 0 3px #f8f8f8, -1.75px 0 3px #f8f8f8, 1px 1.75px 3px #f8f8f8, -1px -1.75px 3px #f8f8f8, -1px 1.75px 3px #f8f8f8, 1px -1.75px 3px #f8f8f8, 1.75px 1px 3px #f8f8f8, -1.75px -1px 3px #f8f8f8, -1.75px 1px 3px #f8f8f8, 1.75px -1px 3px #f8f8f8
 
 .cardExpansion.common:before
   background-color: #222
@@ -1082,10 +1104,10 @@ input, select, button
 .levelSpread:after
   content: "\2617"
   position: absolute
-  top: -15px
+  top: -12px
   transform: rotate(90deg)
   color: #222
-  left: -20px
+  left: -8px
   z-index: -1
   font-size: 90px
   text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
@@ -1120,7 +1142,7 @@ input, select, button
   top: 15px
   transform: rotate(90deg)
   color: #222
-  left: -24px
+  left: -12px
   z-index: -1
   font-size: 94px
   text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8

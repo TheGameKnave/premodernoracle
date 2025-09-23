@@ -8,6 +8,7 @@ export interface CardFormattingOptions {
   borderColor?: string|number;
   roundedCorners?: boolean;
   highRes?: boolean;
+  modernFlourish?: boolean;
 }
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     'borderColor': new UntypedFormControl('111'),
     'roundedCorners': new UntypedFormControl(false),
     'highRes': new UntypedFormControl(false),
+    'modernFlourish': new UntypedFormControl(true),
   });
   cardFormattingOptions: CardFormattingOptions = {}
   cardFieldSub: Subscription | undefined;

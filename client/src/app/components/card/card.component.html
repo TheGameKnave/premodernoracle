@@ -29,19 +29,19 @@
         alt="Card Template"
       >
       <img
-        *ngIf="card.type_line.includes('Legendary') || card.type_line.includes('World ')"
+        *ngIf="cardFormattingOptions.modernFlourish && (face !== undefined ? card.card_faces[face].type_line : card.type_line).includes('Legendary') || (face !== undefined ? card.card_faces[face].type_line : card.type_line).includes('World ')"
         [src]="'assets/images/card_templates/' + cardTemplate(card,face,'legendary') + '.png'"
         class="cardTemplateLegendary1"
         alt="Card Template"
       >
       <img
-        *ngIf="(card.type_line.includes('Legendary') || card.type_line.includes('World ')) && colorID(card,face).length === 2"
+        *ngIf="cardFormattingOptions.modernFlourish && ((face !== undefined ? card.card_faces[face].type_line : card.type_line).includes('Legendary') || (face !== undefined ? card.card_faces[face].type_line : card.type_line).includes('World ')) && colorID(card,face).length === 2"
         [src]="'assets/images/card_templates/' + cardTemplate2(card,face,'legendary') + '.png'"
         class="cardTemplateLegendary2"
         alt="Card Template"
       >
       <img
-        *ngIf="card.type_line.includes('Enchantment')"
+        *ngIf="cardFormattingOptions.modernFlourish && (face !== undefined ? card.card_faces[face].type_line : card.type_line).includes('Enchantment')"
         src="assets/images/card_templates/constellation.png"
         class="cardTemplate3"
         alt="Card Template"
