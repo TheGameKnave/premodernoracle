@@ -252,7 +252,7 @@ input, select, button
   mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0.50) 50%, rgba(0,0,0,0) 60%)
 
 
-.cardTitle, .cardType, .cardArtist, .cardPowerToughness, .levelPT
+.cardTitle, .cardType, .cardArtist, .cardPowerToughness, .levelPT, .stationPT
   text-shadow: 2px 2px 2px #000
 
 .cardManaCost, .manaSymbolGroup
@@ -1068,13 +1068,12 @@ input, select, button
     transform: translate(-50%, -50%) scaleX(1.2)
     text-shadow: 1px 1px 0 #eda, -1px 1px 0 #eda,1px -1px 0 #eda,-1px -1px 0 #eda
 
-.levelAbility
+.levelAbility, .stationAbility
   display: flex
   min-height: 90px
   margin-left: -45px
-
-.levelAbility > *
-  align-self: center
+  > *
+    align-self: center
 
 .levelReminder
   font-size: 29px
@@ -1082,7 +1081,7 @@ input, select, button
   flex: auto
   margin-left: 45px
 
-.levelSpread
+.levelSpread, .stationSpread
   flex: 0 0 75px
   color: #f8f8f8
   position: relative
@@ -1103,32 +1102,44 @@ input, select, button
 
 .levelSpread:after
   content: "\2617"
-  position: absolute
   top: -12px
-  transform: rotate(90deg)
-  color: #222
   left: -8px
-  z-index: -1
   font-size: 90px
+  transform: rotate(90deg)
+.stationSpread:after
+  content: "O"
+  font-family: "MagicSymbols"
+  left: 0.2rem
+  font-size: 4.2rem
+.stationSpread:before
+  color: #000
+  content: ":"
+  position: absolute
+  right: -10px
+  top: -3px
+.levelSpread:after, .stationSpread:after
+  position: absolute
+  color: #222
+  z-index: -1
   text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
-.levelCost
+.levelCost, .stationCost
   flex: 0 0 75px
   position: relative
   text-align: center
   align-self: flex-start
   font-size: 24px
   z-index: 99
+  &:before
+    white-space: nowrap
+    font-size: 20px
+    color: #f8f8f8
+    position: absolute
+    top: 30px
+    right: 50%
+    transform: translate(50%, 0)
+    z-index: 99
 
-.levelCost:before
-  white-space: nowrap
-  font-size: 20px
-  color: #f8f8f8
-  position: absolute
-  top: 30px
-  right: 50%
-  transform: translate(50%, 0)
-  z-index: 99
 
 .levelCost.level2:before
   content: "Level 2"
@@ -1147,16 +1158,32 @@ input, select, button
   font-size: 94px
   text-shadow: 2px 2px 0 #f8f8f8, -2px -2px 0 #f8f8f8, -2px 2px 0 #f8f8f8, 2px -2px 0 #f8f8f8, 0 2px 0 #f8f8f8, 0 -2px 0 #f8f8f8, 2px 0 0 #f8f8f8, -2px 0 0 #f8f8f8
 
-.levelText
+.levelText, .stationText
   flex: 1 1 auto
   padding: 10px 10px 10px 20px
 
-.levelPT
+.levelPT, .stationPT
   flex: 0 0 50px
   font-size: 45px
   letter-spacing: 1px
   color: #f8f8f8
   align-self: center
+.stationPT
+  display: none
+  margin-right: 0.4rem
+  padding: 0.4rem 0.8rem
+.vehiclePT
+  padding: 0 0.8rem
+  bottom: 95px !important
+  right: 60px !important
+.stationPT, .vehiclePT
+  background: #444
+  border-radius: 1.1rem
+  border: 0.2rem solid #fff
+  box-shadow: 1.5px 1.5px 0 #222, -1.5px -1.5px 0 #222, 1.5px -1.5px 0 #222, -1.5px 1.5px 0 #222, 5px 5px 5px 2.5px #0006
+.rulesText > .stationAbility:last-child .stationPT
+  display: block
+
 
 .smol
   font-size: .7em

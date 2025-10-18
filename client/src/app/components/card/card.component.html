@@ -130,9 +130,9 @@
         class="cardArtist"
       ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
       <div
-        *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler'"
+        *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler' && !card.type_line.includes('Spacecraft')"
         #cardPowerToughnessElement
-        [class]="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '')" 
+        [class]="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '') + ' ' + (card.type_line.includes('Vehicle') ? 'vehiclePT ' : '')" 
         [innerHtml]="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : (card.layout === 'adventure' ? card.card_faces[0].power : card.power)) + '/' + (face !== undefined ? card.card_faces[face].toughness : (card.layout === 'adventure' ? card.card_faces[0].toughness : card.toughness)))"
       ></div>
       <div
