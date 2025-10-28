@@ -54,16 +54,30 @@
             [card]="card"
             [cardFormattingOptions]="cardFormattingOptions"
           ></app-card>
+          <app-card
+            *ngIf="card.type_line.includes('Planeswalker')"
+            [card]="card"
+            [cardFormattingOptions]="cardFormattingOptions"
+            [class.overlay]="true"
+          ></app-card>
         </ng-container>
         <ng-container
           *ngIf="['transform','modal_dfc','flip'].includes(card.layout)"
         >
-          <app-card 
-            *ngFor="let face of card.card_faces; let index = index"
-            [card]="card"
-            [cardFormattingOptions]="cardFormattingOptions"
-            [face]="index"
-          ></app-card>
+          <ng-container *ngFor="let face of card.card_faces; let index = index">
+            <app-card
+              [card]="card"
+              [cardFormattingOptions]="cardFormattingOptions"
+              [face]="index"
+            ></app-card>
+            <app-card
+              *ngIf="card.card_faces[index].type_line.includes('Planeswalker')"
+              [card]="card"
+              [cardFormattingOptions]="cardFormattingOptions"
+              [face]="index"
+              [class.overlay]="true"
+            ></app-card>
+          </ng-container>
         </ng-container>
       </ng-container>
     </div>
@@ -73,6 +87,13 @@
       <ul>
         <li>Ctrl+Enter to fetch cards</li>
         <li>Downloading cards is a challenge; you’ll need to screenshot. The chrome plugin <a target="_blank" href="https://chromewebstore.google.com/detail/gofullpage-full-page-scre/fdpohaocaechififmbbbbbknoalclacl">GoFullPage</a> seems to work well.</li>
+        <li>Sometimes the art is poor quality, or is not centered well (especially for special frames like planeswalkers, sagas, classes, talents, etc.) If you have Photoshop or a program that can edit *.psd files, you can:&hellip;
+          <ul>
+            <li>&hellip;use this <a href="assets/files/Planeswalker_Frame_Jig.psd">photoshop file</a> to replace the art <i>on planeswalker cards</i>. It supports larger art with transparency under the text box (uses the gray-background version provided above)</li>
+            <li>&hellip;use this <a href="assets/files/Art_Replacement_Jig.psd">photoshop file</a> to replace art on <i>regular-template cards</i>.</li>
+          </ul>
+          <b>NOTE:</b> If you use non-official artwork, the artist credit won’t match, so probly don’t do that. 😊
+        </li>
         <li><a target="_blank" href="https://github.com/TheGameKnave/premodernoracle/issues/3">Here’s a method</a> to self-assemble home-printable sheets. <i>(not for the faint of heart)</i></li>
       </ul>
       <div class="float-left">
