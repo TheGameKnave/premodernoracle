@@ -142,7 +142,6 @@ export class HelpersService {
       ftxtArr = ftxtArr.map(ft => `<p ${ft.indexOf('—') === 0 ? 'class=flavorAttribution' : ''}><i>${ft}</i></p>`);
       textBox = (textBox + (((face !== undefined || card.layout === 'adventure') ? card.card_faces[0].oracle_text : card.oracle_text) ? '<hr>' : '') + '<div class="flavorText">' + ftxtArr.join('') + '</div>');
     }
-    console.log('textBox', textBox);
     textBox = textBox
       .replace(/\b\*/g, "<i>")       // Closing asterisk
       .replace(/\*\b/g, "</i>")      // Opening asterisk
@@ -171,7 +170,6 @@ export class HelpersService {
       .replace(/dd {/g,  "dd&nbsp;{")// add mana nobreak;
       .replace(/=“/g, '="')           // fix closing double quotes
       .replace(/”>/g, '">')          // fix closing double quotes
-    console.log('textBox', textBox);
     if(face !== undefined ? card.card_faces[face].type_line.includes('Saga') : card.type_line.includes('Saga')){
       let textArr = textBox.split('<p>');
       textArr = textArr.filter(x => x);

@@ -112,6 +112,11 @@ h1
 input, select, button
   font-size: 1.1rem
 
+.downloadBtn
+  cursor: pointer
+  &:disabled
+    cursor: wait
+
 .home
   margin: 0 1rem
 
@@ -195,13 +200,9 @@ input, select, button
   margin: 0
 
 .cardBorder.mpc
-  width: 812px
-  height: 1106px
+  width: 816px
+  height: 1110px
 
-.cardBorder
-  border: 2px solid #80808000
-.cardBorder:not(.rounded)
-  border: 2px dashed #80808040
 
 .cardBorder.high-res
   zoom: 1

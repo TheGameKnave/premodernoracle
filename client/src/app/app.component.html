@@ -33,6 +33,14 @@
             <option value="none">None</option>
           </select> <label for="borderColor">Border</label>
         </span>
+        <span>
+          <button
+            type="button"
+            class="downloadBtn"
+            [disabled]="exporting"
+            (click)="exportCards()"
+          >{{ exporting ? exportProgress + ' / ' + exportTotal : 'Download JPGs' }}</button>
+        </span>
       </form>
     </div>
     <div 
@@ -86,7 +94,6 @@
     <div class="wrapper">
       <ul>
         <li>Ctrl+Enter to fetch cards</li>
-        <li>Downloading cards is a challenge; you’ll need to screenshot. The chrome plugin <a target="_blank" href="https://chromewebstore.google.com/detail/gofullpage-full-page-scre/fdpohaocaechififmbbbbbknoalclacl">GoFullPage</a> seems to work well.</li>
         <li>Sometimes the art is poor quality, or is not centered well (especially for special frames like planeswalkers, sagas, classes, talents, etc.) If you have Photoshop or a program that can edit *.psd files, you can:&hellip;
           <ul>
             <li>&hellip;use this <a href="assets/files/Planeswalker_Frame_Jig.psd">photoshop file</a> to replace the art <i>on planeswalker cards</i>. It supports larger art with transparency under the text box (uses the gray-background version provided above)</li>

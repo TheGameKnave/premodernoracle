@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewChildren }
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { toJpeg, getFontEmbedCSS } from 'html-to-image';
+import * as JSZip from 'jszip';
 
 export interface CardFormattingOptions {
   mpcBleed?: boolean;
@@ -17,6 +19,9 @@ export interface CardFormattingOptions {
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('textarea') textRef: ElementRef = new ElementRef(null);
   loading = false;
+  exporting = false;
+  exportProgress = 0;
+  exportTotal = 0;
   cardsTooMany = false;
   
   Object = Object;
@@ -125,6 +130,123 @@ export class AppComponent implements OnInit, AfterViewInit {
           console.error('Fetch error:', error)
         })
     }
+  }
+
+  /** Convert an external image URL to a data URL via server proxy */
+  private async toDataUrl(url: string): Promise<string> {
+    const proxied = `/api/image-proxy?url=${encodeURIComponent(url)}`;
+    const resp = await fetch(proxied);
+    const blob = await resp.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  /** Cache of already-proxied image URLs to avoid re-fetching */
+  private imageCache = new Map<string, string>();
+
+  private async inlineImages(container: HTMLElement): Promise<{ el: HTMLElement; origBg: string }[]> {
+    const restored: { el: HTMLElement; origBg: string }[] = [];
+    const bgEls = container.querySelectorAll<HTMLElement>('.cardImage, [class*="splitCardImage"]');
+    for (const bgEl of Array.from(bgEls)) {
+      const bgUrl = bgEl.style.backgroundImage.replace(/^url\(["']?|["']?\)$/g, '');
+      if (bgUrl && bgUrl.startsWith('http')) {
+        try {
+          let dataUrl = this.imageCache.get(bgUrl);
+          if (!dataUrl) {
+            dataUrl = await this.toDataUrl(bgUrl);
+            this.imageCache.set(bgUrl, dataUrl);
+          }
+          restored.push({ el: bgEl, origBg: bgEl.style.backgroundImage });
+          bgEl.style.backgroundImage = `url(${dataUrl})`;
+        } catch { /* leave original if fetch fails */ }
+      }
+    }
+    return restored;
+  }
+
+  async exportCards() {
+    const cards = document.querySelectorAll<HTMLElement>('.cardBorder');
+    if (!cards.length) return;
+
+    this.exporting = true;
+    this.exportProgress = 0;
+    this.exportTotal = cards.length;
+    this.imageCache.clear();
+
+    // Compute font CSS once and reuse for every card
+    const fontEmbedCSS = await getFontEmbedCSS(cards[0]);
+
+    const zip = new JSZip();
+    let index = 0;
+
+    for (const el of Array.from(cards)) {
+      const isOverlay = el.closest('.overlay') !== null;
+      const isMpc = el.classList.contains('mpc');
+      // Card dimensions + 4px for the 2px border on each side
+      const width = (isMpc ? 812 : 740) + 4;
+      const height = (isMpc ? 1106 : 1034) + 4;
+
+      // Inline external images for this card only
+      const inlined = await this.inlineImages(el);
+
+      // Temporarily remove zoom for capture
+      const origZoom = el.style.getPropertyValue('zoom');
+      (el.style as any).zoom = '1';
+
+      try {
+        const dataUrl = await toJpeg(el, {
+          width, height,
+          pixelRatio: 1,
+          quality: 0.92,
+          fontEmbedCSS,
+        });
+        // Convert data URL to raw bytes immediately to free the data URL string
+        const binary = atob(dataUrl.split(',')[1]);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+        // Build filename from the card's title text
+        const titleEl = el.querySelector('.cardTitle') || el.querySelector('.splitCardTitle');
+        let name = titleEl?.textContent?.trim() || `card_${index}`;
+        const splitTitles = el.querySelectorAll('.splitCardTitle');
+        if (splitTitles.length === 2) {
+          name = Array.from(splitTitles).map(t => t.textContent?.trim()).join(' -- ');
+        }
+        name = name.replace(/[^a-zA-Z0-9 ,'-]/g, '').trim();
+        if (isOverlay) name += '_overlay';
+
+        zip.file(`${name}.jpg`, bytes);
+      } catch (err) {
+        console.error('Failed to export card:', err);
+      } finally {
+        (el.style as any).zoom = origZoom;
+      }
+
+      // Restore original background-image URLs for this card
+      for (const { el: bgEl, origBg } of inlined) {
+        bgEl.style.backgroundImage = origBg;
+      }
+
+      index++;
+      this.exportProgress = index;
+
+      // Yield to the browser so the UI stays responsive
+      await new Promise(r => setTimeout(r, 0));
+    }
+
+    this.imageCache.clear();
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(zipBlob);
+    a.download = 'cards.zip';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    this.exporting = false;
   }
 }
 

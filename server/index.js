@@ -28,6 +28,24 @@ app.use((function(req, res, next) {
 app.use('/api', apiLimiter);
 app.use('/api', require('./routes/cards'));
 
+// Image proxy for CORS-free export
+app.get('/api/image-proxy', async (req, res) => {
+  const url = req.query.url;
+  if (!url || !url.startsWith('https://cards.scryfall.io/')) {
+    return res.status(400).send('Invalid URL');
+  }
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return res.status(response.status).send('Upstream error');
+    res.set('Content-Type', response.headers.get('content-type') || 'image/jpeg');
+    res.set('Cache-Control', 'public, max-age=86400');
+    const buffer = Buffer.from(await response.arrayBuffer());
+    res.send(buffer);
+  } catch (err) {
+    res.status(500).send('Proxy error');
+  }
+});
+
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'development') {
   // Serve any static files
   let dirname = __dirname.replace("/server", "")

@@ -24,6 +24,7 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": ["jszip"],
             "inlineStyleLanguage": "sass",
             "assets": [
               "src/favicon.ico",
