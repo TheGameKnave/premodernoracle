@@ -1,18 +1,23 @@
 const https = require('https');
 
 function findFirstPrinting(cardName,cardData){
+  const normalize = str => str.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "");
+  const normalizedInput = normalize(cardName);
+
+  // Prefer exact name match first
+  let exactMatches = cardData.filter(card => normalize(card.name) === normalizedInput && card.reprint === false);
+  if (exactMatches.length >= 1) return exactMatches[0];
+
+  // Fall back to substring match
   let possibilities = cardData.filter(card => {
-    console.log('firstPrinting: ',card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""),cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""))
-    return card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "").includes(cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")) && card.reprint === false;
+    console.log('firstPrinting: ', normalize(card.name), normalizedInput)
+    return normalize(card.name).includes(normalizedInput) && card.reprint === false;
   });
   if (possibilities.length > 1) {
-    let narrowedPossibilities = possibilities.filter(card => card.name.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "") === cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, ""));
-    // console.log('narrowedPossibilities',narrowedPossibilities.map(card => card.name));
+    let narrowedPossibilities = possibilities.filter(card => normalize(card.name) === normalizedInput);
     if(narrowedPossibilities.length >= 1){
-      // console.log('Found one', narrowedPossibilities[0].name);
       return narrowedPossibilities[0];
     }
-      // console.log('Found more than one', possibilities[0].name);
   }
   return possibilities[0];
 }

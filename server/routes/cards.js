@@ -72,12 +72,18 @@ router.post('/cards', async function(req, res, next) {
   await Promise.all(payload.cardList.map(async (cardName, index) => {
     cardData = [];
     if (!global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")] || (new Date().getTime() - (global.cache[cardName.toLowerCase().normalize("NFD").normalize('NFKD').replace(/[\u0300-\u036f]/g, "")]?.time.getTime() || 0) > 24 * 60 * 60 * 1000)) {
-      const initialPageUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=name%3D${encodeURIComponent(`${cardName}`)}`;
-      console.log('initialPageUrl', initialPageUrl);
-      const fetchedData = await fetchPage(initialPageUrl, index); // Start fetching the initial page for each item
-      // console.log('fetchedData',initialPageUrl,fetchedData);
-      // console.log(cardData)
+      // Try exact name match first, fall back to fuzzy search
+      const exactUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=!${encodeURIComponent(`"${cardName}"`)}`;
+      console.log('exactUrl', exactUrl);
+      await fetchPage(exactUrl, index);
       let firstPrinting = findFirstPrinting(cardName,cardData);
+      if (!firstPrinting) {
+        cardData = [];
+        const fuzzyUrl = `https://api.scryfall.com/cards/search?order=released&dir=asc&unique=prints&q=name%3D${encodeURIComponent(`${cardName}`)}`;
+        console.log('fuzzyUrl', fuzzyUrl);
+        await fetchPage(fuzzyUrl, index);
+        firstPrinting = findFirstPrinting(cardName,cardData);
+      }
       if(firstPrinting){
         // console.log('firstPrinting',firstPrinting.name);
         if(firstPrinting?.card_faces?.length > 1){
