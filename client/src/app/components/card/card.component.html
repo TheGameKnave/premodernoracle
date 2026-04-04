@@ -15,16 +15,16 @@
   />
   <div [class]="'card ' + (originalCard ? 'originalPresent' : '')">
     <ng-container
-      *ngIf="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
+      *ngIf="['normal','mutate','prototype','meld','class','case','saga','leveler','adventure','prepare','flip'].includes(card.layout) || (['transform','modal_dfc'].includes(card.layout) && face !== undefined)"
     >
       <img
-        [src]="'assets/images/card_templates/' + cardTemplate(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.png'"
+        [src]="'assets/images/card_templates/' + cardTemplate(card,face,(['adventure','prepare','omen'].includes(card.layout) ? 'adventurer' : 'card')) + '.png'"
         class="cardTemplate"
         alt="Card Template"
       >
       <img
         *ngIf="colorID(card,face).length === 2"
-        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(card.layout === 'adventure' ? 'adventurer' : 'card')) + '.png'"
+        [src]="'assets/images/card_templates/' + cardTemplate2(card,face,(['adventure','prepare','omen'].includes(card.layout) ? 'adventurer' : 'card')) + '.png'"
         class="cardTemplate2"
         alt="Card Template"
       >
@@ -47,7 +47,7 @@
         alt="Card Template"
       >
       <img
-        *ngIf="(face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text)).includes('Miracle {')"
+        *ngIf="(face !== undefined ? card.card_faces[face].oracle_text : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].oracle_text : card.oracle_text)).includes('Miracle {')"
         src="assets/images/card_templates/miracle.png"
         class="cardTemplate3"
         alt="Card Template"
@@ -69,12 +69,12 @@
         #cardTitleElement
         class="cardTitle"
       >
-        {{ face !== undefined ? card.card_faces[face].name : (card.layout === 'adventure' ? card.card_faces[0].name : card.name) }}
+        {{ face !== undefined ? card.card_faces[face].name : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].name : card.name) }}
       </div>
       <div
         #cardManaCostElement
         class="cardManaCost"
-        [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost))"
+        [innerHtml]="parseSymbols(face !== undefined ? card.card_faces[face].mana_cost : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].mana_cost : card.mana_cost))"
       ></div>
       <div 
         [style]="{ backgroundImage: 'url(' + cardImage + ')' }" 
@@ -103,7 +103,7 @@
         #cardTypeElement
         class="cardType"
       >
-        {{ face !== undefined ? card.card_faces[face].type_line : (card.layout === 'adventure' ? card.card_faces[0].type_line : card.type_line) }}
+        {{ face !== undefined ? card.card_faces[face].type_line : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].type_line : card.type_line) }}
       </div>
       <div class="cardExpansionWrapper">
         <i [class]="'cardExpansion ' + card.rarity + ' stroke ss ss-' + card.set"></i>
@@ -117,23 +117,23 @@
         ></i>
       </div>
       <app-adventure
-        *ngIf="card.layout === 'adventure'"
+        *ngIf="['adventure','prepare','omen'].includes(card.layout)"
         [card]="card"
       ></app-adventure>
       <div 
         #cardTextElement
-        [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (card.layout === 'adventure' ? 'adventurerText ' : '')"
-        [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : (card.layout === 'adventure' ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (card.layout === 'adventure' ? card.card_faces[0].flavor_text : card.flavor_text)))"
+        [class]="'cardText ' + (((face !== undefined && card.type_line.includes('Planeswalker')) || card.type_line.includes('Planeswalker')) ? 'planeswalkerText ' : '') + (['adventure','prepare','omen'].includes(card.layout) ? 'adventurerText ' : '')"
+        [innerHtml]="findSymbols(formatText(card,face,face !== undefined ? card.card_faces[face].oracle_text : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].oracle_text : card.oracle_text), face !== undefined ? card.card_faces[face].flavor_text : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].flavor_text : card.flavor_text)))"
       ></div>
       <div
         #cardArtistElement
         class="cardArtist"
       ><span class="magicSymbol">L</span>&nbsp;{{ imageArtist || 'Unknown' }}</div>
       <div
-        *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (card.layout === 'adventure' ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler' && !card.type_line.includes('Spacecraft')"
+        *ngIf="(face !== undefined ? (card.card_faces[face].loyalty || card.card_faces[face].power || card.card_faces[face].toughness) : (['adventure','prepare','omen'].includes(card.layout) ? (card.card_faces[0].power || card.card_faces[0].toughness) : (card.power || card.toughness || card.loyalty))) && card.layout !== 'leveler' && !card.type_line.includes('Spacecraft')"
         #cardPowerToughnessElement
         [class]="'cardPowerToughness ' + (((face !== undefined && card.card_faces[face].loyalty) || card.loyalty) ? 'cardLoyalty' : '') + ' ' + (card.type_line.includes('Vehicle') ? 'vehiclePT ' : '')" 
-        [innerHtml]="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : (card.layout === 'adventure' ? card.card_faces[0].power : card.power)) + '/' + (face !== undefined ? card.card_faces[face].toughness : (card.layout === 'adventure' ? card.card_faces[0].toughness : card.toughness)))"
+        [innerHtml]="(face !== undefined ? card.card_faces[face].loyalty : card.loyalty) || formatPT((face !== undefined ? card.card_faces[face].power : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].power : card.power)) + '/' + (face !== undefined ? card.card_faces[face].toughness : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].toughness : card.toughness)))"
       ></div>
       <div
         *ngIf="face !== undefined ? (card.card_faces[face].defense) : (card.defense)"

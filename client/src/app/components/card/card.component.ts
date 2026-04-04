@@ -74,7 +74,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   cardTemplate(card: any, face: number | undefined, base: string = 'card') {
     let returnString = '';
     let colors = this.colorID(card,face);
-    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost);
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].mana_cost : card.mana_cost);
     let costArr = manaCost.split(/[{}]+/);
     costArr = costArr.filter(x => x);
     let hybridArr: string[] = [];
@@ -137,8 +137,8 @@ export class CardComponent implements OnInit, AfterViewInit {
     return base + '_' + returnString
   }
   cardTemplate2(card: any,face: number | undefined, base: string = 'card') {
-    let typeLine: string = face !== undefined ? card.card_faces[face].type_line : (card.layout === 'adventure' ? card.card_faces[0].type_line : card.type_line);
-    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (card.layout === 'adventure' ? card.card_faces[0].mana_cost : card.mana_cost);
+    let typeLine: string = face !== undefined ? card.card_faces[face].type_line : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].type_line : card.type_line);
+    let manaCost: string = face !== undefined ? card.card_faces[face].mana_cost : (['adventure','prepare','omen'].includes(card.layout) ? card.card_faces[0].mana_cost : card.mana_cost);
     let costArr = manaCost.split(/[{}]+/);
     costArr = costArr.filter(x => x);
     let hybridArr: string[] = [];
