@@ -177,8 +177,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.exportTotal = cards.length;
     this.imageCache.clear();
 
-    // Compute font CSS once and reuse for every card
-    const fontEmbedCSS = await getFontEmbedCSS(cards[0]);
+    // Compute font CSS from the cards container so all used fonts are included
+    const cardsContainer = document.querySelector('.cards') as HTMLElement || cards[0];
+    const fontEmbedCSS = await getFontEmbedCSS(cardsContainer);
 
     const zip = new JSZip();
     let index = 0;
